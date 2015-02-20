@@ -57,8 +57,8 @@
 	  </license>
 	</licenses>	
 	<issueManagement>
-		<url>https://java.net/jira/browse/NUTSHELL_COMMUNICATE/?selectedTab=com.atlassian.jira.jira-projects-plugin:issues-panel</url>
-		<system>Jira</system>
+		<url>https://github.com/olir/nutshell-communicate/issues</url>
+		<system>github</system>
 	</issueManagement>
 	<developers>
 		<developer>
