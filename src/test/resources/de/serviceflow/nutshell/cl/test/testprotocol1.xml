@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Test Communication Protocol
+ --> 
+<tns:Protocol messagepackage="de.serviceflow.nutshell.cl.test1" xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://www.screenflow.de/nutshell/2015/protocol.xsd" name="test1/v1">
+	<State name="ReadyForTest" isInitial="true">
+			<Message classname="TestRequest" client="true"  reliable="false"/>
+			<Message classname="TestResponse" reliable="false"/>
+	</State>
+	<State name="Terminated" isInitial="false">
+	</State>
+</tns:Protocol>
+  
