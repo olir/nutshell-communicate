@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<tns:Protocol messagepackage="" name="" xmlns:tns="http://www.screenflow.de/nutshell/2015/protocol.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.screenflow.de/nutshell/2015/protocol.xsd protocol.xsd ">
-  <State name="">
-    <Message classname=""/>
-  </State>
-</tns:Protocol>
