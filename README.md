@@ -2,7 +2,7 @@
 
 The Nutshell Communication Library is designed for network communication by using the messaging communication-style. It's a higher-level framework, where the application developer defines an application protocol by XML and code the corresponding messages and event handling. The library hides transport details from the developer.
 
-It offers a plug-in serialization from the [Kryo](/EsotericSoftware/kryo). Currently it's bundled with it.
+It offers a plug-in serialization from the [Kryo](https://github.com/EsotericSoftware/kryo). Currently it's bundled with it.
 
 ## Contents
 * [Installation](#installation)
