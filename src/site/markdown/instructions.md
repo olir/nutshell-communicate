@@ -8,7 +8,7 @@ To create the server daemon, the easiest way is to
  
 * create a class that extends SimpleServerDaemon,
 * read the application protocol by a method createProtocolReader() 
-  (see [Application Protocol](#application_protocol),
+  (see [Application Protocol](#application-protocol),
 * create a MessageListener. We add a subclass MyCom that implements it.
 * add a bind() method where we add the application protocol and then
 call the bind method from the superclass to bind the server daemon 
@@ -46,6 +46,7 @@ connect method is required.
 * We connect with TCP so we use port 10001.
 * "InetAddress.getLocalHost()" is just for test and should be replaced by the remote host later.
 * We also need to select an application protocol by providing it's name ("test3/v1").
+(see [Application Protocol](#application-protocol)
 
 ``` java
 public class TestClient3 extends SimpleClient{
