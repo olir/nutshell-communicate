@@ -70,7 +70,7 @@ public class NioObjectContainer implements Transferable {
 		getKryo().register(c, id);
 	}
 
-	private static Kryo getKryo() {
+	static Kryo getKryo() {
 		if (kryoInstance==null) {
 			kryoInstance = new Kryo();
 		}

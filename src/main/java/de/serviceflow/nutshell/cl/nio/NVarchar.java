@@ -46,8 +46,15 @@ public final class NVarchar implements Transferable {
 	private ByteBuffer buffer;
 	private int size = 0;
 
+	private String svalue = null;
+
 	public NVarchar() {
 		this(MIN);
+	}
+
+	public NVarchar(String value) {
+		this(value.length());
+		setString(value);
 	}
 
 	public NVarchar(int initialcapacity) {
@@ -78,6 +85,7 @@ public final class NVarchar implements Transferable {
 		}
 		// buffer[size++]=value;
 		buffer.put(value);
+		svalue = null;
 	}
 
 	private final void increase() {
@@ -99,6 +107,7 @@ public final class NVarchar implements Transferable {
 		// for (int i=0; i<values.length; i++)
 		// addByte(values[i]);
 		buffer.put(values);
+		svalue = null;
 	}
 
 	/**
@@ -120,15 +129,22 @@ public final class NVarchar implements Transferable {
 			throw new RuntimeException(
 					"Unexpected that UTF-8 is not available", e);
 		}
+		svalue = null;
 	}
 
 	public final void setString(String value) {
 		clear();
 		addString(value, null);
+		svalue = null;
+	}
+
+	public final void setString(NVarchar value) {
+		setString(value.toString());
 	}
 
 	public final void clear() {
 		buffer.clear();
+		svalue = null;
 	}
 
 	/**
@@ -154,37 +170,15 @@ public final class NVarchar implements Transferable {
 	 */
 	public final String toString() {
 		try {
-			byte[] a = getBytes();
-			return new String(a, 0, a.length, "UTF-8");
+			if (svalue == null) {
+				byte[] a = getBytes();
+				svalue = new String(a, 0, a.length, "UTF-8");
+			}
+			return svalue;
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(
 					"Unexpected that UTF-8 is not available", e);
 		}
-	}
-
-	/**
-	 * Returns the buffer to read or write to. The buffer is expected to be in
-	 * writable before and will be so after been used. The call on this method
-	 * should not lead to calculating the buffer.
-	 * 
-	 * @deprecated
-	 * @return ByteBuffer representing the serialized or deserializable
-	 *         Transferable.
-	 */
-	public ByteBuffer getBuffer() {
-		return buffer;
-	}
-
-	/**
-	 * The Transferable should serialize itself to buffer if the buffer is not
-	 * up-to-date.
-	 * 
-	 * @deprecated
-	 * @return ByteBuffer representing the serialized or deserializable
-	 *         Transferable.
-	 */
-	public void doSerialize() {
-		// always up-to-date by design
 	}
 
 	public void writeObject(ByteBuffer out) {
@@ -202,6 +196,6 @@ public final class NVarchar implements Transferable {
 		in.limit(pos + size);
 		buffer.put(in);
 		in.limit(limit);
+		svalue = null;
 	}
-
 }
