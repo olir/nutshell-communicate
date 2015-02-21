@@ -24,20 +24,20 @@ public class AddressKey implements Comparable<AddressKey> {
 		this.sa = sa;
 	}
 
-	public int compareTo(AddressKey arg0) {
-		if (arg0 == null)
+	public int compareTo(AddressKey ak) {
+		if (ak == null)
 			return -1;
 		if (sa == null)
 			return 1;
-		int c = sa.hashCode() - arg0.hashCode();
+		int c = sa.hashCode() - ak.hashCode();
 		if (c == 0) {
-			if (sa.equals(arg0)) {
+			if (sa.equals(ak.getSocketAddress())) {
 				return 0;
 			}
-			if (!sa.getAddress().equals(arg0.getSocketAddress().getAddress())) {
+			if (!sa.getAddress().equals(ak.getSocketAddress().getAddress())) {
 				return -1;
 			}
-			return sa.getPort()-arg0.getSocketAddress().getPort();
+			return sa.getPort()-ak.getSocketAddress().getPort();
 		}
 		return c;
 	}
