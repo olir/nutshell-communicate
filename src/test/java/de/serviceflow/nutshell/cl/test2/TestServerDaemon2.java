@@ -62,8 +62,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 	BitSet dChecker = null;
 
 	public TestServerDaemon2(MBeanServer server) {
-		super(server);
-
+		setMbeanServer(server);
 		addApplicationProtocol(createProtocolReader());
 	}
 

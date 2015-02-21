@@ -42,7 +42,7 @@ import de.serviceflow.nutshell.cl.intern.TransportProvider;
  * 
  * 
  */
-public class TestClient2 extends SimpleClient implements MessageListener {
+public class TestClient2 extends SimpleClient {
 	static final Logger jlog = Logger.getLogger(TestClient2.class.getName());
 
 	public final int TESTPORT = 10101;
@@ -63,45 +63,47 @@ public class TestClient2 extends SimpleClient implements MessageListener {
 		this.amount = amount;
 		this.sleepTime = sleepTime;
 		this.msgPerSleep = msgPerSleep;
-
-		addApplicationProtocol(createProtocolReader());
 	}
 
 	public void connect(String host) throws UnknownHostException, IOException,
 			ClassNotFoundException, IllegalAccessException, JAXBException {
+		addApplicationProtocol(createProtocolReader());
+
 		connect(NetworkProtocolType.TCP_UDP,
 				new InetSocketAddress(InetAddress.getByName(host), TESTPORT),
-				"test2/v1", "".getBytes(), this, this);
+				"test2/v1", "".getBytes(), this, new MyMessageListener());
 	}
 
-	public void messageHasBeenSent(Session s, Message<?> m) {
-		jlog.fine("TestClient2 detects messageSend " + m);
-	}
+	class MyMessageListener implements MessageListener {
+		public void messageHasBeenSent(Session s, Message<?> m) {
+			jlog.fine("TestClient2 detects messageSend " + m);
+		}
 
-	public void messageReceived(Session s, Message<?> nextMessage) {
-		jlog.info("*** TestClient2 detects messageReceived " + nextMessage);
-		try {
-			/*
-			 * Check if protocol instance for the current client is in the right
-			 * state.
-			 */
-			if (s.inProtocolState("ReadyForTest")) {
-				throw new Error("Protocol state invalid: "
-						+ s.getApplicationProtocolState());
-			}
+		public void messageReceived(Session s, Message<?> nextMessage) {
+			jlog.info("*** TestClient2 detects messageReceived " + nextMessage);
+			try {
+				/*
+				 * Check if protocol instance for the current client is in the
+				 * right state.
+				 */
+				if (s.inProtocolState("ReadyForTest")) {
+					throw new Error("Protocol state invalid: "
+							+ s.getApplicationProtocolState());
+				}
 
-			/*
-			 * Get TEST_PING and send TEST_ACKNOWLEDGE.
-			 */
-			if (nextMessage.getCommand() == TestMessage2.TEST_ACKNOWLEDGE) {
-				TestAcknowledge m = (TestAcknowledge) nextMessage;
-				loop.stopTimer(m, s);
-			} else {
-				throw new Error("APPLICATION message unexpected: "
-						+ nextMessage.getCommand());
+				/*
+				 * Get TEST_PING and send TEST_ACKNOWLEDGE.
+				 */
+				if (nextMessage.getCommand() == TestMessage2.TEST_ACKNOWLEDGE) {
+					TestAcknowledge m = (TestAcknowledge) nextMessage;
+					loop.stopTimer(m, s);
+				} else {
+					throw new Error("APPLICATION message unexpected: "
+							+ nextMessage.getCommand());
+				}
+			} finally {
+				nextMessage.releaseMessage();
 			}
-		} finally {
-			nextMessage.releaseMessage();
 		}
 	}
 

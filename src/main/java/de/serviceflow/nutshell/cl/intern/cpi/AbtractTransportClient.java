@@ -19,6 +19,7 @@ import java.net.InetSocketAddress;
 import java.util.logging.Logger;
 
 import de.serviceflow.nutshell.cl.APState;
+import de.serviceflow.nutshell.cl.ApplicationProtocol;
 import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.SessionState;
 import de.serviceflow.nutshell.cl.intern.Communication;
@@ -46,6 +47,8 @@ public abstract class AbtractTransportClient extends NIOTransportProvider
 	private final String applicationProtocolName;
 	
 	protected AbtractTransportClient(String applicationProtocolName) {
+		if (ApplicationProtocol.getByName(applicationProtocolName)==null)
+			throw new Error("Protocol not registered: "+applicationProtocolName);
 		this.applicationProtocolName = applicationProtocolName;
 		
 	}

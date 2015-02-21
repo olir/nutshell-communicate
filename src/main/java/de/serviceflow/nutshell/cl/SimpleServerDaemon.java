@@ -17,10 +17,12 @@ package de.serviceflow.nutshell.cl;
 
 import java.io.Reader;
 import java.net.InetSocketAddress;
+import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.management.MBeanServer;
+import javax.sql.ConnectionEventListener;
 
 import de.serviceflow.nutshell.cl.intern.Communication;
 
@@ -46,25 +48,35 @@ public abstract class SimpleServerDaemon extends DefaultSessionListener {
 
 	private ServerCommunication sc;
 
-	public SimpleServerDaemon(MBeanServer mbs) {
-		sc = ServerCommunication.getServerCommunication();
+	public SimpleServerDaemon() {
+		ServerCommunication.getServerCommunication().setAuthentication(
+				new AnonymousAuthentication());
+	}
+
+	public void setMbeanServer(MBeanServer mbs) {
 		Communication.setMbeanServer(mbs);
 	}
 
-	protected void addApplicationProtocol(Reader r) {
+	public void addApplicationProtocol(Reader r) {
+		if (sc == null) {
+			sc = ServerCommunication.getServerCommunication();
+		}
 		sc.addApplicationProtocol(r);
 	}
 
-	
-	protected void bind(InetSocketAddress isa,
-			SessionListener slistener, MessageListener mlistener) {
+	protected void bind(InetSocketAddress isa, SessionListener slistener,
+			MessageListener mlistener) {
+		if (sc == null) {
+			throw new Error(
+					"You need to add at least one application protocol first.");
+		}
 		try {
 
 			sc.addSessionListener(slistener);
 			sc.addMessageListener(mlistener);
 
 			sc.bind(isa);
-			
+
 			if (jlog.isLoggable(Level.FINE)) {
 				jlog.fine("communication started.");
 			}
@@ -95,5 +107,19 @@ public abstract class SimpleServerDaemon extends DefaultSessionListener {
 		return sc;
 	}
 
+	private static class AnonymousAuthentication implements Authentication {
+
+		@Override
+		public Principal authenticate(byte[] credentials) {
+			return new Principal() {
+
+				@Override
+				public String getName() {
+					return "Anonymous";
+				}
+			};
+		}
+
+	}
 
 }

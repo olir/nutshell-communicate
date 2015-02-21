@@ -50,8 +50,9 @@ public class TestServerDaemon1 extends SimpleServerDaemon implements
 
 	public TestServerDaemon1(SimpleCommunicationTest simpleCommunicationTest,
 			MBeanServer server) {
-		super(server);
 		this.simpleCommunicationTest = simpleCommunicationTest;
+
+		setMbeanServer(server);
 
 		addApplicationProtocol(this.simpleCommunicationTest
 				.createProtocolReader());

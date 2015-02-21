@@ -7,6 +7,7 @@ It offers a plug-in serialization from the [Kryo](https://github.com/EsotericSof
 ## Contents
 * [Installation](#installation)
     * [Maven](#maven)
+* HOWTO
 * [Notice](#notice)
 
 ## Installation
@@ -21,6 +22,10 @@ Open the project documentation in your web browser on http://localhost:9000
 or open it without site:run under
 
 > target/site/index.html
+ 
+## HOWTO
+
+Please read [Instructions](src/site/markdown/instructions.html).
  
 ## Notice
 
