@@ -25,7 +25,7 @@ or open it without site:run under
  
 ## HOWTO
 
-Please read [Instructions](src/site/markdown/instructions.html).
+Please read [Instructions](src/site/markdown/instructions.md).
  
 ## Notice
 
