@@ -39,7 +39,7 @@ import de.serviceflow.nutshell.cl.intern.spi.ConnectionApprover;
  * 
  */
 public abstract class NIOTransportProvider implements TransportProvider {
-	private static final Logger jlog = Logger
+	private static final Logger JLOG = Logger
 			.getLogger(NIOTransportProvider.class.getName());
 
 	private Selector selector;
@@ -67,11 +67,11 @@ public abstract class NIOTransportProvider implements TransportProvider {
 		this.isa = isa;
 	}
 
-	public SessionListenerDispensor getProtocolListenerHelper() {
+	public final SessionListenerDispensor getProtocolListenerHelper() {
 		return communication.getProtocolListenerHelper();
 	}
 
-	public Communication getCommunication() {
+	public final Communication getCommunication() {
 		return communication;
 	}
 
@@ -90,19 +90,13 @@ public abstract class NIOTransportProvider implements TransportProvider {
 
 	public void completeStop() throws IOException {
 		if (sc != null && sc.isOpen()) {
-			try {
-				sc.close();
-			} finally {
-			}
+			sc.close();
 		}
 		sc = null;
 
 		// Close selector
 		if (selector != null && selector.isOpen()) {
-			try {
-				selector.close();
-			} finally {
-			}
+			selector.close();
 		}
 		selector = null;
 	}
@@ -128,7 +122,7 @@ public abstract class NIOTransportProvider implements TransportProvider {
 			} catch (IOException e) {
 				NioSession session = (NioSession) key.attachment();
 				key.cancel();
-				jlog.log(Level.WARNING, "I/O Error - Key canceled.");
+				JLOG.log(Level.WARNING, "I/O Error - Key canceled.");
 				getProtocolListenerHelper().connectionLost(this, session);
 			} finally {
 				it.remove();
@@ -142,28 +136,28 @@ public abstract class NIOTransportProvider implements TransportProvider {
 
 	private void doOperation(SelectionKey key) throws IOException {
 		if (key.isValid() && key.isAcceptable()) {
-			// jlog.info("ENTER opAccept()");
+			// JLOG.info("ENTER opAccept()");
 			opAccept(key);
-			// jlog.info("LEAVE opAccept()");
+			// JLOG.info("LEAVE opAccept()");
 		}
 		if (key.isValid() && key.isReadable()) {
-			// jlog.info("ENTER opRead()");
+			// JLOG.info("ENTER opRead()");
 			opRead(key);
-			// jlog.info("LEAVE opRead()");
+			// JLOG.info("LEAVE opRead()");
 		}
 		if (key.isValid() && key.isWritable()) {
-			// jlog.info("ENTER opWrite()");
+			// JLOG.info("ENTER opWrite()");
 			opWrite(key);
-			// jlog.info("LEAVE opWrite()");
+			// JLOG.info("LEAVE opWrite()");
 		}
 		if (key.isValid() && key.isConnectable()) {
-			// jlog.info("ENTER opConnect()");
+			// JLOG.info("ENTER opConnect()");
 			opConnect(key);
-			// jlog.info("LEAVE opConnect()");
+			// JLOG.info("LEAVE opConnect()");
 		}
 		if (!key.isValid()) {
 			NioSession session = (NioSession) key.attachment();
-			jlog.log(Level.WARNING,
+			JLOG.log(Level.WARNING,
 					"I/O Error - Key canceled (without exception).");
 			if (session != null) {
 				getProtocolListenerHelper().connectionLost(this, session);
@@ -196,7 +190,7 @@ public abstract class NIOTransportProvider implements TransportProvider {
 		return ca;
 	}
 
-	public void setConnectionApprover(ConnectionApprover c) {
+	public final void setConnectionApprover(ConnectionApprover c) {
 		if (c == null) {
 			ca = new DefaultConnectionApprover();
 		} else {
@@ -204,7 +198,7 @@ public abstract class NIOTransportProvider implements TransportProvider {
 		}
 	}
 
-	public boolean isRunning() {
+	public final boolean isRunning() {
 		return running;
 	}
 
@@ -228,7 +222,7 @@ public abstract class NIOTransportProvider implements TransportProvider {
 	 * @return
 	 */
 	public NIOTransportProvider join(SessionObject communicationSession) {
-		jlog.severe("dualchannel: join() not implemented.");
+		JLOG.severe("dualchannel: join() not implemented.");
 		return null;
 	}
 

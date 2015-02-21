@@ -43,7 +43,7 @@ public class MultiTargetMessage<EnumClass> extends Message<EnumClass> {
 	private ByteBuffer reusedWriteBuffer = ByteBuffer
 			.allocateDirect(BUFFER_SIZE);
 
-	private static final Bucket<MultiTargetMessage<?>> mmPool = new Bucket<MultiTargetMessage<?>>(
+	private static final Bucket<MultiTargetMessage<?>> MMPOOL = new Bucket<MultiTargetMessage<?>>(
 			100) {
 		@SuppressWarnings("rawtypes")
 		protected MultiTargetMessage<?> newInstance() {
@@ -67,7 +67,7 @@ public class MultiTargetMessage<EnumClass> extends Message<EnumClass> {
 
 	public static MultiTargetMessage<?> requestMultiTargetMessage(
 			Message<?> real) {
-		MultiTargetMessage<?> mtm = mmPool.requestElementFromPool();
+		MultiTargetMessage<?> mtm = MMPOOL.requestElementFromPool();
 		mtm.assignMessage(real);
 		return mtm;
 	}

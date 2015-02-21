@@ -43,7 +43,7 @@ import de.serviceflow.nutshell.cl.intern.SessionObject;
  */
 public class TCPService extends AbtractTransportService {
 
-	private static final Logger jlog = Logger.getLogger(TCPService.class
+	private static final Logger JLOG = Logger.getLogger(TCPService.class
 			.getName());
 
 	public void init(Communication c, InetSocketAddress isa) {
@@ -62,19 +62,19 @@ public class TCPService extends AbtractTransportService {
 
 		register(ssc, SelectionKey.OP_ACCEPT);
 
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL, "TCPService started on port "
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "TCPService started on port "
 					+ isa.getPort());
 		}
 
 		return ssc;
 	}
 
-	public void terminate(NioSession communicationSession) {
+	public final void terminate(NioSession communicationSession) {
 		delegate.terminate(communicationSession);
 	}
 
-	protected void opAccept(SelectionKey key) throws IOException {
+	protected final void opAccept(SelectionKey key) throws IOException {
 
 		// Accept the new connection
 		ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
@@ -84,8 +84,8 @@ public class TCPService extends AbtractTransportService {
 			InetAddress a = ((InetSocketAddress) sc.getRemoteAddress())
 					.getAddress();
 			if (isBlacklisted(a)) {
-				if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-					jlog.log(SessionObject.MSG_TRACE_LEVEL,
+				if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+					JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 							"Reject Blacklisted: " + a);
 				}
 				return;
@@ -106,18 +106,18 @@ public class TCPService extends AbtractTransportService {
 			session.setKey(newkey);
 			session.setChannel(sc);
 
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("Got connection from " + sc);
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("Got connection from " + sc);
 			}
 		} else {
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("Rejected: " + ssc);
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("Rejected: " + ssc);
 			}
 		}
 	}
 
 	@Override
-	protected void opRead(SelectionKey key) throws IOException {
+	protected final void opRead(SelectionKey key) throws IOException {
 		if (delegate.opRead(key)) {
 			getProtocolListenerHelper().connectionLost(this,
 					(NioSession) key.attachment());
@@ -127,23 +127,23 @@ public class TCPService extends AbtractTransportService {
 	}
 
 	@Override
-	protected void opWrite(SelectionKey key) throws IOException {
+	protected final void opWrite(SelectionKey key) throws IOException {
 		delegate.opWrite(key);
 	}
 
-	public int getMessagesSend() {
+	public final int getMessagesSend() {
 		return delegate.getMessagesSend();
 	}
 
-	public void setMessagesSend(int messagesSend) {
+	public final void setMessagesSend(int messagesSend) {
 		delegate.setMessagesSend(messagesSend);
 	}
 
-	public int getMessagesReceived() {
+	public final int getMessagesReceived() {
 		return delegate.getMessagesReceived();
 	}
 
-	public void setMessagesReceived(int messagesReceived) {
+	public final void setMessagesReceived(int messagesReceived) {
 		delegate.setMessagesReceived(messagesReceived);
 	}
 

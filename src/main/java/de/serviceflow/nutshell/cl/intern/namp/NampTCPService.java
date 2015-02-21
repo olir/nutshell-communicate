@@ -37,20 +37,20 @@ public class NampTCPService extends TCPService {
 	private NampUDPService udp = new NampUDPService();
 
 	@Override
-	public NIOTransportProvider join(SessionObject communicationSession) {
+	public final NIOTransportProvider join(SessionObject communicationSession) {
 		udp.join(communicationSession);
 
 		// InetSocketAdress super.isa.getAddress();
 		// // communicationSession.
 		// AddressKey a = new AddressKey(sa);
-		// // jlog.info("UDP: New AddressKey: " + a);
+		// // JLOG.info("UDP: New AddressKey: " + a);
 		// //
 		//
 		return udp;
 	}
 
 	@Override
-	public void init(Communication c, InetSocketAddress isa) {
+	public final void init(Communication c, InetSocketAddress isa) {
 		super.init(c, isa);
 
 		InetSocketAddress udpIsa = new InetSocketAddress(isa.getAddress(),
@@ -59,22 +59,22 @@ public class NampTCPService extends TCPService {
 
 	}
 
-	public void start() throws IOException {
+	public final void start() throws IOException {
 		super.start();
 		udp.start();
 	}
 
-	public void stop() throws IOException {
+	public final void stop() throws IOException {
 		super.stop();
 		udp.stop();
 	}
 
-	public void completeStop() throws IOException {
+	public final void completeStop() throws IOException {
 		super.completeStop();
 		udp.completeStop();
 	}
 
-	public boolean process() throws IOException {
+	public final boolean process() throws IOException {
 		boolean hasNothingSelected1 = super.process();
 		boolean hasNothingSelected2 = udp.process();
 		return hasNothingSelected1 & hasNothingSelected2;

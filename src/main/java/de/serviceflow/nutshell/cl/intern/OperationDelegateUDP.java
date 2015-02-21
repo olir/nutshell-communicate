@@ -31,7 +31,7 @@ import de.serviceflow.nutshell.cl.SessionState;
 import de.serviceflow.nutshell.cl.intern.util.Pipe;
 
 public class OperationDelegateUDP {
-	private static final Logger jlog = Logger
+	private static final Logger JLOG = Logger
 			.getLogger(OperationDelegateUDP.class.getName());
 
 	private Map<AddressKey, NioSession> runningSessions = Collections
@@ -45,15 +45,15 @@ public class OperationDelegateUDP {
 
 	private NIOTransportProvider ts;
 
-	public void opRead(SelectionKey key) throws IOException {
+	public final void opRead(SelectionKey key) throws IOException {
 
 		DatagramChannel dc = (DatagramChannel) key.channel();
 		buffer.clear();
 
 		InetSocketAddress sa = (InetSocketAddress) dc.receive(buffer);
 		if (NIOTransportProvider.isBlacklisted(sa.getAddress())) {
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				jlog.log(SessionObject.MSG_TRACE_LEVEL, "Reject Blacklisted: "
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL, "Reject Blacklisted: "
 						+ sa.getAddress());
 			}
 			return;
@@ -68,7 +68,7 @@ public class OperationDelegateUDP {
 				session = addSession(sa);
 				session.setSessionState(SessionState.CREATED);
 			} else {
-				jlog.info("Rejected: " + sa);
+				JLOG.info("Rejected: " + sa);
 				return;
 			}
 		}
@@ -79,12 +79,12 @@ public class OperationDelegateUDP {
 		int controlType = buffer.get();
 		if (controlType>0)
 			controlType=session.getApplicationProtocol().getId();
-//		jlog.warning("<<<<< controlType="+controlType);
+//		JLOG.warning("<<<<< controlType="+controlType);
 
 		int commandId = buffer.get();
 		Message<?> nextMessage = Message.requestMessage(commandId, controlType);
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL, "UDP.opRead: " + nextMessage
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "UDP.opRead: " + nextMessage
 					+ " for " + session + " @" + sa);
 		}
 		nextMessage.readObject(buffer);
@@ -102,8 +102,8 @@ public class OperationDelegateUDP {
 				 ts);
 		session.setCommunication(ts.getCommunication());
 		AddressKey ak = new AddressKey(sa);
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL, "UDP: New AddressKey: " + sa
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "UDP: New AddressKey: " + sa
 					+ ": " + ak + " on " + session);
 		}
 		runningSessions.put(ak, session);
@@ -112,22 +112,22 @@ public class OperationDelegateUDP {
 
 	public void addSession(NioSession session, InetSocketAddress sa) {
 		AddressKey ak = new AddressKey(sa);
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL, "UDP: Joined with Address "
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "UDP: Joined with Address "
 					+ sa + ": " + ak + " on " + session);
 		}
 		runningSessions.put(ak, session);
 	}
 
 	public void opWrite(SelectionKey key) throws IOException {
-		// jlog.info("**** opWrite(1) **** "+this.ts+": "+runningSessions.size());
+		// JLOG.info("**** opWrite(1) **** "+this.ts+": "+runningSessions.size());
 
 		DatagramChannel dc = (DatagramChannel) key.channel();
 
 		for (Entry<AddressKey, NioSession> es : runningSessions.entrySet()) {
 			NioSession session = es.getValue();
 
-			// jlog.info("opWrite ..."+session);
+			// JLOG.info("opWrite ..."+session);
 
 			Pipe<Message<?>> mcSendPipe = session.getOutgoingMessages(ts);
 			if (mcSendPipe.isClean()) {
@@ -135,8 +135,8 @@ public class OperationDelegateUDP {
 			}
 
 			Message<?> m = mcSendPipe.next();
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				jlog.log(SessionObject.MSG_TRACE_LEVEL, "UDP.opWrite: " + m
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL, "UDP.opWrite: " + m
 						+ " for " + session + " @"
 						+ es.getKey().getSocketAddress());
 			}
@@ -148,7 +148,7 @@ public class OperationDelegateUDP {
 			if (controlType>1)
 				controlType = 1; 
 			buffer.put((byte) controlType);
-//			jlog.warning(">>>>> controlType="+m.getClassificationValue());
+//			JLOG.warning(">>>>> controlType="+m.getClassificationValue());
 			buffer.put((byte) m.getCommandId());
 			m.writeObject(buffer);
 			buffer.flip();
@@ -156,32 +156,32 @@ public class OperationDelegateUDP {
 			if (dc.send(buffer, es.getKey().getSocketAddress()) > 0) {
 				messagesSend++;
 			} else {
-				jlog.severe("APPLICATION to large " + m);
+				JLOG.severe("APPLICATION to large " + m);
 			}
 			m.releaseMessage();
 		}
 	}
 
-	public int getMessagesSend() {
+	public final int getMessagesSend() {
 		return messagesSend;
 	}
 
-	public void setMessagesSend(int messagesSend) {
+	public final void setMessagesSend(int messagesSend) {
 		this.messagesSend = messagesSend;
 	}
 
-	public int getMessagesReceived() {
+	public final int getMessagesReceived() {
 		return messagesReceived;
 	}
 
-	public void setMessagesReceived(int messagesReceived) {
+	public final void setMessagesReceived(int messagesReceived) {
 		this.messagesReceived = messagesReceived;
 	}
 
 	/**
 	 * 
 	 */
-	public void setNIOTransportProvider(NIOTransportProvider ts) {
+	public final void setNIOTransportProvider(NIOTransportProvider ts) {
 		this.ts = ts;
 	}
 
@@ -192,8 +192,8 @@ public class OperationDelegateUDP {
 					AddressKey key = en.getKey();
 					NioSession value = en.getValue();
 					if (value.getAddress() == null) {
-						if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-							jlog.log(SessionObject.MSG_TRACE_LEVEL,
+						if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+							JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 									"findSession: Attaching Address to session "
 											+ a + " @" + value);
 						}
@@ -201,8 +201,8 @@ public class OperationDelegateUDP {
 						key.setSocketAddress(a); // attach sender
 						runningSessions.put(key, value);
 					} else {
-						if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-							jlog.log(SessionObject.MSG_TRACE_LEVEL,
+						if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+							JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 									"findSession: SessionObject already has Address "
 											+ key.getSocketAddress() + " @"
 											+ value);
@@ -210,18 +210,18 @@ public class OperationDelegateUDP {
 					}
 					return value;
 				} else {
-					if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-						jlog.log(SessionObject.MSG_TRACE_LEVEL,
+					if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+						JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 								"findSession: ------ info: " + a + " <=> "
 										+ en.getKey().getSocketAddress());
-						jlog.log(SessionObject.MSG_TRACE_LEVEL,
+						JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 								"findSession: ------ compared: " + sessionkey
 										+ " <=> "
 										+ en.getValue().getSessionkey());
 					}
 				}
 			}
-			jlog.warning("Possible intrusion detected. UDP client from "
+			JLOG.warning("Possible intrusion detected. UDP client from "
 					+ a.getAddress() + " has unkown session key: " + sessionkey
 					+ ". Blacklisted.");
 			NIOTransportProvider.blacklist(a.getAddress());
@@ -229,23 +229,23 @@ public class OperationDelegateUDP {
 		} else {
 			for (Entry<AddressKey, NioSession> en : runningSessions.entrySet()) {
 				if (a.equals(en.getKey().getSocketAddress())) {
-					if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-						jlog.log(SessionObject.MSG_TRACE_LEVEL,
+					if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+						JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 								"findSession: SessionObject without key: " + a + " @"
 										+ en.getValue());
 					}
 					return en.getValue();
 				} else {
-					if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-						jlog.log(SessionObject.MSG_TRACE_LEVEL,
+					if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+						JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 								"findSession: ------ compared: " + a + " <=> "
 										+ en.getKey().getSocketAddress());
 					}
 				}
 			}
 		}
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL,
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 					"findSession: no session found for " + a + " #"
 							+ sessionkey);
 		}

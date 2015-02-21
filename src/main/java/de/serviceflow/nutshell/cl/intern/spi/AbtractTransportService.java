@@ -38,7 +38,7 @@ import de.serviceflow.nutshell.cl.intern.namp.MessageClassification;
  */
 public abstract class AbtractTransportService extends NIOTransportProvider
 		implements TransportService, AbtractTransportServiceMBean {
-	private static final Logger jlog = Logger
+	private static final Logger JLOG = Logger
 			.getLogger(AbtractTransportService.class.getName());
 
 	@Override
@@ -48,8 +48,8 @@ public abstract class AbtractTransportService extends NIOTransportProvider
 
 	public void changedApplicationProtocolState(SessionObject session,
 			APState protocolState) {
-		if (jlog.isLoggable(Level.FINE)) {
-			jlog.fine("changedApplicationProtocolState [" + this
+		if (JLOG.isLoggable(Level.FINE)) {
+			JLOG.fine("changedApplicationProtocolState [" + this
 					+ "] switching to sessionState " + protocolState.getName());
 		}
 		session.setSessionState(SessionState.SYNC);

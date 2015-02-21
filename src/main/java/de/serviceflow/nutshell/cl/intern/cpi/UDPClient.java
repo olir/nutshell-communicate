@@ -37,7 +37,7 @@ import de.serviceflow.nutshell.cl.intern.OperationDelegateUDP;
  * 
  */
 public class UDPClient extends AbtractTransportClient {
-	private static Logger jlog = Logger.getLogger(UDPClient.class.getName());
+	private static Logger JLOG = Logger.getLogger(UDPClient.class.getName());
 
 	private final OperationDelegateUDP delegate = new OperationDelegateUDP();
 
@@ -74,19 +74,19 @@ public class UDPClient extends AbtractTransportClient {
 		delegate.setNIOTransportProvider(this);
 	}
 
-	public void terminate(NioSession communicationSession) {
+	public final void terminate(NioSession communicationSession) {
 		try {
 			stop();
 		} catch (IOException e) {
-			jlog.finest("terminate() - close failed.");
+			JLOG.finest("terminate() - close failed.");
 		}
 	}
 
 	protected SelectableChannel createChannel(Selector selector)
 			throws IOException {
 
-		if (jlog.isLoggable(Level.FINER)) {
-			jlog.finer("createChannel() ....");
+		if (JLOG.isLoggable(Level.FINER)) {
+			JLOG.finer("createChannel() ....");
 		}
 
 		dc = DatagramChannel.open();
@@ -127,19 +127,19 @@ public class UDPClient extends AbtractTransportClient {
 		delegate.opWrite(key);
 	}
 
-	public int getMessagesSend() {
+	public final int getMessagesSend() {
 		return delegate.getMessagesSend();
 	}
 
-	public void setMessagesSend(int messagesSend) {
+	public final void setMessagesSend(int messagesSend) {
 		delegate.setMessagesSend(messagesSend);
 	}
 
-	public int getMessagesReceived() {
+	public final int getMessagesReceived() {
 		return delegate.getMessagesReceived();
 	}
 
-	public void setMessagesReceived(int messagesReceived) {
+	public final void setMessagesReceived(int messagesReceived) {
 		delegate.setMessagesReceived(messagesReceived);
 	}
 

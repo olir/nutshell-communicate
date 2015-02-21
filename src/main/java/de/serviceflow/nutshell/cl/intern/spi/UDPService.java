@@ -38,7 +38,7 @@ import de.serviceflow.nutshell.cl.intern.SessionObject;
  * 
  */
 public class UDPService extends AbtractTransportService {
-	private static final Logger jlog = Logger.getLogger(UDPService.class
+	private static final Logger JLOG = Logger.getLogger(UDPService.class
 			.getName());
 
 	protected final OperationDelegateUDP delegate = new OperationDelegateUDP();
@@ -59,7 +59,7 @@ public class UDPService extends AbtractTransportService {
 		delegate.setNIOTransportProvider(this);
 	}
 
-	public void terminate(NioSession communicationSession) {
+	public final void terminate(NioSession communicationSession) {
 		delegate.terminate(communicationSession);
 	}
 
@@ -76,8 +76,8 @@ public class UDPService extends AbtractTransportService {
 
 		register(dc, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
 
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL, "UDPService started on port "
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "UDPService started on port "
 					+ isa.getPort());
 		}
 
@@ -85,28 +85,28 @@ public class UDPService extends AbtractTransportService {
 	}
 
 	@Override
-	protected void opRead(SelectionKey key) throws IOException {
+	protected final void opRead(SelectionKey key) throws IOException {
 		delegate.opRead(key);
 	}
 
 	@Override
-	protected void opWrite(SelectionKey key) throws IOException {
+	protected final void opWrite(SelectionKey key) throws IOException {
 		delegate.opWrite(key);
 	}
 
-	public int getMessagesSend() {
+	public final int getMessagesSend() {
 		return delegate.getMessagesSend();
 	}
 
-	public void setMessagesSend(int messagesSend) {
+	public final void setMessagesSend(int messagesSend) {
 		delegate.setMessagesSend(messagesSend);
 	}
 
-	public int getMessagesReceived() {
+	public final int getMessagesReceived() {
 		return delegate.getMessagesReceived();
 	}
 
-	public void setMessagesReceived(int messagesReceived) {
+	public final void setMessagesReceived(int messagesReceived) {
 		delegate.setMessagesReceived(messagesReceived);
 	}
 }

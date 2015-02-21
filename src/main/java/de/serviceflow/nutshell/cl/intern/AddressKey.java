@@ -42,7 +42,7 @@ public class AddressKey implements Comparable<AddressKey> {
 		return c;
 	}
 
-	public InetSocketAddress getSocketAddress() {
+	public final InetSocketAddress getSocketAddress() {
 		return sa;
 	}
 
@@ -50,7 +50,7 @@ public class AddressKey implements Comparable<AddressKey> {
 		this.sa = sa;
 	}
 
-	public String toString() {
+	public final String toString() {
 		return "AddressKey#" + AddressKey.this.hashCode() + ": " + sa;
 	}
 }

@@ -39,7 +39,7 @@ import de.serviceflow.nutshell.cl.intern.SessionObject;
  * 
  */
 public class TCPClient extends AbtractTransportClient {
-	private static final Logger jlog = Logger.getLogger(TCPClient.class
+	private static final Logger JLOG = Logger.getLogger(TCPClient.class
 			.getName());
 
 	private final OperationDelegateTCP delegate = new OperationDelegateTCP();
@@ -50,7 +50,7 @@ public class TCPClient extends AbtractTransportClient {
 	public TCPClient(String applicationProtocolName) {
 		super(applicationProtocolName);
 	}
-	
+
 	/**
 	 * A new TCPClient
 	 * 
@@ -63,8 +63,7 @@ public class TCPClient extends AbtractTransportClient {
 	 * @param credentials
 	 */
 	@Override
-	public void init(Communication c, InetSocketAddress isa,
-			byte[] credentials) {
+	public void init(Communication c, InetSocketAddress isa, byte[] credentials) {
 		super.init(c, isa, credentials);
 		delegate.setNIOTransportProvider(this);
 	}
@@ -76,8 +75,8 @@ public class TCPClient extends AbtractTransportClient {
 	protected SelectableChannel createChannel(Selector selector)
 			throws IOException {
 
-		if (jlog.isLoggable(Level.FINER)) {
-			jlog.finer("createChannel() ....");
+		if (JLOG.isLoggable(Level.FINER)) {
+			JLOG.finer("createChannel() ....");
 		}
 
 		nsc = SocketChannel.open();
@@ -91,8 +90,8 @@ public class TCPClient extends AbtractTransportClient {
 		// nsc.socket().setTcpNoDelay(true);
 
 		if (nsc.connect(isa)) {
-			if (jlog.isLoggable(Level.FINER)) {
-				jlog.finer("direct connect successfull");
+			if (JLOG.isLoggable(Level.FINER)) {
+				JLOG.finer("direct connect successfull");
 			}
 			NioSession session = new SessionObject();
 			session.setSessionState(SessionState.CREATED);
@@ -112,35 +111,29 @@ public class TCPClient extends AbtractTransportClient {
 
 	}
 
-	public void terminate(NioSession communicationSession) {
+	public final void terminate(NioSession communicationSession) {
 		try {
-			try {
-				if (key != null && key.isValid()) {
-					key.cancel();
-				}
-			} finally {
+			if (key != null && key.isValid()) {
+				key.cancel();
 			}
 			key = null;
 
-			try {
-				if (nsc != null && nsc.isOpen()) {
-					nsc.close();
-				}
-			} finally {
+			if (nsc != null && nsc.isOpen()) {
+				nsc.close();
 			}
 			nsc = null;
 
 			stop();
 		} catch (IOException e) {
-			jlog.finest("terminate() - close failed.");
+			JLOG.finest("terminate() - close failed.");
 		}
 	}
 
-	protected void opConnect(SelectionKey acceptKey) throws IOException {
+	protected final void opConnect(SelectionKey acceptKey) throws IOException {
 		SocketChannel sc = (SocketChannel) acceptKey.channel();
 		try {
 			if (sc.finishConnect()) {
-				// jlog.info("finishConnect() successfull");
+				// JLOG.info("finishConnect() successfull");
 				NioSession session = new SessionObject();
 				session.setSessionState(SessionState.CREATED);
 				session.open(// getApplicationProtocol(),
@@ -151,23 +144,24 @@ public class TCPClient extends AbtractTransportClient {
 
 				authenticate(session, getApplicationProtocolName());
 			} else {
-				jlog.severe("finishConnect() failed - Exception excpected.");
+				JLOG.severe("finishConnect() failed - Exception excpected.");
 			}
 		} catch (IOException x) {
 			getProtocolListenerHelper().sessionFailedToOpen(this, x);
-			if (jlog.isLoggable(Level.FINER)) {
-				jlog.finest("finishConnect() failed");
+			if (JLOG.isLoggable(Level.FINER)) {
+				JLOG.finest("finishConnect() failed");
 			}
 			// no event.
 			try {
 				sc.close();
 			} catch (IOException x2) {
+				JLOG.finest(x2.toString());
 			}
 		}
 	}
 
 	@Override
-	protected void opRead(SelectionKey key) throws IOException {
+	protected final void opRead(SelectionKey key) throws IOException {
 		if (getDelegate().opRead(key)) {
 			getProtocolListenerHelper().connectionLost(this,
 					(NioSession) key.attachment());
@@ -177,23 +171,23 @@ public class TCPClient extends AbtractTransportClient {
 	}
 
 	@Override
-	protected void opWrite(SelectionKey key) throws IOException {
+	protected final void opWrite(SelectionKey key) throws IOException {
 		getDelegate().opWrite(key);
 	}
 
-	public int getMessagesSend() {
+	public final int getMessagesSend() {
 		return getDelegate().getMessagesSend();
 	}
 
-	public void setMessagesSend(int messagesSend) {
+	public final void setMessagesSend(int messagesSend) {
 		getDelegate().setMessagesSend(messagesSend);
 	}
 
-	public int getMessagesReceived() {
+	public final int getMessagesReceived() {
 		return getDelegate().getMessagesReceived();
 	}
 
-	public void setMessagesReceived(int messagesReceived) {
+	public final void setMessagesReceived(int messagesReceived) {
 		getDelegate().setMessagesReceived(messagesReceived);
 	}
 

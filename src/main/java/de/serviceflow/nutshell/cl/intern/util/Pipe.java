@@ -42,7 +42,7 @@ import de.serviceflow.nutshell.cl.intern.Communication;
  * 
  */
 public class Pipe<T> implements PipeMBean<T> {
-	private static Logger jlog = Logger.getLogger(Pipe.class.getName());
+	private static Logger JLOG = Logger.getLogger(Pipe.class.getName());
 
 	/**
 	 * internal data storage
@@ -62,7 +62,7 @@ public class Pipe<T> implements PipeMBean<T> {
 			} catch (MalformedObjectNameException
 					| InstanceAlreadyExistsException
 					| MBeanRegistrationException | NotCompliantMBeanException e) {
-				jlog.log(Level.WARNING, e.toString(), e);
+				JLOG.log(Level.WARNING, e.toString(), e);
 			}
 
 		}
@@ -73,8 +73,8 @@ public class Pipe<T> implements PipeMBean<T> {
 	 */
 	public synchronized final void add(T o) {
 		queue.add(o);
-		if (jlog.isLoggable(Level.FINEST)) {
-			jlog.finest("#ADD " + o + " to " + toString());
+		if (JLOG.isLoggable(Level.FINEST)) {
+			JLOG.finest("#ADD " + o + " to " + toString());
 		}
 	}
 
@@ -86,8 +86,8 @@ public class Pipe<T> implements PipeMBean<T> {
 		if (queue.isEmpty())
 			return null;
 		T t = queue.remove();
-		if (jlog.isLoggable(Level.FINEST)) {
-			jlog.finest("#NEXT " + t + " from " + toString());
+		if (JLOG.isLoggable(Level.FINEST)) {
+			JLOG.finest("#NEXT " + t + " from " + toString());
 		}
 		return t;
 	}

@@ -27,7 +27,7 @@ import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.intern.util.Pipe;
 
 public class OperationDelegateTCP {
-	private static final Logger jlog = Logger
+	private static final Logger JLOG = Logger
 			.getLogger(OperationDelegateTCP.class.getName());
 
 	private int messagesSend = 0;
@@ -43,7 +43,7 @@ public class OperationDelegateTCP {
 	 * @return problem occurred. connection lost
 	 * @throws IOException
 	 */
-	public boolean opRead(SelectionKey key) throws IOException {
+	public final boolean opRead(SelectionKey key) throws IOException {
 
 		SessionObject session = (SessionObject) key.attachment();
 		SocketChannel sc = (SocketChannel) key.channel();
@@ -52,8 +52,8 @@ public class OperationDelegateTCP {
 
 		int count = sc.read(buffer);
 		if (count < 0) {
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("opRead: -1 => connection lost");
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("opRead: -1 => connection lost");
 			}
 			return true;
 		}
@@ -62,15 +62,15 @@ public class OperationDelegateTCP {
 
 			short size = buffer.getShort(0);
 			if (buffer.position() < size + 2) {
-				if (jlog.isLoggable(Level.FINE)) {
-					jlog.fine("ReadBuffer not filled. pos=" + buffer.position()
+				if (JLOG.isLoggable(Level.FINE)) {
+					JLOG.fine("ReadBuffer not filled. pos=" + buffer.position()
 							+ " of " + (size + 2));
 				}
 				return false; // not enough data yet to deserialize message.
 			}
 
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("opRead: buffer filled (size=" + size + ")");
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("opRead: buffer filled (size=" + size + ")");
 			}
 
 			buffer.flip();
@@ -82,23 +82,23 @@ public class OperationDelegateTCP {
 			int controlType = buffer.get();
 			if (controlType>0)
 				controlType=session.getApplicationProtocol().getId();
-//			jlog.warning("<<<<< controlType="+controlType);
+//			JLOG.warning("<<<<< controlType="+controlType);
 			int commandId = buffer.get();
 			Message<?> nextMessage = Message.requestMessage(commandId,
 					controlType);
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				jlog.log(SessionObject.MSG_TRACE_LEVEL, "TCP.opRead: "
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL, "TCP.opRead: "
 						+ nextMessage + " for " + session);
 			}
 
 			nextMessage.readObject(buffer);
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("opRead: next deserialized: " + nextMessage);
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("opRead: next deserialized: " + nextMessage);
 			}
 
 			buffer.compact();
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("opRead: buffer compacted (position="
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("opRead: buffer compacted (position="
 						+ buffer.position() + ")");
 			}
 
@@ -110,7 +110,7 @@ public class OperationDelegateTCP {
 		return false;
 	}
 
-	public void opWrite(SelectionKey key) throws IOException {
+	public final void opWrite(SelectionKey key) throws IOException {
 
 		SessionObject session = (SessionObject) key.attachment();
 		ByteBuffer buffer;
@@ -124,8 +124,8 @@ public class OperationDelegateTCP {
 			}
 
 			Message<?> m = mcSendPipe.next();
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				jlog.log(SessionObject.MSG_TRACE_LEVEL, "TCP.opWrite: " + m
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL, "TCP.opWrite: " + m
 						+ " for " + session);
 			}
 			buffer = session.getWriteBuffer();
@@ -138,12 +138,12 @@ public class OperationDelegateTCP {
 			if (controlType>1)
 				controlType = 1; 
 			buffer.put((byte) controlType);
-//			jlog.warning(">>>>> controlType="+m.getClassificationValue());
+//			JLOG.warning(">>>>> controlType="+m.getClassificationValue());
 			buffer.put((byte) m.getCommandId());
 			m.writeObject(buffer);
 			int size = buffer.position() - 2;
 			if (size > Short.MAX_VALUE) {
-				jlog.severe("APPLICATION to large (" + size + "):" + m);
+				JLOG.severe("APPLICATION to large (" + size + "):" + m);
 				m.releaseMessage();
 				return;
 			}
@@ -151,16 +151,16 @@ public class OperationDelegateTCP {
 			buffer.flip();
 
 			session.setWriteBufferFlushed(false);
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("opWrite: cached (size=" + size + ") for: " + m);
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("opWrite: cached (size=" + size + ") for: " + m);
 
 			}
 
 			m.releaseMessage();
 		} else {
 			buffer = session.getWriteBuffer();
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("WriteBuffer not Flushed. pos=" + buffer.position()
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("WriteBuffer not Flushed. pos=" + buffer.position()
 						+ " of " + buffer.limit());
 			}
 		}
@@ -168,49 +168,50 @@ public class OperationDelegateTCP {
 		SocketChannel sc = (SocketChannel) key.channel();
 		sc.write(buffer);
 		if (buffer.position() < buffer.limit()) {
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("WriteBuffer not Flushed. pos=" + buffer.position()
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("WriteBuffer not Flushed. pos=" + buffer.position()
 						+ " of " + buffer.limit());
 			}
 			return;
 		}
 		session.setWriteBufferFlushed(true);
 		messagesSend++;
-		if (jlog.isLoggable(Level.FINE)) {
-			jlog.fine("opWrite: ok (limit=" + buffer.limit() + ")");
+		if (JLOG.isLoggable(Level.FINE)) {
+			JLOG.fine("opWrite: ok (limit=" + buffer.limit() + ")");
 		}
 	}
 
-	public int getMessagesSend() {
+	public final int getMessagesSend() {
 		return messagesSend;
 	}
 
-	public void setMessagesSend(int messagesSend) {
+	public final void setMessagesSend(int messagesSend) {
 		this.messagesSend = messagesSend;
 	}
 
-	public int getMessagesReceived() {
+	public final int getMessagesReceived() {
 		return messagesReceived;
 	}
 
-	public void setMessagesReceived(int messagesReceived) {
+	public final void setMessagesReceived(int messagesReceived) {
 		this.messagesReceived = messagesReceived;
 	}
 
 	/**
 	 * 
 	 */
-	public void setNIOTransportProvider(NIOTransportProvider ts) {
+	public final void setNIOTransportProvider(NIOTransportProvider ts) {
 		this.ts = ts;
 	}
 
-	public void terminate(NioSession communicationSession) {
+	public final void terminate(NioSession communicationSession) {
 		SelectionKey k = communicationSession.getKey();
 		if (k != null && k.isValid()) {
 			try {
-				jlog.info("cancel key.");
+				JLOG.info("cancel key.");
 				k.cancel();
 			} catch (Exception e) {
+				JLOG.finest(e.toString());
 			}
 			communicationSession.setKey(null);
 		}
@@ -218,9 +219,10 @@ public class OperationDelegateTCP {
 		SelectableChannel c = communicationSession.getChannel();
 		if (c != null && c.isOpen()) {
 			try {
-				jlog.info("closing channel.");
+				JLOG.info("closing channel.");
 				c.close();
 			} catch (IOException e) {
+				JLOG.finest(e.toString());
 			}
 			communicationSession.setChannel(null);
 		}

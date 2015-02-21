@@ -41,7 +41,7 @@ import de.serviceflow.nutshell.cl.intern.TransportProvider;
  */
 public class TestServerDaemon1 extends SimpleServerDaemon implements
 		MessageListener {
-	static final Logger jlog = Logger.getLogger(TestServerDaemon1.class
+	static final Logger JLOG = Logger.getLogger(TestServerDaemon1.class
 			.getName());
 	/**
 	 * 
@@ -58,19 +58,19 @@ public class TestServerDaemon1 extends SimpleServerDaemon implements
 				.createProtocolReader());
 	}
 
-	public void startDaemon() throws UnknownHostException,
+	public final void startDaemon() throws UnknownHostException,
 			ClassNotFoundException, IllegalAccessException, JAXBException {
 		bind(new InetSocketAddress(InetAddress.getLocalHost(),
 				simpleCommunicationTest.TESTPORT), this, this);
 
 	}
 
-	public void messageHasBeenSent(Session s, Message<?> m) {
-		jlog.fine("TestServerDaemon2 detects messageSend " + m);
+	public final void messageHasBeenSent(Session s, Message<?> m) {
+		JLOG.fine("TestServerDaemon2 detects messageSend " + m);
 	}
 
-	public void messageReceived(Session s, Message<?> nextMessage) {
-		jlog.fine("TestServerDaemon2 detects messageReceived " + nextMessage);
+	public final void messageReceived(Session s, Message<?> nextMessage) {
+		JLOG.fine("TestServerDaemon2 detects messageReceived " + nextMessage);
 		try {
 			/*
 			 * Check if protocol instance for the current client is in the right
@@ -91,7 +91,7 @@ public class TestServerDaemon1 extends SimpleServerDaemon implements
 				// calculate clientCalculatedProduct and send it back to
 				// client
 				response.result = request.factor1 * request.factor2;
-				jlog.info("Calculated " + request.factor1 + " * "
+				JLOG.info("Calculated " + request.factor1 + " * "
 						+ request.factor2 + " = " + response.result);
 				Object o = request.expected.getObjective();
 				if (!(o instanceof Expected)) {
@@ -99,7 +99,7 @@ public class TestServerDaemon1 extends SimpleServerDaemon implements
 				}
 				Expected x = (Expected) o;
 				if (x.getResult() == response.result) {
-					jlog.info("Expected result identical");
+					JLOG.info("Expected result identical");
 				} else {
 					fail("Expected result different: " + x.getResult());
 				}
@@ -118,15 +118,15 @@ public class TestServerDaemon1 extends SimpleServerDaemon implements
 		}
 	}
 
-	public void sessionCreated(TransportProvider p, Session mc) {
+	public final void sessionCreated(TransportProvider p, Session mc) {
 		addCommunicationSession(mc, new Object());
-		jlog.info("TestServerDaemon2#" + TestServerDaemon1.this.hashCode()
+		JLOG.info("TestServerDaemon2#" + TestServerDaemon1.this.hashCode()
 				+ " detects connectionEstablished");
 	}
 
 	@Override
 	public void connectionLost(TransportProvider p, Session mc) {
-		jlog.info("TestServerDaemon2#" + TestServerDaemon1.this.hashCode()
+		JLOG.info("TestServerDaemon2#" + TestServerDaemon1.this.hashCode()
 				+ " detects connectionLost");
 	}
 

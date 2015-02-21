@@ -8,7 +8,7 @@ public class Expected {
 		this.result = result;
 	}
 
-	public int getResult() {
+	public final int getResult() {
 		return result;
 	}
 }

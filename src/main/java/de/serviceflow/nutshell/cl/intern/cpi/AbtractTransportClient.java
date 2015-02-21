@@ -15,6 +15,7 @@
  */
 package de.serviceflow.nutshell.cl.intern.cpi;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.logging.Logger;
 
@@ -39,7 +40,7 @@ import de.serviceflow.nutshell.cl.intern.namp.MessageClassification;
  */
 public abstract class AbtractTransportClient extends NIOTransportProvider
 		implements TransportClient {
-	private static final Logger jlog = Logger
+	private static final Logger JLOG = Logger
 			.getLogger(AbtractTransportClient.class.getName());
 
 	private byte[] credentials;
@@ -82,7 +83,7 @@ public abstract class AbtractTransportClient extends NIOTransportProvider
 
 	public void changedApplicationProtocolState(SessionObject session,
 			APState protocolState) {
-		jlog.info("changedApplicationProtocolState " + session + " to "
+		JLOG.info("changedApplicationProtocolState " + session + " to "
 				+ protocolState.getName());
 		session.setSessionState(SessionState.SYNC);
 	}
@@ -91,4 +92,9 @@ public abstract class AbtractTransportClient extends NIOTransportProvider
 		return applicationProtocolName;
 	}
 
+	@Override
+	public void stop() throws IOException {
+		super.stop();
+	}
+	
 }

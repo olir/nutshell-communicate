@@ -14,7 +14,7 @@ import de.serviceflow.nutshell.cl.Session;
 import de.serviceflow.nutshell.cl.SimpleClient;
 
 public class TestClient3 extends SimpleClient{
-	public void connect() throws UnknownHostException, IOException {
+	public final void connect() throws UnknownHostException, IOException {
 		addApplicationProtocol(createProtocolReader());
 		connect(NetworkProtocolType.TCP_UDP,
 				new InetSocketAddress(InetAddress.getLocalHost(), 10000),
@@ -27,7 +27,7 @@ public class TestClient3 extends SimpleClient{
 		}
 	}
 
-	private Reader createProtocolReader() {
+	private final Reader createProtocolReader() {
 		return new InputStreamReader(getClass().getResourceAsStream(
 				"/de/serviceflow/nutshell/cl/test/myprotocol.xml"));
 	}

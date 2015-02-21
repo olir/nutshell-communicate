@@ -43,7 +43,7 @@ import de.serviceflow.nutshell.cl.intern.TransportProvider;
  * 
  */
 public class TestClient2 extends SimpleClient {
-	static final Logger jlog = Logger.getLogger(TestClient2.class.getName());
+	static final Logger JLOG = Logger.getLogger(TestClient2.class.getName());
 
 	public final int TESTPORT = 10101;
 
@@ -65,7 +65,7 @@ public class TestClient2 extends SimpleClient {
 		this.msgPerSleep = msgPerSleep;
 	}
 
-	public void connect(String host) throws UnknownHostException, IOException,
+	public final void connect(String host) throws UnknownHostException, IOException,
 			ClassNotFoundException, IllegalAccessException, JAXBException {
 		addApplicationProtocol(createProtocolReader());
 
@@ -76,11 +76,11 @@ public class TestClient2 extends SimpleClient {
 
 	class MyMessageListener implements MessageListener {
 		public void messageHasBeenSent(Session s, Message<?> m) {
-			jlog.fine("TestClient2 detects messageSend " + m);
+			JLOG.fine("TestClient2 detects messageSend " + m);
 		}
 
 		public void messageReceived(Session s, Message<?> nextMessage) {
-			jlog.info("*** TestClient2 detects messageReceived " + nextMessage);
+			JLOG.info("*** TestClient2 detects messageReceived " + nextMessage);
 			try {
 				/*
 				 * Check if protocol instance for the current client is in the
@@ -107,8 +107,8 @@ public class TestClient2 extends SimpleClient {
 		}
 	}
 
-	public void sessionCreated(TransportProvider p, Session session) {
-		jlog.log(Level.INFO, "TestClient2#" + TestClient2.this.hashCode()
+	public final void sessionCreated(TransportProvider p, Session session) {
+		JLOG.log(Level.INFO, "TestClient2#" + TestClient2.this.hashCode()
 				+ " detects sessionCreated");
 		// addCommunicationSession(mc, getTestData()); // remember session
 		doTest(session, amount, sleepTime, msgPerSleep);
@@ -116,12 +116,12 @@ public class TestClient2 extends SimpleClient {
 
 	@Override
 	public void sessionFailedToOpen(TransportProvider p, Throwable t) {
-		jlog.log(Level.INFO, "connectionFailedToOpen: " + t);
+		JLOG.log(Level.INFO, "connectionFailedToOpen: " + t);
 	}
 
 	@Override
 	public void connectionLost(TransportProvider p, Session mc) {
-		jlog.info("TestClient2#" + TestClient2.this.hashCode()
+		JLOG.info("TestClient2#" + TestClient2.this.hashCode()
 				+ " detects connectionLost");
 	}
 

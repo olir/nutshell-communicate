@@ -28,7 +28,7 @@ import de.serviceflow.nutshell.cl.intern.namp.SessionClosed;
 import de.serviceflow.nutshell.cl.intern.namp.SessionMessage;
 
 public class ClientMessageBroker implements MessageBroker {
-	private static final Logger jlog = Logger
+	private static final Logger JLOG = Logger
 			.getLogger(ClientMessageBroker.class.getName());
 
 	private final SessionObject session;
@@ -36,8 +36,8 @@ public class ClientMessageBroker implements MessageBroker {
 	private boolean created(Message<?> m, NIOTransportProvider provider) {
 		switch ((SessionMessage) m.getCommand()) {
 		case SESSION_ACCEPTED: {
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				jlog.log(SessionObject.MSG_TRACE_LEVEL,
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 						"key = " + session.getSessionkey());
 			}
 			boolean isUDP = session.getSessionkey() != 0;
@@ -85,8 +85,8 @@ public class ClientMessageBroker implements MessageBroker {
 	private boolean active(Message<?> m) {
 		if (m.getClassificationValue() == MessageClassification.SESSION.value()) {
 			if (m instanceof SessionClosed) {
-				if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-					jlog.log(SessionObject.MSG_TRACE_LEVEL,
+				if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+					JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 							"SessionObject closed by partner.");
 				}
 				session.terminate();
@@ -94,8 +94,8 @@ public class ClientMessageBroker implements MessageBroker {
 			}
 			else
 			if (m instanceof ChangeState) {
-				if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-					jlog.log(SessionObject.MSG_TRACE_LEVEL,
+				if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+					JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 							"SessionObject state change starting.");
 				}
 				session.setSessionState(SessionState.SYNC);
@@ -103,8 +103,8 @@ public class ClientMessageBroker implements MessageBroker {
 				return true;
 			}
 		} else {
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				jlog.log(SessionObject.MSG_TRACE_LEVEL,
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 						"forwarding "+m);
 			}
 			session.getCommunication().getProtocolListenerHelper()
@@ -130,8 +130,8 @@ public class ClientMessageBroker implements MessageBroker {
 	@Override
 	public final void broke(Message<?> m, NIOTransportProvider provider) {
 		boolean noError = true;
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL, "broking " + m);
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "broking " + m);
 		}
 		switch (session.getSessionState()) {
 		case CREATED:
@@ -159,8 +159,8 @@ public class ClientMessageBroker implements MessageBroker {
 		}
 
 		if (!noError) {
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				jlog.log(SessionObject.MSG_TRACE_LEVEL, "broke(): ignored " + m
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL, "broke(): ignored " + m
 						+ " for " + this + ": message not expected in state "
 						+ session.getSessionState());
 			}

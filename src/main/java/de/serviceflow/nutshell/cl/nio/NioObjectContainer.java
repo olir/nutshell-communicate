@@ -51,7 +51,7 @@ public class NioObjectContainer implements Transferable {
 		input.close();
 	}
 
-	public Object getObjective() {
+	public final Object getObjective() {
 		return objective;
 	}
 

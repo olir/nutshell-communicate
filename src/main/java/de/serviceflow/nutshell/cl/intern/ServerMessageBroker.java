@@ -30,7 +30,7 @@ import de.serviceflow.nutshell.cl.intern.namp.SessionClosed;
 import de.serviceflow.nutshell.cl.intern.namp.SessionMessage;
 
 public class ServerMessageBroker implements MessageBroker {
-	private static final Logger jlog = Logger
+	private static final Logger JLOG = Logger
 			.getLogger(ServerMessageBroker.class.getName());
 
 	private final SessionObject session;
@@ -120,7 +120,7 @@ public class ServerMessageBroker implements MessageBroker {
 			user = a.authenticate(ca.credentials.getBytes());
 		}
 		if (user == null) {
-			jlog.info("Authentication denied.");
+			JLOG.info("Authentication denied.");
 			// Remark: anonymous user should be implemented as
 			// "Null Object".
 			return false;
@@ -140,7 +140,7 @@ public class ServerMessageBroker implements MessageBroker {
 	private boolean active(Message<?> m) {
 		if (m.getClassificationValue() == MessageClassification.SESSION.value()) {
 			if (m instanceof SessionClosed) {
-				jlog.info("SessionObject closed by partner.");
+				JLOG.info("SessionObject closed by partner.");
 				session.terminate();
 				return true;
 			}
@@ -195,14 +195,14 @@ public class ServerMessageBroker implements MessageBroker {
 		}
 
 		if (!noError) {
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				jlog.log(SessionObject.MSG_TRACE_LEVEL, "broke(): ignored " + m
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL, "broke(): ignored " + m
 						+ " for " + this + ": message not expected in state "
 						+ session.getSessionState());
 			}
 		} else {
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				jlog.log(SessionObject.MSG_TRACE_LEVEL,
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 						"broke(): consumed " + m + " for " + this + ". State: "
 								+ session.getSessionState());
 			}

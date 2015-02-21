@@ -43,7 +43,7 @@ import de.serviceflow.nutshell.cl.intern.Communication;
  * 
  */
 public abstract class SimpleServerDaemon extends DefaultSessionListener {
-	private static final Logger jlog = Logger
+	private static final Logger JLOG = Logger
 			.getLogger(SimpleServerDaemon.class.getName());
 
 	private ServerCommunication sc;
@@ -53,11 +53,11 @@ public abstract class SimpleServerDaemon extends DefaultSessionListener {
 				new AnonymousAuthentication());
 	}
 
-	public void setMbeanServer(MBeanServer mbs) {
+	public final void setMbeanServer(MBeanServer mbs) {
 		Communication.setMbeanServer(mbs);
 	}
 
-	public void addApplicationProtocol(Reader r) {
+	public final void addApplicationProtocol(Reader r) {
 		if (sc == null) {
 			sc = ServerCommunication.getServerCommunication();
 		}
@@ -77,8 +77,8 @@ public abstract class SimpleServerDaemon extends DefaultSessionListener {
 
 			sc.bind(isa);
 
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("communication started.");
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("communication started.");
 			}
 		} catch (Exception e) {
 			try {
@@ -94,11 +94,11 @@ public abstract class SimpleServerDaemon extends DefaultSessionListener {
 	public void stop() {
 		try {
 			sc.stopAllServices();
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("communication stopped.");
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("communication stopped.");
 			}
 		} catch (Exception e) {
-			jlog.log(Level.SEVERE, "communication stop failed." + e.toString(),
+			JLOG.log(Level.SEVERE, "communication stop failed." + e.toString(),
 					e);
 		}
 	}

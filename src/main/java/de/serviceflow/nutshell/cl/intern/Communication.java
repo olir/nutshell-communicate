@@ -45,7 +45,7 @@ import de.serviceflow.nutshell.cl.intern.namp.StateChangeAcknowledged;
  * 
  */
 public abstract class Communication {
-	static private final Logger jlog = Logger
+	static private final Logger JLOG = Logger
 			.getLogger(Communication.class.getName());
 
 	public static final String MBEAN_PACKAGE = "de.serviceflow.nutshell.cl";
@@ -82,7 +82,7 @@ public abstract class Communication {
 		}
 	}
 
-	public void addApplicationProtocol(Reader r) {
+	public final void addApplicationProtocol(Reader r) {
 		try {
 			ApplicationProtocol.createInstance(r); // ensure it is created
 		} catch (ClassNotFoundException | IllegalAccessException
@@ -91,46 +91,46 @@ public abstract class Communication {
 		}
 	}
 	
-	public void addSessionListener(SessionListener l) {
+	public final void addSessionListener(SessionListener l) {
 		slisteners.add(l);
-		if (jlog.isLoggable(Level.FINEST)) {
-			jlog.finest("SessionListener installed");
+		if (JLOG.isLoggable(Level.FINEST)) {
+			JLOG.finest("SessionListener installed");
 		}
 	}
 
-	public void removeSessionListener(SessionListener l) {
+	public final void removeSessionListener(SessionListener l) {
 		slisteners.remove(l);
 	}
 
-	public void addMessageListener(MessageListener l) {
+	public final void addMessageListener(MessageListener l) {
 		mlisteners.add(l);
-		if (jlog.isLoggable(Level.FINEST)) {
-			jlog.finest("MessageListener installed");
+		if (JLOG.isLoggable(Level.FINEST)) {
+			JLOG.finest("MessageListener installed");
 		}
 	}
 
-	public void removeMessageListener(MessageListener l) {
+	public final void removeMessageListener(MessageListener l) {
 		mlisteners.remove(l);
 	}
 
-	public void removeAllListeners() {
+	public final void removeAllListeners() {
 		slisteners.clear();
 		mlisteners.clear();
 	}
 
-	public SessionListenerDispensor getProtocolListenerHelper() {
+	public final SessionListenerDispensor getProtocolListenerHelper() {
 		return eventHelper;
 	}
 
-	public List<SessionListener> getSlisteners() {
+	public final List<SessionListener> getSlisteners() {
 		return slisteners;
 	}
 
-	public List<MessageListener> getMlisteners() {
+	public final List<MessageListener> getMlisteners() {
 		return mlisteners;
 	}
 
-	public ThreadGroup getThreadGroup() {
+	public final ThreadGroup getThreadGroup() {
 		return group;
 	}
 
@@ -150,11 +150,11 @@ public abstract class Communication {
 	 *            the Runnable
 	 * @return true 
 	 */
-	public boolean addCommunicationWorker(Runnable r) {
+	public final boolean addCommunicationWorker(Runnable r) {
 		return communicationWorkers.add(r);
 	}
 
-	public boolean removeCommunicationWorker(Runnable r) {
+	public final boolean removeCommunicationWorker(Runnable r) {
 		return communicationWorkers.remove(r);
 	}
 

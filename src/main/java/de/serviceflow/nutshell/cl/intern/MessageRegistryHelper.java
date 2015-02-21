@@ -23,7 +23,7 @@ import de.serviceflow.nutshell.cl.APState;
  * Helps with message registration,  protocol execution and validation. 
  */
 public class MessageRegistryHelper {
-	// private static final Logger jlog =
+	// private static final Logger JLOG =
 	// Logger.getLogger(MessageRegistryHelper.class
 	// .getName());
 
@@ -41,7 +41,7 @@ public class MessageRegistryHelper {
 	 * @param apMessage
 	 *            definition of the message
 	 */
-	public void add(APState state, APMessage apMessage) {
+	public final void add(APState state, APMessage apMessage) {
 		if (this.state != null) {
 			throw new Error(
 					"Message reuse in multipe states is not supported. Define different messages classes. apMessage:"
@@ -54,11 +54,11 @@ public class MessageRegistryHelper {
 		this.apMessage = apMessage;
 	}
 
-	public boolean belongsTo(APState a) {
+	public final boolean belongsTo(APState a) {
 		return state == null || a == state;
 	}
 
-	public boolean isReliable() {
+	public final boolean isReliable() {
 		return apMessage == null || apMessage.isReliable();
 	}
 

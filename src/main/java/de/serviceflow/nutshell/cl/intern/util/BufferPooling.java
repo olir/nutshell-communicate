@@ -87,7 +87,7 @@ public class BufferPooling {
 		bufferBuckets[bucketIndex].releaseElementToPool(b);
 	}
 
-	protected void toss(ByteBuffer b) {
+	protected final void toss(ByteBuffer b) {
 		tossedBytes += b.capacity();
 	}
 
@@ -95,7 +95,7 @@ public class BufferPooling {
 		return 31 - Integer.numberOfLeadingZeros(n);
 	}
 
-	public long getTossedBytes() {
+	public final long getTossedBytes() {
 		return tossedBytes;
 	}
 

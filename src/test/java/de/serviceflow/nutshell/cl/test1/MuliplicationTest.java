@@ -44,7 +44,7 @@ public class MuliplicationTest {
 		this.serverCalculatedProduct = product;
 	}
 
-	public int getServerCalculatedProduct() {
+	public final int getServerCalculatedProduct() {
 		return serverCalculatedProduct;
 	}
 }

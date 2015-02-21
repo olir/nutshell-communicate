@@ -46,7 +46,7 @@ import de.serviceflow.nutshell.cl.intern.TransportProvider;
  */
 public class TestServerDaemon2 extends SimpleServerDaemon implements
 		MessageListener {
-	static final Logger jlog = Logger.getLogger(TestServerDaemon2.class
+	static final Logger JLOG = Logger.getLogger(TestServerDaemon2.class
 			.getName());
 
 	protected static final long OLD_WAITTIME = 1000L;
@@ -66,7 +66,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 		addApplicationProtocol(createProtocolReader());
 	}
 
-	public void startDaemon() throws UnknownHostException,
+	public final void startDaemon() throws UnknownHostException,
 			ClassNotFoundException, IllegalAccessException, JAXBException {
 
 		bind(new InetSocketAddress(InetAddress.getLocalHost(), TESTPORT), this,
@@ -78,7 +78,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 				if (response != null) {
 					if (response.old > 0) {
 						try {
-							jlog.info("waiting for more old messages...");
+							JLOG.info("waiting for more old messages...");
 							response.oldwait += OLD_WAITTIME;
 							Thread.sleep(OLD_WAITTIME);
 						} catch (InterruptedException e) {
@@ -86,7 +86,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 						}
 					}
 					if (old > 0) {
-						jlog.info("removed " + old + " old messages.");
+						JLOG.info("removed " + old + " old messages.");
 						old = 0;
 					} else {
 						session.send(response);
@@ -102,17 +102,17 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 			}
 		});
 
-		jlog.info("TestServerDaemon2 is waiting for incoming connections on "
+		JLOG.info("TestServerDaemon2 is waiting for incoming connections on "
 				+ InetAddress.getLocalHost() + ":" + TESTPORT);
 
 	}
 
-	public void messageHasBeenSent(Session s, Message<?> m) {
-		jlog.fine("TestServerDaemon2 detects messageSend " + m);
+	public final void messageHasBeenSent(Session s, Message<?> m) {
+		JLOG.fine("TestServerDaemon2 detects messageSend " + m);
 	}
 
-	public void messageReceived(Session s, Message<?> nextMessage) {
-		jlog.fine("TestServerDaemon2 detects messageReceived " + nextMessage);
+	public final void messageReceived(Session s, Message<?> nextMessage) {
+		JLOG.fine("TestServerDaemon2 detects messageReceived " + nextMessage);
 		try {
 			/*
 			 * Check if protocol instance for the current client is in the right
@@ -134,7 +134,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 				} else {
 					dChecker.clear();
 				}
-				jlog.info("start " + muuid);
+				JLOG.info("start " + muuid);
 			} else if (nextMessage.getCommand() == TestMessage2.TEST_PING) {
 				TestPing m = (TestPing) nextMessage;
 				if (muuid == m.muuid) {
@@ -151,7 +151,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 				if (muuid != m.muuid) {
 					throw new Error("UUID mismatch");
 				}
-				jlog.info("end.");
+				JLOG.info("end.");
 
 				TestAcknowledge r = (TestAcknowledge) Message.requestMessage(
 						TestAcknowledge.class, s);
@@ -160,7 +160,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 				r.copies = copies;
 				r.oldwait = 0L;
 				if (old > 0) {
-					jlog.info("removed " + old + " old messages.");
+					JLOG.info("removed " + old + " old messages.");
 				}
 				count = 0;
 				old = 0;
@@ -175,9 +175,9 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 		}
 	}
 
-	public void sessionCreated(TransportProvider p, Session mc) {
+	public final void sessionCreated(TransportProvider p, Session mc) {
 		addCommunicationSession(mc, new Object());
-		jlog.info("TestServerDaemon2#" + TestServerDaemon2.this.hashCode()
+		JLOG.info("TestServerDaemon2#" + TestServerDaemon2.this.hashCode()
 				+ " detects connectionEstablished");
 
 		session = mc;
@@ -190,7 +190,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 
 	@Override
 	public void connectionLost(TransportProvider p, Session mc) {
-		jlog.info("TestServerDaemon2#" + TestServerDaemon2.this.hashCode()
+		JLOG.info("TestServerDaemon2#" + TestServerDaemon2.this.hashCode()
 				+ " detects connectionLost");
 		session = null;
 		count = 0;
@@ -222,7 +222,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 					}
 				};
 			} else {
-				jlog.info("2nd client tried to connect. Rejected.");
+				JLOG.info("2nd client tried to connect. Rejected.");
 				return null;
 			}
 		}

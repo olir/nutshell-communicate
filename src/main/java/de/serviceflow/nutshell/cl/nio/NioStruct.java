@@ -33,7 +33,7 @@ import de.serviceflow.nutshell.cl.intern.NioObjectIOHelper;
  * @see NioObjectContainer
  */
 public abstract class NioStruct implements Transferable {
-	private static final Logger jlog = Logger.getLogger(NioStruct.class
+	private static final Logger JLOG = Logger.getLogger(NioStruct.class
 			.getName());
 
 	private static final int AUTO_MAX = 1024;
@@ -57,8 +57,8 @@ public abstract class NioStruct implements Transferable {
 
 	@SuppressWarnings("unused")
 	private final void autoIncrease() {
-		if (jlog.isLoggable(Level.FINER)) {
-			jlog.finer("increase()");
+		if (JLOG.isLoggable(Level.FINER)) {
+			JLOG.finer("increase()");
 		}
 		int newLength = AUTO_MAX;
 		if (newLength > AUTO_MAX)

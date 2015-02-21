@@ -42,7 +42,7 @@ import de.serviceflow.nutshell.cl.intern.TransportProvider;
  * 
  */
 public class TestClient1 extends SimpleClient implements MessageListener {
-	static final Logger jlog = Logger.getLogger(TestClient1.class.getName());
+	static final Logger JLOG = Logger.getLogger(TestClient1.class.getName());
 	/**
 	 * 
 	 */
@@ -65,7 +65,7 @@ public class TestClient1 extends SimpleClient implements MessageListener {
 	/**
 	 * Send a test message to server.
 	 */
-	public void testMessaging() {
+	public final void testMessaging() {
 		Session s = getCommunicationSession(getTestData());
 		TestRequest m = (TestRequest) Message.requestMessage(TestRequest.class,
 				s);
@@ -87,20 +87,20 @@ public class TestClient1 extends SimpleClient implements MessageListener {
 				"anon:anon".getBytes(), this, this);
 	}
 
-	public MuliplicationTest getTestData() {
+	public final MuliplicationTest getTestData() {
 		return testData;
 	}
 
-	public void setTestData(MuliplicationTest testData) {
+	public final void setTestData(MuliplicationTest testData) {
 		this.testData = testData;
 	}
 
-	public void messageHasBeenSent(Session s, Message<?> m) {
-		jlog.fine("TestClient2 detects messageSend " + m);
+	public final void messageHasBeenSent(Session s, Message<?> m) {
+		JLOG.fine("TestClient2 detects messageSend " + m);
 	}
 
-	public void messageReceived(Session s, Message<?> nextMessage) {
-		jlog.info("*** TestClient2 detects messageReceived " + nextMessage);
+	public final void messageReceived(Session s, Message<?> nextMessage) {
+		JLOG.info("*** TestClient2 detects messageReceived " + nextMessage);
 		try {
 			/*
 			 * Check if protocol instance for the current client is in the right
@@ -130,8 +130,8 @@ public class TestClient1 extends SimpleClient implements MessageListener {
 		}
 	}
 
-	public void sessionCreated(TransportProvider p, Session mc) {
-		jlog.log(Level.INFO, "TestClient2#" + TestClient1.this.hashCode()
+	public final void sessionCreated(TransportProvider p, Session mc) {
+		JLOG.log(Level.INFO, "TestClient2#" + TestClient1.this.hashCode()
 				+ " detects sessionCreated");
 		addCommunicationSession(mc, getTestData()); // remember session
 		testMessaging();
@@ -144,7 +144,7 @@ public class TestClient1 extends SimpleClient implements MessageListener {
 
 	@Override
 	public void connectionLost(TransportProvider p, Session mc) {
-		jlog.info("TestClient2#" + TestClient1.this.hashCode()
+		JLOG.info("TestClient2#" + TestClient1.this.hashCode()
 				+ " detects connectionLost");
 	}
 

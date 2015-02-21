@@ -31,7 +31,7 @@ import org.junit.Test;
  * @version $Id: 5fa6fd8a4ea5e7a4ee22d54d8ffbd8d8b985384f $
  */
 public class Test3 {
-	static final Logger jlog = Logger.getLogger(Test3.class.getName());
+	static final Logger JLOG = Logger.getLogger(Test3.class.getName());
 
 	@Test
 	public void doTest3() {

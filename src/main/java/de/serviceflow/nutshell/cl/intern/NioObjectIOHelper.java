@@ -41,7 +41,7 @@ import de.serviceflow.nutshell.cl.nio.Transferable;
  * 
  */
 public class NioObjectIOHelper {
-	private static final Logger jlog = Logger.getLogger(NioObjectIOHelper.class
+	private static final Logger JLOG = Logger.getLogger(NioObjectIOHelper.class
 			.getName());
 
 	private List<AbstractFieldIOHelper> fieldHelperList = new ArrayList<AbstractFieldIOHelper>();
@@ -76,8 +76,8 @@ public class NioObjectIOHelper {
 		Field fields[] = messageClass.getFields();
 		for (Field field : fields) {
 			if (field.isAnnotationPresent(Transfer.class)) {
-				if (jlog.isLoggable(Level.FINER)) {
-					jlog.finer("." + field.getName() + " found annotation on "
+				if (JLOG.isLoggable(Level.FINER)) {
+					JLOG.finer("." + field.getName() + " found annotation on "
 							+ messageClass);
 				}
 
@@ -117,7 +117,7 @@ public class NioObjectIOHelper {
 							+ field.getName());
 				}
 			} else {
-				jlog.finer("." + field.getName()
+				JLOG.finer("." + field.getName()
 						+ ": ignored - no Transfer annotation on "
 						+ messageClass);
 			}
@@ -128,9 +128,9 @@ public class NioObjectIOHelper {
 	public void writeObject(NioStruct m, ByteBuffer out) {
 		for (AbstractFieldIOHelper h : fieldHelperList) {
 			h.writeField(m, out);
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL2)) {
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL2)) {
 				try {
-					jlog.log(SessionObject.MSG_TRACE_LEVEL2,
+					JLOG.log(SessionObject.MSG_TRACE_LEVEL2,
 							"write " + h.field.getName() + "=" + h.field.get(m)
 									+ " remaining " + out.remaining());
 				} catch (IllegalArgumentException | IllegalAccessException e) {
@@ -143,9 +143,9 @@ public class NioObjectIOHelper {
 	public void readObject(NioStruct m, ByteBuffer in) {
 		for (AbstractFieldIOHelper h : fieldHelperList) {
 			h.readField(m, in);
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL2)) {
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL2)) {
 				try {
-					jlog.log(SessionObject.MSG_TRACE_LEVEL2,
+					JLOG.log(SessionObject.MSG_TRACE_LEVEL2,
 							"read " + h.field.getName() + "=" + h.field.get(m)
 									+ " remaining " + in.remaining());
 				} catch (IllegalArgumentException | IllegalAccessException e) {
@@ -162,8 +162,8 @@ public class NioObjectIOHelper {
 		protected AbstractFieldIOHelper(Field field) {
 			this.field = field;
 			isArray = field.getType().isArray();
-			if (jlog.isLoggable(Level.FINER)) {
-				jlog.finer("MessageIOHelper: +field " + field + " isArray="
+			if (JLOG.isLoggable(Level.FINER)) {
+				JLOG.finer("MessageIOHelper: +field " + field + " isArray="
 						+ isArray);
 			}
 		}
@@ -356,7 +356,6 @@ public class NioObjectIOHelper {
 		void readField(Transferable t, ByteBuffer in) {
 			try {
 				((Transferable) field.get(t)).readObject(in);
-				;
 			} catch (Exception e) {
 				throw new Error("read error on " + t + " at " + field, e);
 			}

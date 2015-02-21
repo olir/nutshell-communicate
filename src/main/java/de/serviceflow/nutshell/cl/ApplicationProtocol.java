@@ -42,7 +42,7 @@ import de.serviceflow.nutshell.cl.xml.Protocol;
  * 
  */
 public final class ApplicationProtocol {
-	private static final Logger jlog = Logger
+	private static final Logger JLOG = Logger
 			.getLogger(ApplicationProtocol.class.getName());
 
 	public static final int MAX_PROTOCOLS = 255;
@@ -82,8 +82,8 @@ public final class ApplicationProtocol {
 			protocolCount++; // register instance and messsages under this
 			instance = new ApplicationProtocol(jaxbElement);
 			instanceMap.put(key, instance);
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				jlog.log(SessionObject.MSG_TRACE_LEVEL, "Added protocol '" + key + "'");
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL, "Added protocol '" + key + "'");
 			}
 		}
 		return instance;

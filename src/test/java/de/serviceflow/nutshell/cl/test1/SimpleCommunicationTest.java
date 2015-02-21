@@ -44,7 +44,7 @@ import de.serviceflow.nutshell.cl.test2.TestServerDaemon2;
  * @see TestServerDaemon2
  */
 public class SimpleCommunicationTest {
-	static final Logger jlog = Logger.getLogger(SimpleCommunicationTest.class
+	static final Logger JLOG = Logger.getLogger(SimpleCommunicationTest.class
 			.getName());
 
 	private static final long DELAY = 250L;
@@ -62,7 +62,7 @@ public class SimpleCommunicationTest {
 	 * @see NetworkProtocolType#TCP
 	 */
 	@Test
-	public void testTCP() {
+	public final void testTCP() {
 		npt = NetworkProtocolType.TCP;
 		runProtocolTest();
 	}
@@ -106,7 +106,7 @@ public class SimpleCommunicationTest {
 							+ ", got: "
 							+ c.getTestData().getServerCalculatedProduct());
 				}
-				jlog.info("Success: APPLICATION exchange correct.");
+				JLOG.info("Success: APPLICATION exchange correct.");
 			} finally {
 				// Stop communication threads.
 				c.stop();
@@ -114,7 +114,7 @@ public class SimpleCommunicationTest {
 			}
 			Thread.sleep(DELAY);
 		} catch (Throwable t) {
-			jlog.log(Level.SEVERE, "Error Stack:", t);
+			JLOG.log(Level.SEVERE, "Error Stack:", t);
 			fail("Error occured: " + t);
 		}
 	}
@@ -128,7 +128,7 @@ public class SimpleCommunicationTest {
 		return new InputStreamReader(is);
 	}
 
-	public NetworkProtocolType getNpt() {
+	public final NetworkProtocolType getNpt() {
 		return npt;
 	}
 

@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  * 
  */
 public final class NVarchar implements Transferable {
-	private static final Logger jlog = Logger.getLogger(NVarchar.class
+	private static final Logger JLOG = Logger.getLogger(NVarchar.class
 			.getName());
 
 	/**
@@ -89,8 +89,8 @@ public final class NVarchar implements Transferable {
 	}
 
 	private final void increase() {
-		if (jlog.isLoggable(Level.FINER)) {
-			jlog.finer("increase()");
+		if (JLOG.isLoggable(Level.FINER)) {
+			JLOG.finer("increase()");
 		}
 		// int newLength = buffer.length<<1;
 		int newLength = MAX;
@@ -123,7 +123,7 @@ public final class NVarchar implements Transferable {
 			charsetName = "UTF-8";
 		try {
 			addBytes(value.getBytes(charsetName));
-			// jlog.info("addString: value="+value+
+			// JLOG.info("addString: value="+value+
 			// " position="+buffer.position());
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(
@@ -158,7 +158,7 @@ public final class NVarchar implements Transferable {
 		buffer.flip();
 		buffer.get(a);
 		buffer.limit(buffer.capacity());
-		// jlog.info("getBytes: a.length="+a.length+
+		// JLOG.info("getBytes: a.length="+a.length+
 		// " position="+buffer.position()+ " limit="+buffer.limit());
 		return a;
 	}

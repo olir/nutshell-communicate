@@ -44,16 +44,23 @@ import de.serviceflow.nutshell.cl.intern.NIOTransportProvider;
  * 
  */
 public abstract class SimpleClient extends DefaultSessionListener {
-	static private Logger jlog = Logger.getLogger(SimpleClient.class.getName());
+	static private Logger JLOG = Logger.getLogger(SimpleClient.class.getName());
 
 	private ClientCommunication clientCommunication;
 	private SessionListener slistener;
 	private MessageListener mlistener;
 
 	protected SimpleClient() {
-		clientCommunication = ClientCommunication.getClientCommunication();
 	}
 
+	protected final void addApplicationProtocol(Reader r) {
+		if (clientCommunication==null) {
+			clientCommunication = ClientCommunication.getClientCommunication();
+		}
+		clientCommunication.addApplicationProtocol(r);
+	}
+
+	
 	/**
 	 * Connect dual channel (TCP on port, and udp on port+1).
 	 * 
@@ -66,10 +73,14 @@ public abstract class SimpleClient extends DefaultSessionListener {
 	 * @return
 	 * @throws IOException
 	 */
-	public NIOTransportProvider connect(NetworkProtocolType npt,
+	public final NIOTransportProvider connect(NetworkProtocolType npt,
 			InetSocketAddress inetSocketAddress, String protocolName,
 			byte[] credentials, SessionListener slistener,
 			MessageListener mlistener) throws IOException {
+		if (clientCommunication==null) {
+			throw new Error(
+					"You need to add at least one application protocol first.");
+		}
 		try {
 			this.slistener = slistener;
 			this.mlistener = mlistener;
@@ -77,19 +88,15 @@ public abstract class SimpleClient extends DefaultSessionListener {
 			clientCommunication.addMessageListener(mlistener);
 			NIOTransportProvider c = clientCommunication.connect(npt,
 					inetSocketAddress, protocolName, credentials);
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("started.");
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("started.");
 			}
 			return c;
 		} catch (IOException e) {
-			jlog.log(Level.WARNING, "protocol start failed", e);
+			JLOG.log(Level.WARNING, "protocol start failed", e);
 			throw e;
 		}
 
-	}
-
-	protected void addApplicationProtocol(Reader r) {
-		clientCommunication.addApplicationProtocol(r);
 	}
 
 	/**
@@ -97,12 +104,12 @@ public abstract class SimpleClient extends DefaultSessionListener {
 	public void stop() {
 		try {
 			clientCommunication.stopAllClients();
-			if (jlog.isLoggable(Level.FINE)) {
-				jlog.fine("stopped.");
+			if (JLOG.isLoggable(Level.FINE)) {
+				JLOG.fine("stopped.");
 			}
 			clientCommunication.removeAllListeners();
 		} catch (Exception e) {
-			jlog.log(Level.WARNING, "protocol stop failed", e);
+			JLOG.log(Level.WARNING, "protocol stop failed", e);
 		} finally {
 			clientCommunication.removeSessionListener(slistener);
 			clientCommunication.removeMessageListener(mlistener);

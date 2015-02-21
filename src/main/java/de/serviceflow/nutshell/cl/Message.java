@@ -38,7 +38,7 @@ import de.serviceflow.nutshell.cl.nio.NioStruct;
  * 
  */
 public abstract class Message<EnumClass> extends NioStruct {
-	private static final Logger jlog = Logger
+	private static final Logger JLOG = Logger
 			.getLogger(Message.class.getName());
 
 	protected boolean bufferGetMode;
@@ -105,7 +105,7 @@ public abstract class Message<EnumClass> extends NioStruct {
 					+ ". Please check if your protocol xml is valid.");
 		}
 		Message<?> m = pool.requestElementFromPool();
-		m.setClassificationValue(controlType); 
+		m.setClassificationValue(controlType);
 		return m;
 	}
 
@@ -213,8 +213,8 @@ public abstract class Message<EnumClass> extends NioStruct {
 	 */
 	public static MessageRegistryHelper register(final Class<?> messageClass,
 			int controlType) throws IllegalAccessException {
-		if (jlog.isLoggable(Level.FINER)) {
-			jlog.finer("AbstractMessage.register(): " + messageClass.getName());
+		if (JLOG.isLoggable(Level.FINER)) {
+			JLOG.finer("AbstractMessage.register(): " + messageClass.getName());
 		}
 		Map<Class<?>, MPool<Message<?>>> map = poolMapArray[controlType];
 		if (map == null) {
@@ -265,7 +265,7 @@ public abstract class Message<EnumClass> extends NioStruct {
 		return pool.getMessageDefinition();
 	}
 
-	public NioSession getSession() {
+	public final NioSession getSession() {
 		return session;
 	}
 
@@ -291,7 +291,7 @@ public abstract class Message<EnumClass> extends NioStruct {
 		@Override
 		protected void toss(T e) {
 			// TODO Auto-generated method stub
-			
+
 		}
 	}
 
@@ -307,7 +307,7 @@ public abstract class Message<EnumClass> extends NioStruct {
 		return pool.size();
 	}
 
-	public void setClassificationValue(int classificationValue) {
+	public final void setClassificationValue(int classificationValue) {
 		this.classificationValue = classificationValue;
 	}
 }

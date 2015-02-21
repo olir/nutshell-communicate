@@ -33,7 +33,7 @@ import de.serviceflow.nutshell.cl.SessionListener;
  */
 public class SessionListenerDispensor implements MessageListener,
 		SessionListener, ConnectionListener {
-	static private final Logger jlog = Logger
+	static private final Logger JLOG = Logger
 			.getLogger(SessionListenerDispensor.class.getName());
 	/**
 	 * 
@@ -50,17 +50,17 @@ public class SessionListenerDispensor implements MessageListener,
 	/**
 	 * {@inheritDoc}
 	 */
-	public void sessionCreated(TransportProvider p, Session mc) {
-		if (jlog.isLoggable(Level.FINE)) {
-			jlog.fine("connectionEstablished " + mc);
+	public final void sessionCreated(TransportProvider p, Session mc) {
+		if (JLOG.isLoggable(Level.FINE)) {
+			JLOG.fine("connectionEstablished " + mc);
 		}
 		for (SessionListener listener : this.abstractCommunication
 				.getSlisteners()) {
 			listener.sessionCreated(p, mc);
 		}
-		if (jlog.isLoggable(Level.FINE)) {
+		if (JLOG.isLoggable(Level.FINE)) {
 			if (mc.getUserObject() == null) {
-				jlog.fine("sessionCreated() did not set an user object for session "
+				JLOG.fine("sessionCreated() did not set an user object for session "
 						+ mc);
 			}
 		}
@@ -69,9 +69,9 @@ public class SessionListenerDispensor implements MessageListener,
 	/**
 	 * {@inheritDoc}
 	 */
-	public void sessionTerminated(TransportProvider p, Session mc) {
-		if (jlog.isLoggable(Level.FINE)) {
-			jlog.fine("connectionTerminated " + mc);
+	public final void sessionTerminated(TransportProvider p, Session mc) {
+		if (JLOG.isLoggable(Level.FINE)) {
+			JLOG.fine("connectionTerminated " + mc);
 		}
 		for (SessionListener listener : this.abstractCommunication
 				.getSlisteners()) {
@@ -82,9 +82,9 @@ public class SessionListenerDispensor implements MessageListener,
 	/**
 	 * {@inheritDoc}
 	 */
-	public void sessionFailedToOpen(TransportProvider p, Throwable t) {
-		if (jlog.isLoggable(Level.FINE)) {
-			jlog.log(Level.FINE, "connectionFailedToOpen " + t.getMessage(), t);
+	public final void sessionFailedToOpen(TransportProvider p, Throwable t) {
+		if (JLOG.isLoggable(Level.FINE)) {
+			JLOG.log(Level.FINE, "connectionFailedToOpen " + t.getMessage(), t);
 		}
 		for (SessionListener listener : this.abstractCommunication
 				.getSlisteners()) {
@@ -95,9 +95,9 @@ public class SessionListenerDispensor implements MessageListener,
 	/**
 	 * {@inheritDoc}
 	 */
-	public void sessionRecovered(TransportProvider p, Session mc) {
-		if (jlog.isLoggable(Level.FINE)) {
-			jlog.fine("connectionOverload " + mc);
+	public final void sessionRecovered(TransportProvider p, Session mc) {
+		if (JLOG.isLoggable(Level.FINE)) {
+			JLOG.fine("connectionOverload " + mc);
 		}
 		for (SessionListener listener : this.abstractCommunication
 				.getSlisteners()) {
@@ -108,9 +108,9 @@ public class SessionListenerDispensor implements MessageListener,
 	/**
 	 * {@inheritDoc}
 	 */
-	public void sessionStall(TransportProvider p, Session mc) {
-		if (jlog.isLoggable(Level.FINE)) {
-			jlog.fine("connectionStall " + mc);
+	public final void sessionStall(TransportProvider p, Session mc) {
+		if (JLOG.isLoggable(Level.FINE)) {
+			JLOG.fine("connectionStall " + mc);
 		}
 		for (SessionListener listener : this.abstractCommunication
 				.getSlisteners()) {
@@ -121,9 +121,9 @@ public class SessionListenerDispensor implements MessageListener,
 	/**
 	 * {@inheritDoc}
 	 */
-	public void stateChangeComplete(TransportProvider p, Session session) {
-		if (jlog.isLoggable(Level.FINE)) {
-			jlog.fine("stateChangeComplete " + session);
+	public final void stateChangeComplete(TransportProvider p, Session session) {
+		if (JLOG.isLoggable(Level.FINE)) {
+			JLOG.fine("stateChangeComplete " + session);
 		}
 		for (SessionListener listener : this.abstractCommunication
 				.getSlisteners()) {
@@ -135,9 +135,9 @@ public class SessionListenerDispensor implements MessageListener,
 	/**
 	 * {@inheritDoc}
 	 */
-	public void connectionLost(TransportProvider p, NioSession mc) {
-		if (jlog.isLoggable(Level.FINE)) {
-			jlog.fine("connectionLost " + mc);
+	public final void connectionLost(TransportProvider p, NioSession mc) {
+		if (JLOG.isLoggable(Level.FINE)) {
+			JLOG.fine("connectionLost " + mc);
 		}
 
 		mc.stall();
@@ -146,16 +146,16 @@ public class SessionListenerDispensor implements MessageListener,
 	/**
 	 * {@inheritDoc}
 	 */
-	public void connectionFixed(TransportProvider p, NioSession mc) {
-		if (jlog.isLoggable(Level.FINE)) {
-			jlog.fine("connectionFixed " + mc);
+	public final void connectionFixed(TransportProvider p, NioSession mc) {
+		if (JLOG.isLoggable(Level.FINE)) {
+			JLOG.fine("connectionFixed " + mc);
 		}
 
 	}
 
-	public void messageReceived(Session s, Message<?> nextMessage) {
-		if (jlog.isLoggable(Level.FINE)) {
-			jlog.fine("messageReceived " + nextMessage);
+	public final void messageReceived(Session s, Message<?> nextMessage) {
+		if (JLOG.isLoggable(Level.FINE)) {
+			JLOG.fine("messageReceived " + nextMessage);
 		}
 		for (MessageListener listener : this.abstractCommunication
 				.getMlisteners()) {
@@ -168,8 +168,8 @@ public class SessionListenerDispensor implements MessageListener,
 	// */
 	// public void messageArrived(SessionObject sc, AbstractMessage
 	// m) {
-	// if (jlog.isLoggable(Level.FINE)) {
-	// jlog.fine("messageArrived " + m);
+	// if (JLOG.isLoggable(Level.FINE)) {
+	// JLOG.fine("messageArrived " + m);
 	// }
 	// for (MessageChannelListener listener : mlisteners) {
 	// listener.messageArrived(sc, m);

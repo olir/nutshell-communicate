@@ -48,7 +48,7 @@ import de.serviceflow.nutshell.cl.intern.util.Pipe;
  * 
  */
 public final class SessionObject implements Session, NioSession {
-	private static final Logger jlog = Logger.getLogger(SessionObject.class
+	private static final Logger JLOG = Logger.getLogger(SessionObject.class
 			.getName());
 
 	public static final Level MSG_TRACE_LEVEL = Level.INFO;
@@ -156,7 +156,7 @@ public final class SessionObject implements Session, NioSession {
 	// {
 	// protected SessionObject newInstance() {
 	// SessionObject mc = new SessionObject();
-	// jlog.log(Level.WARNING, "************ New SessionObject from Pool! " +
+	// JLOG.log(Level.WARNING, "************ New SessionObject from Pool! " +
 	// mc);
 	// return mc;
 	// }
@@ -212,7 +212,7 @@ public final class SessionObject implements Session, NioSession {
 	// unreliableProvider.stop();
 	// mainProvider.stop();
 	// } catch (IOException e) {
-	// jlog.log(Level.WARNING, "Stopping providers failed", e);
+	// JLOG.log(Level.WARNING, "Stopping providers failed", e);
 	// }
 	// this.applicationProtocol = null;
 	// this.sessionkey = 0;
@@ -254,16 +254,16 @@ public final class SessionObject implements Session, NioSession {
 	}
 
 	public ByteBuffer getWriteBuffer() {
-		if (jlog.isLoggable(Level.FINEST)) {
-			jlog.finest("getWriteBuffer() remaining= "
+		if (JLOG.isLoggable(Level.FINEST)) {
+			JLOG.finest("getWriteBuffer() remaining= "
 					+ writeBuffer.remaining());
 		}
 		return writeBuffer;
 	}
 
 	public ByteBuffer getReadBuffer() {
-		if (jlog.isLoggable(Level.FINEST)) {
-			jlog.finest("getReadBuffer() remaining= " + readBuffer.remaining());
+		if (JLOG.isLoggable(Level.FINEST)) {
+			JLOG.finest("getReadBuffer() remaining= " + readBuffer.remaining());
 		}
 		return readBuffer;
 	}
@@ -280,8 +280,8 @@ public final class SessionObject implements Session, NioSession {
 	// }
 
 	public void receive(Message<?> m) {
-		// if (jlog.isLoggable(Level.INFO)) {
-		// jlog.info("received on " + this + " " + m.getCommand() + ": " + m);
+		// if (JLOG.isLoggable(Level.INFO)) {
+		// JLOG.info("received on " + this + " " + m.getCommand() + ": " + m);
 		// }
 		// getReceivedMessages().add(m);
 	}
@@ -309,8 +309,8 @@ public final class SessionObject implements Session, NioSession {
 	// * Message
 	// */
 	// public final void oldInternMessageReceived(Message<?> m) {
-	// if (jlog.isLoggable(Level.FINE)) {
-	// jlog.fine("internMessageReceived(): <- read " + m);
+	// if (JLOG.isLoggable(Level.FINE)) {
+	// JLOG.fine("internMessageReceived(): <- read " + m);
 	// }
 	// if (m instanceof ChangeState) {
 	// sessionState = SessionState.SYNC;
@@ -322,7 +322,7 @@ public final class SessionObject implements Session, NioSession {
 	// if (m.getClassificationValue() == MessageClassification.SESSION
 	// .value()) {
 	// if (m instanceof SessionClosed) {
-	// jlog.info("SessionObject closed by partner.");
+	// JLOG.info("SessionObject closed by partner.");
 	// sessionState = SessionState.TERMINATED;
 	// mainProvider.terminate(this);
 	// if (unreliableProvider != null) {
@@ -330,7 +330,7 @@ public final class SessionObject implements Session, NioSession {
 	// }
 	// return;
 	// } else {
-	// jlog.warning("internMessageReceived(): Unhandled: " + m
+	// JLOG.warning("internMessageReceived(): Unhandled: " + m
 	// + " for " + this);
 	// }
 	// } else {
@@ -338,7 +338,7 @@ public final class SessionObject implements Session, NioSession {
 	// this, m);
 	// }
 	// } else {
-	// jlog.warning("internMessageReceived(): No communication associated!");
+	// JLOG.warning("internMessageReceived(): No communication associated!");
 	// }
 	// } else if (sessionState == SessionState.CREATED) {
 	// if (m instanceof ClientAuthentication) {
@@ -348,7 +348,7 @@ public final class SessionObject implements Session, NioSession {
 	// if (a != null) {
 	// user = a.authenticate(ca.credentials.getBytes());
 	// if (user == null) {
-	// jlog.info("Authentication denied access.");
+	// JLOG.info("Authentication denied access.");
 	// doTerminate();
 	// return;
 	// }
@@ -394,7 +394,7 @@ public final class SessionObject implements Session, NioSession {
 	// getProvider(true),
 	// new AuthenticationException("Access denied."));
 	// } else {
-	// jlog.warning("protocol error. received in CREATED: "
+	// JLOG.warning("protocol error. received in CREATED: "
 	// + m.getClass());
 	// doTerminate();
 	// communication.getProtocolListenerHelper().sessionTerminated(
@@ -404,7 +404,7 @@ public final class SessionObject implements Session, NioSession {
 	// if (m instanceof ChangeState) {
 	// protocolState = APState.get(((ChangeState) m).stateValue);
 	// if (protocolState == null) {
-	// jlog.warning("protocol error. Illegal ChangeState: "
+	// JLOG.warning("protocol error. Illegal ChangeState: "
 	// + ((ChangeState) m).stateValue);
 	// doTerminate();
 	// communication.getProtocolListenerHelper()
@@ -421,7 +421,7 @@ public final class SessionObject implements Session, NioSession {
 	// }
 	// } else if (m instanceof StateChangeAcknowledged) {
 	// if (protocolState.value() != ((StateChangeAcknowledged) m).stateValue) {
-	// jlog.warning("protocol error. Wrong State Acknowledged: "
+	// JLOG.warning("protocol error. Wrong State Acknowledged: "
 	// + ((StateChangeAcknowledged) m).stateValue);
 	// doTerminate();
 	// communication.getProtocolListenerHelper()
@@ -434,14 +434,14 @@ public final class SessionObject implements Session, NioSession {
 	// }
 	// // ignore other messages
 	// } else {
-	// jlog.warning("protocol error. received in " + sessionState.name()
+	// JLOG.warning("protocol error. received in " + sessionState.name()
 	// + ": " + m.getClass());
 	// }
 	// }
 
 	public void send(Message<?> m) {
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL,
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 					"send on " + this + " " + m.getCommand() + ": " + m);
 		}
 		if (m.getClassificationValue() < 0)
@@ -532,8 +532,8 @@ public final class SessionObject implements Session, NioSession {
 
 	public void setSessionState(SessionState state) {
 		this.sessionState = state;
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL,
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 					"SessionObject state changed for " + this
 							+ ". ****************** New state: " + state);
 		}
@@ -572,8 +572,8 @@ public final class SessionObject implements Session, NioSession {
 	}
 
 	public void terminate() {
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL, "terminating " + this);
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "terminating " + this);
 		}
 		setSessionState(SessionState.TERMINATED);
 		mainProvider.terminate(this);
@@ -583,8 +583,8 @@ public final class SessionObject implements Session, NioSession {
 	}
 
 	public boolean activate(String protocol) {
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL, "activating " + this
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "activating " + this
 					+ ": '" + protocol + "'");
 		}
 		applicationProtocol = ApplicationProtocol.getByName(protocol);

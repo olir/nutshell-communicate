@@ -7,7 +7,7 @@ import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.Session;
 
 public class TestLoop implements Runnable {
-	private static final Logger jlog = Logger.getLogger(TestLoop.class
+	private static final Logger JLOG = Logger.getLogger(TestLoop.class
 			.getName());
 
 	private final int amount;
@@ -29,7 +29,7 @@ public class TestLoop implements Runnable {
 	}
 
 	@Override
-	public void run() {
+	public final void run() {
 		long u;
 		while (true) {
 			if (sendMode) {
@@ -88,7 +88,7 @@ public class TestLoop implements Runnable {
 	long tlost = 0;
 	long iterations = 0;
 
-	public void stopTimer(TestAcknowledge m, Session s) {
+	public final void stopTimer(TestAcknowledge m, Session s) {
 		long t1 = System.currentTimeMillis();
 		long travelTime = t1 - t0 - FINAL_SLEEP - m.oldwait;
 		tlost += (amount - m.count);
@@ -98,7 +98,7 @@ public class TestLoop implements Runnable {
 		if (l_loss == 0L) {
 			loss = 100.0f * tlost / iterations / amount;
 		}
-		jlog.info("" + amount + " msg traveled in " + travelTime
+		JLOG.info("" + amount + " msg traveled in " + travelTime
 				+ "ms while lost " + (amount - m.count) + ". pipesize="
 				+ Message.pipesize(TestPing.class, s) + ". Ignored " + m.old
 				+ " old and " + m.copies + " copies. Total loss " + loss + "%.");

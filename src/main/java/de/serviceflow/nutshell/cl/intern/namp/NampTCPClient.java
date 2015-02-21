@@ -36,7 +36,7 @@ import de.serviceflow.nutshell.cl.intern.cpi.UDPClient;
  * 
  */
 public class NampTCPClient extends TCPClient {
-	private static final Logger jlog = Logger.getLogger(NampTCPClient.class
+	private static final Logger JLOG = Logger.getLogger(NampTCPClient.class
 			.getName());
 
 	private final UDPClient udp;
@@ -48,7 +48,7 @@ public class NampTCPClient extends TCPClient {
 	}
 
 	@Override
-	public void init(Communication c, InetSocketAddress isa,
+	public final void init(Communication c, InetSocketAddress isa,
 			byte[] credentials) {
 		super.init(c, isa, credentials);
 
@@ -56,29 +56,29 @@ public class NampTCPClient extends TCPClient {
 		udp.init(c, udpIsa, credentials);
 	}
 
-	public void start() throws IOException {
+	public final void start() throws IOException {
 		super.start();
 		// udp is started in authenticate(...)
 	}
 
-	public void stop() throws IOException {
+	public final void stop() throws IOException {
 		super.stop();
 		udp.stop();
 	}
 
-	public void completeStop() throws IOException {
+	public final void completeStop() throws IOException {
 		super.completeStop();
 		udp.completeStop();
 	}
 
-	public boolean process() throws IOException {
+	public final boolean process() throws IOException {
 		boolean hasNothingSelected1 = super.process();
 		boolean hasNothingSelected2 = udp.process();
 		return hasNothingSelected1 & hasNothingSelected2;
 	}
 
 	@Override
-	protected void authenticate(NioSession session, String applicationProtocolName) {
+	protected final void authenticate(NioSession session, String applicationProtocolName) {
 		// create dual channel.
 		session.join(udp);
 
@@ -91,9 +91,9 @@ public class NampTCPClient extends TCPClient {
 	/**
 	 * After accepting TCP ...
 	 */
-	public void sessionAccepted(NioSession session) {
-		if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			jlog.log(SessionObject.MSG_TRACE_LEVEL,
+	public final void sessionAccepted(NioSession session) {
+		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 					"****************** Starting 2nd Channel Authentication for key #"
 							+ session.getSessionkey() + " on " + session);
 		}
@@ -106,7 +106,7 @@ public class NampTCPClient extends TCPClient {
 			udp.addSessionAndAuthenticate(session);
 
 		} catch (IOException e) {
-			jlog.log(Level.SEVERE, "NAMP connection failed.", e);
+			JLOG.log(Level.SEVERE, "NAMP connection failed.", e);
 		}
 	}
 

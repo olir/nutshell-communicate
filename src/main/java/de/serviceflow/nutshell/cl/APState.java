@@ -46,7 +46,7 @@ public final class APState {
 	private static int count = 0;
 
 	private final de.serviceflow.nutshell.cl.xml.State xState;
-	private final APMessage messages[];
+	private final APMessage [] messages;
 	private final int value;
 
 	public APState(de.serviceflow.nutshell.cl.xml.State xState,

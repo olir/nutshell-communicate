@@ -41,7 +41,7 @@ import de.serviceflow.nutshell.cl.intern.namp.NampTCPClient;
  * 
  */
 public class ClientCommunication extends Communication {
-	private static Logger jlog = Logger.getLogger(ClientCommunication.class
+	private static Logger JLOG = Logger.getLogger(ClientCommunication.class
 			.getName());
 
 	private static ClientCommunication clientCommunication;
@@ -133,7 +133,7 @@ public class ClientCommunication extends Communication {
 							break; // restart loop instead fixing iterator.
 						}
 					} catch (Throwable t) {
-						jlog.log(Level.SEVERE,
+						JLOG.log(Level.SEVERE,
 								"Exception in communication Loop", t);
 					}
 				}
@@ -157,15 +157,15 @@ public class ClientCommunication extends Communication {
 					try {
 						r.run();
 					} catch (Throwable t) {
-						jlog.log(Level.SEVERE,
+						JLOG.log(Level.SEVERE,
 								"Exception in communication Loop", t);
 					}
 				}
 			}
 			removeAllListeners();
 			clientCommunication = null;
-			if (jlog.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				jlog.log(SessionObject.MSG_TRACE_LEVEL,
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 						"Finished client communication thread.");
 			}
 		}
@@ -175,7 +175,7 @@ public class ClientCommunication extends Communication {
 				Thread.sleep(1L);
 			} catch (InterruptedException e) {
 				running = false;
-				jlog.log(Level.SEVERE, "Exception in communication Loop", e);
+				JLOG.log(Level.SEVERE, "Exception in communication Loop", e);
 			}
 
 		}

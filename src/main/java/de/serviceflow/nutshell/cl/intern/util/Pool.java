@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  * 
  */
 public abstract class Pool<T> {
-	private static Logger jlog = Logger.getLogger(Pool.class.getName());
+	private static Logger JLOG = Logger.getLogger(Pool.class.getName());
 
 	/**
 	 * internal data storage
@@ -51,14 +51,14 @@ public abstract class Pool<T> {
 	public final T requestElementFromPool() {
 		if (stack.isEmpty()) {
 			T t = newInstance();
-			if (jlog.isLoggable(Level.FINEST)) {
-				jlog.finest("#NEW " + t + " for " + toString());
+			if (JLOG.isLoggable(Level.FINEST)) {
+				JLOG.finest("#NEW " + t + " for " + toString());
 			}
 			return t;
 		} else {
 			T t = stack.pop();
-			if (jlog.isLoggable(Level.FINEST)) {
-				jlog.finest("#POP " + t + " from " + toString());
+			if (JLOG.isLoggable(Level.FINEST)) {
+				JLOG.finest("#POP " + t + " from " + toString());
 			}
 			return t;
 		}
@@ -67,8 +67,8 @@ public abstract class Pool<T> {
 	/**
 	 */
 	public final void releaseElementToPool(T o) {
-		if (jlog.isLoggable(Level.FINEST)) {
-			jlog.finest("#PUSH " + o + " to " + toString());
+		if (JLOG.isLoggable(Level.FINEST)) {
+			JLOG.finest("#PUSH " + o + " to " + toString());
 		}
 		stack.push(o);
 	}
