@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 
 import de.serviceflow.nutshell.cl.intern.MessageRegistryHelper;
 import de.serviceflow.nutshell.cl.intern.NioSession;
-import de.serviceflow.nutshell.cl.intern.namp.MessageClassification;
+import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
 import de.serviceflow.nutshell.cl.intern.util.Bucket;
 import de.serviceflow.nutshell.cl.intern.util.Pool;
 import de.serviceflow.nutshell.cl.nio.NioStruct;

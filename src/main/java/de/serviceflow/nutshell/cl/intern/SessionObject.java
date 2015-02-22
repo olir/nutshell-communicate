@@ -29,9 +29,9 @@ import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.Session;
 import de.serviceflow.nutshell.cl.SessionState;
 import de.serviceflow.nutshell.cl.intern.cpi.UDPClient;
-import de.serviceflow.nutshell.cl.intern.namp.ClientAuthentication;
-import de.serviceflow.nutshell.cl.intern.namp.MessageClassification;
-import de.serviceflow.nutshell.cl.intern.namp.SessionAccepted;
+import de.serviceflow.nutshell.cl.intern.session.ClientAuthentication;
+import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
+import de.serviceflow.nutshell.cl.intern.session.SessionAccepted;
 import de.serviceflow.nutshell.cl.intern.spi.AbtractTransportService;
 import de.serviceflow.nutshell.cl.intern.spi.UDPService;
 import de.serviceflow.nutshell.cl.intern.util.Pipe;
@@ -599,7 +599,7 @@ public final class SessionObject implements Session, NioSession {
 	 * The session has gone stall.
 	 */
 	public void stall() {
-		setSessionState(SessionState.STALL);
+		setSessionState(SessionState.STALE);
 		// TODO mainProvider.reconnect(this);
 	}
 

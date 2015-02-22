@@ -42,9 +42,9 @@ public enum SessionState {
 	SYNC, 
 
 	/**
-	 * SessionObject is stall and recovery sub protocol is running.
+	 * SessionObject is stale and recovery sub protocol is running.
 	 */
-	STALL, 
+	STALE, 
 	
 	
 	/**

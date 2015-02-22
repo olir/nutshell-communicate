@@ -29,12 +29,12 @@ import de.serviceflow.nutshell.cl.ApplicationProtocol;
 import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.MessageListener;
 import de.serviceflow.nutshell.cl.SessionListener;
-import de.serviceflow.nutshell.cl.intern.namp.ChangeState;
-import de.serviceflow.nutshell.cl.intern.namp.ClientAuthentication;
-import de.serviceflow.nutshell.cl.intern.namp.MessageClassification;
-import de.serviceflow.nutshell.cl.intern.namp.SessionAccepted;
-import de.serviceflow.nutshell.cl.intern.namp.SessionClosed;
-import de.serviceflow.nutshell.cl.intern.namp.StateChangeAcknowledged;
+import de.serviceflow.nutshell.cl.intern.session.ChangeState;
+import de.serviceflow.nutshell.cl.intern.session.ClientAuthentication;
+import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
+import de.serviceflow.nutshell.cl.intern.session.SessionAccepted;
+import de.serviceflow.nutshell.cl.intern.session.SessionClosed;
+import de.serviceflow.nutshell.cl.intern.session.StateChangeAcknowledged;
 
 /**
  * Base class for communication that separates application and transport layer.

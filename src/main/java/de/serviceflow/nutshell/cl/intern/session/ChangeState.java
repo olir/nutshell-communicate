@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.serviceflow.nutshell.cl.intern.namp;
+package de.serviceflow.nutshell.cl.intern.session;
 
 import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.nio.Transfer;
@@ -26,9 +26,9 @@ import de.serviceflow.nutshell.cl.nio.Transfer;
  * 
  * 
  */
-public class StateChangeAcknowledged extends Message<SessionMessage> {
-	public StateChangeAcknowledged() {
-		super(SessionMessage.STATE_CHANGE_ACKNOWLEDGED,
+public class ChangeState extends Message<SessionMessage> {
+	public ChangeState() {
+		super(SessionMessage.CHANGE_STATE,
 				MessageClassification.SESSION.value());
 	}
 

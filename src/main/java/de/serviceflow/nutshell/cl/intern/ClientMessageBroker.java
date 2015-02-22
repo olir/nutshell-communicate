@@ -21,11 +21,11 @@ import de.serviceflow.nutshell.cl.APState;
 import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.SessionState;
 import de.serviceflow.nutshell.cl.intern.cpi.AbtractTransportClient;
-import de.serviceflow.nutshell.cl.intern.namp.ChangeState;
-import de.serviceflow.nutshell.cl.intern.namp.MessageClassification;
-import de.serviceflow.nutshell.cl.intern.namp.SessionAccepted;
-import de.serviceflow.nutshell.cl.intern.namp.SessionClosed;
-import de.serviceflow.nutshell.cl.intern.namp.SessionMessage;
+import de.serviceflow.nutshell.cl.intern.session.ChangeState;
+import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
+import de.serviceflow.nutshell.cl.intern.session.SessionAccepted;
+import de.serviceflow.nutshell.cl.intern.session.SessionClosed;
+import de.serviceflow.nutshell.cl.intern.session.SessionMessage;
 
 public class ClientMessageBroker implements MessageBroker {
 	private static final Logger JLOG = Logger
@@ -143,7 +143,7 @@ public class ClientMessageBroker implements MessageBroker {
 		case ACTIVE:
 			noError = active(m);
 			break;
-		case STALL:
+		case STALE:
 			noError = stall(m);
 			break;
 		case SYNC:

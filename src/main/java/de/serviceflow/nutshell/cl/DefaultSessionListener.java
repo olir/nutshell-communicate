@@ -74,7 +74,7 @@ public class DefaultSessionListener implements SessionListener {
 
 	}
 
-	public void sessionStall(TransportProvider p, Session session) {
+	public void sessionStale(TransportProvider p, Session session) {
 
 	}
 

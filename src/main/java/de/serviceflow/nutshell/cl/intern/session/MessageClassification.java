@@ -13,26 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.serviceflow.nutshell.cl.intern.namp;
-
-import de.serviceflow.nutshell.cl.Message;
-import de.serviceflow.nutshell.cl.nio.Transfer;
+package de.serviceflow.nutshell.cl.intern.session;
 
 /**
- * The server sends this message to initiate a state change.
- *  
+ * Classifications of messages into SESSION (messages provided by this library) and
+ * APPLICATION (messages provided outside the library).
+ * 
  * @author <a href="http://www.serviceflow.de/nutshell">Oliver Rode</a>
- * @version $Id: $
+ * @version $Id: 64bda492741229e9e1dc5cf82eccacca4995caba $
  * 
  * 
  */
-public class ChangeState extends Message<SessionMessage> {
-	public ChangeState() {
-		super(SessionMessage.CHANGE_STATE,
-				MessageClassification.SESSION.value());
+public enum MessageClassification {
+
+	SESSION(0), APPLICATION(1);
+
+	private int value;
+
+	MessageClassification(int initialvalue) {
+		this.value = initialvalue;
 	}
 
-	@Transfer
-	public int stateValue;
-	
+	public int value() {
+		return value;
+	}
+
 }

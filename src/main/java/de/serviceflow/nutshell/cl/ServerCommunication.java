@@ -28,7 +28,7 @@ import javax.management.ObjectName;
 import de.serviceflow.nutshell.cl.intern.Communication;
 import de.serviceflow.nutshell.cl.intern.NIOTransportProvider;
 import de.serviceflow.nutshell.cl.intern.SessionObject;
-import de.serviceflow.nutshell.cl.intern.namp.NampTCPService;
+import de.serviceflow.nutshell.cl.intern.session.NampTCPService;
 
 /**
  * Server side communication class. used to startup communication.

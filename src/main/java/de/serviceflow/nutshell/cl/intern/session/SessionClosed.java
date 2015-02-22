@@ -13,33 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.serviceflow.nutshell.cl.intern.namp;
+package de.serviceflow.nutshell.cl.intern.session;
 
 import de.serviceflow.nutshell.cl.Message;
-import de.serviceflow.nutshell.cl.nio.NVarchar;
-import de.serviceflow.nutshell.cl.nio.Transfer;
 
 /**
  * The client send this message to authenticate to a server or proxy.
- * 
+ *  
  * @author <a href="http://www.serviceflow.de/nutshell">Oliver Rode</a>
  * @version $Id: $
  * 
  * 
  */
-public class SessionAccepted extends Message<SessionMessage> {
-	public SessionAccepted() {
-		super(SessionMessage.SESSION_ACCEPTED, MessageClassification.SESSION
-				.value());
+public class SessionClosed extends Message<SessionMessage> {
+	public SessionClosed() {
+		super(SessionMessage.SESSION_CLOSED,
+				MessageClassification.SESSION.value());
 	}
 
-	@Transfer
-	public long sessionkey;
-
-	@Transfer
-	public long nampVersion;
-
-	@Transfer
-	public final NVarchar protocol = new NVarchar();
-
+	
 }

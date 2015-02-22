@@ -23,11 +23,11 @@ import de.serviceflow.nutshell.cl.ApplicationProtocol;
 import de.serviceflow.nutshell.cl.Authentication;
 import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.ServerCommunication;
-import de.serviceflow.nutshell.cl.intern.namp.ClientAuthentication;
-import de.serviceflow.nutshell.cl.intern.namp.MessageClassification;
-import de.serviceflow.nutshell.cl.intern.namp.SessionAccepted;
-import de.serviceflow.nutshell.cl.intern.namp.SessionClosed;
-import de.serviceflow.nutshell.cl.intern.namp.SessionMessage;
+import de.serviceflow.nutshell.cl.intern.session.ClientAuthentication;
+import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
+import de.serviceflow.nutshell.cl.intern.session.SessionAccepted;
+import de.serviceflow.nutshell.cl.intern.session.SessionClosed;
+import de.serviceflow.nutshell.cl.intern.session.SessionMessage;
 
 public class ServerMessageBroker implements MessageBroker {
 	private static final Logger JLOG = Logger
@@ -179,7 +179,7 @@ public class ServerMessageBroker implements MessageBroker {
 		case ACTIVE:
 			noError = active(m);
 			break;
-		case STALL:
+		case STALE:
 			noError = stall(m);
 			break;
 		case SYNC:

@@ -25,8 +25,8 @@ import de.serviceflow.nutshell.cl.SessionState;
 import de.serviceflow.nutshell.cl.intern.Communication;
 import de.serviceflow.nutshell.cl.intern.NIOTransportProvider;
 import de.serviceflow.nutshell.cl.intern.SessionObject;
-import de.serviceflow.nutshell.cl.intern.namp.ChangeState;
-import de.serviceflow.nutshell.cl.intern.namp.MessageClassification;
+import de.serviceflow.nutshell.cl.intern.session.ChangeState;
+import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
 
 /**
  * Base class for transport services.

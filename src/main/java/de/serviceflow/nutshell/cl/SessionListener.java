@@ -61,7 +61,7 @@ public interface SessionListener {
 	void sessionTerminated(TransportProvider p, Session session);
 
 	/**
-	 * A session has got stall, when no message arrived for some time, and can't
+	 * A session has got stale, when no message arrived for some time, and can't
 	 * be used until it is covered. Reported on client and server.
 	 * 
 	 * @param p
@@ -69,7 +69,7 @@ public interface SessionListener {
 	 * @param session
 	 *            the SESSION, that got stall.
 	 */
-	void sessionStall(TransportProvider p, Session session);
+	void sessionStale(TransportProvider p, Session session);
 
 	/**
 	 * A session that got stall has been recovered and can be used again.

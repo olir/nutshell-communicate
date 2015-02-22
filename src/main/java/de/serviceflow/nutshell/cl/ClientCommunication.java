@@ -29,7 +29,7 @@ import de.serviceflow.nutshell.cl.intern.SessionObject;
 import de.serviceflow.nutshell.cl.intern.cpi.AbtractTransportClient;
 import de.serviceflow.nutshell.cl.intern.cpi.TCPClient;
 import de.serviceflow.nutshell.cl.intern.cpi.UDPClient;
-import de.serviceflow.nutshell.cl.intern.namp.NampTCPClient;
+import de.serviceflow.nutshell.cl.intern.session.NampTCPClient;
 
 /**
  * Represents the Communication Service on client-side. Obtained by

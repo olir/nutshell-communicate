@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.serviceflow.nutshell.cl.intern.namp;
+package de.serviceflow.nutshell.cl.intern.session;
 
 /**
  * Messages of the session layer in the NAMP. They belong to

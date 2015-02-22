@@ -13,23 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.serviceflow.nutshell.cl.intern.namp;
+package de.serviceflow.nutshell.cl.intern.session;
 
 import de.serviceflow.nutshell.cl.Message;
+import de.serviceflow.nutshell.cl.nio.Transfer;
 
 /**
- * The client send this message to authenticate to a server or proxy.
+ * The server sends this message to initiate a state change.
  *  
  * @author <a href="http://www.serviceflow.de/nutshell">Oliver Rode</a>
  * @version $Id: $
  * 
  * 
  */
-public class SessionClosed extends Message<SessionMessage> {
-	public SessionClosed() {
-		super(SessionMessage.SESSION_CLOSED,
+public class StateChangeAcknowledged extends Message<SessionMessage> {
+	public StateChangeAcknowledged() {
+		super(SessionMessage.STATE_CHANGE_ACKNOWLEDGED,
 				MessageClassification.SESSION.value());
 	}
 
+	@Transfer
+	public int stateValue;
 	
 }

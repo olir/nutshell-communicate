@@ -27,8 +27,8 @@ import de.serviceflow.nutshell.cl.intern.Communication;
 import de.serviceflow.nutshell.cl.intern.NIOTransportProvider;
 import de.serviceflow.nutshell.cl.intern.NioSession;
 import de.serviceflow.nutshell.cl.intern.SessionObject;
-import de.serviceflow.nutshell.cl.intern.namp.ClientAuthentication;
-import de.serviceflow.nutshell.cl.intern.namp.MessageClassification;
+import de.serviceflow.nutshell.cl.intern.session.ClientAuthentication;
+import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
 
 /**
  * Base class for transport clients.

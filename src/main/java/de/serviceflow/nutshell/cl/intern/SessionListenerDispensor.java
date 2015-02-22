@@ -108,13 +108,13 @@ public class SessionListenerDispensor implements MessageListener,
 	/**
 	 * {@inheritDoc}
 	 */
-	public final void sessionStall(TransportProvider p, Session mc) {
+	public final void sessionStale(TransportProvider p, Session mc) {
 		if (JLOG.isLoggable(Level.FINE)) {
 			JLOG.fine("connectionStall " + mc);
 		}
 		for (SessionListener listener : this.abstractCommunication
 				.getSlisteners()) {
-			listener.sessionStall(p, mc);
+			listener.sessionStale(p, mc);
 		}
 	}
 

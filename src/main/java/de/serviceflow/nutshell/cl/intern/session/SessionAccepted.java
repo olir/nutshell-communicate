@@ -13,29 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.serviceflow.nutshell.cl.intern.namp;
+package de.serviceflow.nutshell.cl.intern.session;
+
+import de.serviceflow.nutshell.cl.Message;
+import de.serviceflow.nutshell.cl.nio.NVarchar;
+import de.serviceflow.nutshell.cl.nio.Transfer;
 
 /**
- * Classifications of messages into SESSION (messages provided by this library) and
- * APPLICATION (messages provided outside the library).
+ * The client send this message to authenticate to a server or proxy.
  * 
  * @author <a href="http://www.serviceflow.de/nutshell">Oliver Rode</a>
- * @version $Id: 64bda492741229e9e1dc5cf82eccacca4995caba $
+ * @version $Id: $
  * 
  * 
  */
-public enum MessageClassification {
-
-	SESSION(0), APPLICATION(1);
-
-	private int value;
-
-	MessageClassification(int initialvalue) {
-		this.value = initialvalue;
+public class SessionAccepted extends Message<SessionMessage> {
+	public SessionAccepted() {
+		super(SessionMessage.SESSION_ACCEPTED, MessageClassification.SESSION
+				.value());
 	}
 
-	public int value() {
-		return value;
-	}
+	@Transfer
+	public long sessionkey;
+
+	@Transfer
+	public long nampVersion;
+
+	@Transfer
+	public final NVarchar protocol = new NVarchar();
 
 }
