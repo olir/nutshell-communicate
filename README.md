@@ -1,8 +1,16 @@
 # About
 
-The Nutshell Communication Library is designed for network communication by using the messaging communication-style. It's a higher-level framework, where the application developer defines an application protocol by XML and code the corresponding messages and event handling. The library hides transport details from the developer.
+The Nutshell Communication Library is designed for low-latency network communication and using the messaging communication-style, instead of remote procedure calls. It's a higher-level framework, where the application developer defines an application protocol by XML and code the corresponding messages and event handling. The library hides transport details from the developer. The library us using a session layer protocol which covers authentication (client sends binary data your server has to handle), synchronized state-switching and in future it offers session-recovery (session gets "stall" while connection is down). The library offers also a plug-in serialization implemented by using [Kryo](https://github.com/EsotericSoftware/kryo).
 
-It offers a plug-in serialization from the [Kryo](https://github.com/EsotericSoftware/kryo). Currently it's bundled with it.
+## Disclaimer
+
+A couple of other networking libraries exist. I was not satisfied with my first library written 1999, because it used many threads and was very low level. 
+So the idea of the new library is to offer a high-level API including [OSI-Level 5 and 6](http://en.wikipedia.org/wiki/OSI_model) for servers that 
+need to steady broadcast events towards many clients. 
+
+If you need guaranteed delivery or transactions, please look out for profession messaging products that provide queuing.
+In the case you need more control over network or RPC, please take a look at [KryoNet](https://github.com/EsotericSoftware/kryonet); 
+it may suit your needs, at least you will find there more suggestions for other libraries.
 
 ## Contents
 * [Installation](#installation)
