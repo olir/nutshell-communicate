@@ -140,11 +140,12 @@ public class TestRequest extends Message<TestMessage1> {
 ```
 
 Serialization:
+
 * Message extends NioStruct, a class which expects that each field we want to transfer is explicitly marked with the annotation @Transfer. These field types can be primitives or the corresponding classes or any class that
 implements Transferable. 
 * NioStruct is a Transferable, so you can create substructures.
 * The class NioObjectContainer is a Transferable that can be used to transfer any objects using Kryo.
-*
+* NVarchar is a String replacement based on ByteBuffer.
 
 TODO: i will try to replace @Transfer and inverse the behaviour similar to @Transient.
 
