@@ -96,6 +96,12 @@
 		   <scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>6.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
 	       <groupId>com.esotericsoftware</groupId>
 	       <artifactId>kryo</artifactId>
 		   <version>3.0.0</version>

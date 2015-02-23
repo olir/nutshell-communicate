@@ -24,8 +24,13 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.persistence.Id;
+
+import de.serviceflow.nutshell.cl.Lookup;
+import de.serviceflow.nutshell.cl.LookupRegistry;
 import de.serviceflow.nutshell.cl.nio.NioStruct;
 import de.serviceflow.nutshell.cl.nio.Transfer;
+import de.serviceflow.nutshell.cl.nio.TransferJPAReference;
 import de.serviceflow.nutshell.cl.nio.Transferable;
 
 /**
@@ -116,10 +121,48 @@ public class NioObjectIOHelper {
 							+ messageClass.getClass().getName() + " field="
 							+ field.getName());
 				}
+			} else if (field.isAnnotationPresent(TransferJPAReference.class)) {
+				Class<?> type = field.getType();
+				Field tfields[] = type.getFields();
+				Field idfield = null;
+				for (Field tfield : tfields) {
+					if (tfield.isAnnotationPresent(Id.class)) {
+						idfield = tfield;
+						break;
+					}
+				}
+				if (idfield != null) {
+					Class<?> idtype = idfield.getType();
+					if (idtype == Integer.class || idtype == Integer.TYPE) {
+						fieldHelperList.add(new JPAReferenceIOHelper(field,
+								idfield));
+					} else {
+						throw new Error(
+								"TransferJPAReference failed for class "
+										+ messageClass.getName()
+										+ " on field "
+										+ field.getName()
+										+ ": Refer to "
+										+ type.getName()
+										+ " invalid because Id annotated field "
+										+ idfield.getName()
+										+ " is not of type int. Unsupported type: "
+										+ idtype.getName());
+					}
+				} else {
+					throw new Error(
+							"TransferJPAReference failed for class "
+									+ messageClass.getName()
+									+ " on field "
+									+ field.getName()
+									+ ": Refer to "
+									+ type.getName()
+									+ " invalid because Id annotation is not present in this class.");
+				}
 			} else {
 				JLOG.finer("." + field.getName()
-						+ ": ignored - no Transfer annotation on "
-						+ messageClass);
+						+ ": ignored - no useful annotation on "
+						+ messageClass.getName());
 			}
 
 		}
@@ -365,6 +408,56 @@ public class NioObjectIOHelper {
 		void writeField(Transferable t, ByteBuffer out) {
 			try {
 				((Transferable) field.get(t)).writeObject(out);
+			} catch (Exception e) {
+				throw new Error("write error on " + t + " at " + field, e);
+			}
+		}
+
+	}
+
+	private static class JPAReferenceIOHelper extends AbstractFieldIOHelper {
+		protected Field idfield;
+
+		JPAReferenceIOHelper(Field field, Field idfield) {
+			super(field);
+			this.idfield = idfield;
+		}
+
+		@Override
+		void readField(Transferable t, ByteBuffer in) {
+			try {
+				Object entity = field.get(t);
+				int id = in.getInt();
+				if (entity == null) {
+					Class<?> type = field.getType();
+					Lookup<?> lookup = LookupRegistry.getInstance().getLookup(
+							type);
+					if (lookup != null) {
+						entity = lookup.lookup(id);
+						if (entity == null) {
+							JLOG.warning("lookup failed on " + type
+									+ " for id " + id);
+						}
+					} else {
+						throw new Error("error on " + t + " at " + field
+								+ ": No Lookup registred for " + type);
+					}
+				}
+				if (entity != null) {
+					idfield.setInt(entity, id);
+				}
+				field.set(t, entity);
+			} catch (Exception e) {
+				throw new Error("read error on " + t + " at " + field, e);
+			}
+		}
+
+		@Override
+		void writeField(Transferable t, ByteBuffer out) {
+			try {
+				Object entity = field.get(t);
+				int id = idfield.getInt(entity);
+				out.putInt(id);
 			} catch (Exception e) {
 				throw new Error("write error on " + t + " at " + field, e);
 			}
