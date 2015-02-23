@@ -41,5 +41,4 @@ public class TestRequest extends Message<TestMessage1> {
 
 	@Transfer
 	public final NioObjectContainer expected = new NioObjectContainer();
-
 }
