@@ -16,23 +16,20 @@
 package de.serviceflow.nutshell.cl.intern.session;
 
 import de.serviceflow.nutshell.cl.Message;
-import de.serviceflow.nutshell.cl.nio.Transfer;
 
 /**
  * The server sends this message to initiate a state change.
- *  
+ * 
  * @author <a href="http://www.serviceflow.de/nutshell">Oliver Rode</a>
  * @version $Id: $
  * 
  * 
  */
-public class ChangeState extends Message<SessionMessage> {
+public class ChangeState extends Message {
 	public ChangeState() {
-		super(SessionMessage.CHANGE_STATE,
-				MessageClassification.SESSION.value());
+		super();
 	}
 
-	@Transfer
 	public int stateValue;
-	
+
 }

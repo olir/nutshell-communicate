@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 import org.junit.Test;
 
 /**
- * Another Simple Junit Test to check if client-server communication is working.
+ * Another Test to check if client-server communication is working.
  * 
  * @author <a href="http://www.serviceflow.de/nutshell">Oliver Rode</a>
  * @version $Id: 5fa6fd8a4ea5e7a4ee22d54d8ffbd8d8b985384f $
@@ -33,7 +33,6 @@ import org.junit.Test;
 public class Test3 {
 	static final Logger JLOG = Logger.getLogger(Test3.class.getName());
 
-	@Test
 	public void doTest3() {
 		try {
 			TestServer3 server = new TestServer3();

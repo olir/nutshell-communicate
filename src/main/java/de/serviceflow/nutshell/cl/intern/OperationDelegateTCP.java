@@ -84,7 +84,7 @@ public class OperationDelegateTCP {
 				controlType=session.getApplicationProtocol().getId();
 //			JLOG.warning("<<<<< controlType="+controlType);
 			int commandId = buffer.get();
-			Message<?> nextMessage = Message.requestMessage(commandId,
+			Message nextMessage = Message.requestMessage(commandId,
 					controlType);
 			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
 				JLOG.log(SessionObject.MSG_TRACE_LEVEL, "TCP.opRead: "
@@ -118,12 +118,12 @@ public class OperationDelegateTCP {
 		if (session.isWriteBufferFlushed()) {
 			// clean - write next message in buffer ...
 
-			Pipe<Message<?>> mcSendPipe = session.getOutgoingMessages(ts);
+			Pipe<Message> mcSendPipe = session.getOutgoingMessages(ts);
 			if (mcSendPipe.isClean()) {
 				return; // no message
 			}
 
-			Message<?> m = mcSendPipe.next();
+			Message m = mcSendPipe.next();
 			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
 				JLOG.log(SessionObject.MSG_TRACE_LEVEL, "TCP.opWrite: " + m
 						+ " for " + session);
@@ -132,14 +132,19 @@ public class OperationDelegateTCP {
 			buffer.clear();
 			buffer.position(2);
 			// buffer.putLong(session.getSessionkey());
-			int controlType = m.getClassificationValue();
+			int controlType = m.getProtocolId();
 			// currently only 1 protocol supported per session
 			// client and server id do not match - map it
 			if (controlType>1)
 				controlType = 1; 
+			else if (controlType<0)
+				throw new Error("controlType: "+controlType); 
 			buffer.put((byte) controlType);
 //			JLOG.warning(">>>>> controlType="+m.getClassificationValue());
-			buffer.put((byte) m.getCommandId());
+			int cid = m.getCommandId();
+			if (cid<0)
+				throw new Error("commandId: "+cid);			
+			buffer.put((byte) cid);
 			m.writeObject(buffer);
 			int size = buffer.position() - 2;
 			if (size > Short.MAX_VALUE) {

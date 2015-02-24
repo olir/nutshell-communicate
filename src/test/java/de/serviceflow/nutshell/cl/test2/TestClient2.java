@@ -75,11 +75,11 @@ public class TestClient2 extends SimpleClient {
 	}
 
 	class MyMessageListener implements MessageListener {
-		public void messageHasBeenSent(Session s, Message<?> m) {
+		public void messageHasBeenSent(Session s, Message m) {
 			JLOG.fine("TestClient2 detects messageSend " + m);
 		}
 
-		public void messageReceived(Session s, Message<?> nextMessage) {
+		public void messageReceived(Session s, Message nextMessage) {
 			JLOG.info("*** TestClient2 detects messageReceived " + nextMessage);
 			try {
 				/*
@@ -94,12 +94,12 @@ public class TestClient2 extends SimpleClient {
 				/*
 				 * Get TEST_PING and send TEST_ACKNOWLEDGE.
 				 */
-				if (nextMessage.getCommand() == TestMessage2.TEST_ACKNOWLEDGE) {
+				if (nextMessage instanceof TestAcknowledge) {
 					TestAcknowledge m = (TestAcknowledge) nextMessage;
 					loop.stopTimer(m, s);
 				} else {
 					throw new Error("APPLICATION message unexpected: "
-							+ nextMessage.getCommand());
+							+ nextMessage);
 				}
 			} finally {
 				nextMessage.releaseMessage();

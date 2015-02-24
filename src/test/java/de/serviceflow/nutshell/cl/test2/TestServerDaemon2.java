@@ -107,11 +107,11 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 
 	}
 
-	public final void messageHasBeenSent(Session s, Message<?> m) {
+	public final void messageHasBeenSent(Session s, Message m) {
 		JLOG.fine("TestServerDaemon2 detects messageSend " + m);
 	}
 
-	public final void messageReceived(Session s, Message<?> nextMessage) {
+	public final void messageReceived(Session s, Message nextMessage) {
 		JLOG.fine("TestServerDaemon2 detects messageReceived " + nextMessage);
 		try {
 			/*
@@ -126,7 +126,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 			/*
 			 * Get TEST_PING and send TEST_ACKNOWLEDGE.
 			 */
-			if (nextMessage.getCommand() == TestMessage2.TEST_ROUND_STARTING) {
+			if (nextMessage instanceof TestRoundStarting) {
 				TestRoundStarting m = (TestRoundStarting) nextMessage;
 				muuid = m.muuid;
 				if (dChecker == null) {
@@ -135,7 +135,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 					dChecker.clear();
 				}
 				JLOG.info("start " + muuid);
-			} else if (nextMessage.getCommand() == TestMessage2.TEST_PING) {
+			} else if (nextMessage instanceof TestPing) {
 				TestPing m = (TestPing) nextMessage;
 				if (muuid == m.muuid) {
 					if (dChecker.get(m.id)) {
@@ -146,7 +146,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 					}
 				} else
 					old++;
-			} else if (nextMessage.getCommand() == TestMessage2.TEST_ROUND_COMPLETED) {
+			} else if (nextMessage instanceof TestRoundCompleted) {
 				TestRoundCompleted m = (TestRoundCompleted) nextMessage;
 				if (muuid != m.muuid) {
 					throw new Error("UUID mismatch");
@@ -167,7 +167,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 				response = r;
 			} else {
 				throw new Error("APPLICATION type unexpected: "
-						+ nextMessage.getClassificationValue() + "/"
+						+ nextMessage.getProtocolId() + "/"
 						+ nextMessage.getCommandId());
 			}
 		} finally {

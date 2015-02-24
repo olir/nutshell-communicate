@@ -37,44 +37,47 @@ import de.serviceflow.nutshell.cl.nio.NioStruct;
  * 
  * 
  */
-public abstract class Message<EnumClass> extends NioStruct {
+public abstract class Message extends NioStruct {
 	private static final Logger JLOG = Logger
 			.getLogger(Message.class.getName());
 
 	protected boolean bufferGetMode;
 
+	private Message subject;
 	private int commandId;
-	private int classificationValue;
-	private Enum<?> command = null;
+	private int protocolId;
 
 	private NioSession session;
 
 	@SuppressWarnings("unchecked")
-	private static Map<Class<?>, MPool<Message<?>>>[] poolMapArray = new Map[ApplicationProtocol.MAX_PROTOCOLS];
+	private static Map<Class<?>, MPool<Message>>[] poolMapArray = new Map[ApplicationProtocol.MAX_PROTOCOLS];
 	@SuppressWarnings("unchecked")
 	private static List<Class<?>>[] poolListArray = new List[ApplicationProtocol.MAX_PROTOCOLS];
 
 	/**
 	 * @see MessageClassification
 	 */
-	public static Message<?> requestMessage(Class<?> c, Session session) {
+	public static Message requestMessage(Class<?> c, Session session) {
 		return requestMessage(c, session.getApplicationProtocol());
 	}
 
 	/**
 	 * @see MessageClassification
 	 */
-	public static Message<?> requestMessage(Class<?> c, ApplicationProtocol p) {
+	public static Message requestMessage(Class<?> c, ApplicationProtocol p) {
 		return requestMessage(c, p.getId());
 	}
 
 	/**
 	 * @see MessageClassification
 	 */
-	public static Message<?> requestMessage(int commandId, int controlType) {
-		if (controlType == -1) {
+	public static Message requestMessage(int commandId, int controlType) {
+		if (controlType < 0) {
 			throw new Error("APPLICATION class not registered for commandId="
 					+ commandId + "in #" + controlType);
+		}
+		if (commandId < 0) {
+			throw new Error("commandId: " + commandId);
 		}
 		if (poolListArray[controlType] == null) {
 			poolListArray[controlType] = new ArrayList<Class<?>>();
@@ -83,6 +86,7 @@ public abstract class Message<EnumClass> extends NioStruct {
 			throw new Error("APPLICATION class not registered for commandId="
 					+ commandId + "in #" + controlType);
 		}
+		JLOG.info("controlType=" + controlType + " commandId=" + commandId);
 		Class<?> c = poolListArray[controlType].get(commandId);
 		if (c == null) {
 			throw new Error("APPLICATION class not registered for commandId="
@@ -94,39 +98,38 @@ public abstract class Message<EnumClass> extends NioStruct {
 	/**
 	 * @see MessageClassification
 	 */
-	public static Message<?> requestMessage(Class<?> c, int controlType) {
+	public static Message requestMessage(Class<?> c, int controlType) {
 		if (poolMapArray[controlType] == null) {
-			poolMapArray[controlType] = new HashMap<Class<?>, MPool<Message<?>>>();
+			poolMapArray[controlType] = new HashMap<Class<?>, MPool<Message>>();
 		}
-		Pool<Message<?>> pool = poolMapArray[controlType].get(c);
+		Pool<Message> pool = poolMapArray[controlType].get(c);
 		if (pool == null) {
 			throw new Error("APPLICATION class not registered for class"
 					+ c.getName() + "in message class #" + controlType
 					+ ". Please check if your protocol xml is valid.");
 		}
-		Message<?> m = pool.requestElementFromPool();
-		m.setClassificationValue(controlType);
+		Message m = pool.requestElementFromPool();
+		m.updateCommand(m, controlType);
 		return m;
 	}
 
 	public String toString() {
-		return getClass().getSimpleName() + "[" + commandId + "("
-				+ classificationValue + ")]";
+		return getClass().getSimpleName() + "(" + protocolId + ")]";
 	}
 
 	/**
 	 * clean up and put message into pool.
 	 */
 	public void releaseMessage() {
-		if (getClassificationValue() == -1)
+		if (getProtocolId() == -1)
 			return; // ignore prototypes
 
 		// pool it
-		Map<Class<?>, MPool<Message<?>>> map = poolMapArray[getClassificationValue()];
+		Map<Class<?>, MPool<Message>> map = poolMapArray[getProtocolId()];
 		if (map != null) {
-			Pool<Message<?>> pool = map.get(getClass());
+			Pool<Message> pool = map.get(getClass());
 			if (pool != null) {
-				pool.releaseElementToPool((Message<?>) this);
+				pool.releaseElementToPool((Message) this);
 			}
 		}
 	}
@@ -139,28 +142,10 @@ public abstract class Message<EnumClass> extends NioStruct {
 	 * @param command
 	 *            The application message enumerator.
 	 */
-	protected Message(Enum<?> command) {
-		this(command, -1);
-	}
-
-	// /**
-	// * Creates a transport control message.
-	// * <p>
-	// * Do not use outside library.
-	// *
-	// * @param id
-	// * control message id
-	// * @param type
-	// * MessageClassification.
-	// */
-	// protected Message(int id, int classificationValue) {
-	// this.command = null;
-	// this.commandId = id;
-	// this.classificationValue = classificationValue;
-	// }
-
-	public final Enum<?> getCommand() {
-		return command;
+	protected Message() {
+		this.subject = null;
+		this.protocolId = -1;
+		this.commandId = -1;
 	}
 
 	/**
@@ -173,18 +158,15 @@ public abstract class Message<EnumClass> extends NioStruct {
 	 * @param type
 	 *            MessageClassification.
 	 */
-	protected Message(Enum<?> command, int classificationValue) {
-		updateCommand(command, classificationValue);
+	protected Message(int protocolId) {
+		updateCommand(this, protocolId);
 	}
 
-	protected void updateCommand(Enum<?> command, int classificationValue) {
-		this.command = command;
-		if (command != null) {
-			this.commandId = command.ordinal();
-		} else {
-			this.commandId = -1;
-		}
-		this.classificationValue = classificationValue;
+	// REAL! ...
+	protected void updateCommand(Message subject, int protocolId) {
+		this.subject = subject;
+		this.protocolId = protocolId;
+		this.commandId = findCommandId(subject.getClass(), protocolId);
 	}
 
 	private void setMessageDefinition(MessageRegistryHelper messageDefinition) {
@@ -199,8 +181,8 @@ public abstract class Message<EnumClass> extends NioStruct {
 		return commandId;
 	}
 
-	public final int getClassificationValue() {
-		return classificationValue;
+	public final int getProtocolId() {
+		return protocolId;
 	}
 
 	/**
@@ -216,9 +198,9 @@ public abstract class Message<EnumClass> extends NioStruct {
 		if (JLOG.isLoggable(Level.FINER)) {
 			JLOG.finer("AbstractMessage.register(): " + messageClass.getName());
 		}
-		Map<Class<?>, MPool<Message<?>>> map = poolMapArray[controlType];
+		Map<Class<?>, MPool<Message>> map = poolMapArray[controlType];
 		if (map == null) {
-			map = new HashMap<Class<?>, MPool<Message<?>>>();
+			map = new HashMap<Class<?>, MPool<Message>>();
 			poolMapArray[controlType] = map;
 		}
 		List<Class<?>> list = poolListArray[controlType];
@@ -227,12 +209,12 @@ public abstract class Message<EnumClass> extends NioStruct {
 			poolListArray[controlType] = list;
 		}
 
-		MPool<Message<?>> pool = map.get(messageClass);
+		MPool<Message> pool = map.get(messageClass);
 		if (pool == null) {// Not registered yet
-			pool = new MPool<Message<?>>(100) {
-				protected Message<?> newInstance() {
+			pool = new MPool<Message>(100) {
+				protected Message newInstance() {
 					try {
-						Message<?> m = (Message<?>) messageClass.newInstance();
+						Message m = (Message) messageClass.newInstance();
 						m.setMessageDefinition(getMessageDefinition());
 						return m;
 					} catch (InstantiationException e) {
@@ -247,22 +229,24 @@ public abstract class Message<EnumClass> extends NioStruct {
 			pool.setMessageDefinition(new MessageRegistryHelper());
 			poolMapArray[controlType].put(messageClass, pool);
 
-			Message<?> prototype = Message.requestMessage(messageClass,
+			Message prototype = Message.requestMessage(messageClass,
 					controlType);
-			prototype.setClassificationValue(controlType);
-			int id = prototype.getCommandId();
-			for (int i = poolListArray[controlType].size(); i < id; i++) {
-				poolListArray[controlType].add(null);
-			}
-			if (poolListArray[controlType].size() == id) {
-				poolListArray[controlType].add(messageClass);
-			} else {
-				poolListArray[controlType].set(id, messageClass);
-			}
+			prototype.setProtocolId(controlType);
+
+			poolListArray[controlType].add(messageClass);
 
 			prototype.releaseMessage();
 		}
 		return pool.getMessageDefinition();
+	}
+
+	public static int findCommandId(Class<?> messageClass, int controlType) {
+		for (int i = 0; i < poolListArray[controlType].size(); i++) {
+			Class<?> m = poolListArray[controlType].get(i);
+			if (m.equals(messageClass))
+				return i;
+		}
+		return -1;
 	}
 
 	public final NioSession getSession() {
@@ -301,13 +285,13 @@ public abstract class Message<EnumClass> extends NioStruct {
 
 	private static int pipesize(Class<?> c, int controlType) {
 		if (poolMapArray[controlType] == null) {
-			poolMapArray[controlType] = new HashMap<Class<?>, MPool<Message<?>>>();
+			poolMapArray[controlType] = new HashMap<Class<?>, MPool<Message>>();
 		}
-		Pool<Message<?>> pool = poolMapArray[controlType].get(c);
+		Pool<Message> pool = poolMapArray[controlType].get(c);
 		return pool.size();
 	}
 
-	public final void setClassificationValue(int classificationValue) {
-		this.classificationValue = classificationValue;
+	public final void setProtocolId(int protocolId) {
+		this.protocolId = protocolId;
 	}
 }

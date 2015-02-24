@@ -17,7 +17,6 @@ package de.serviceflow.nutshell.cl.intern.session;
 
 import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.nio.NVarchar;
-import de.serviceflow.nutshell.cl.nio.Transfer;
 
 /**
  * The client send this message to authenticate to a server or proxy.
@@ -27,19 +26,15 @@ import de.serviceflow.nutshell.cl.nio.Transfer;
  * 
  * 
  */
-public class SessionAccepted extends Message<SessionMessage> {
+public class SessionAccepted extends Message {
 	public SessionAccepted() {
-		super(SessionMessage.SESSION_ACCEPTED, MessageClassification.SESSION
-				.value());
+		super(MessageClassification.SESSION.value());
 	}
 
-	@Transfer
 	public long sessionkey;
 
-	@Transfer
 	public long nampVersion;
 
-	@Transfer
 	public final NVarchar protocol = new NVarchar();
 
 }

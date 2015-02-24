@@ -52,7 +52,7 @@ public final class SessionObject implements Session, NioSession {
 			.getName());
 
 	public static final Level MSG_TRACE_LEVEL = Level.INFO;
-	public static final Level MSG_TRACE_LEVEL2 = Level.FINE;
+	public static final Level MSG_TRACE_LEVEL2 = Level.INFO;
 
 	private Communication communication = null;
 	private NIOTransportProvider mainProvider = null;
@@ -67,14 +67,13 @@ public final class SessionObject implements Session, NioSession {
 	private ByteBuffer readBuffer = null;
 	private boolean writeBufferFlushed = true;
 
-	private final Pipe<Message<?>> mainSendPipe = new Pipe<Message<?>>(
+	private final Pipe<Message> mainSendPipe = new Pipe<Message>(
 			"name=SessionObject,hash=" + this.hashCode()
 					+ ",direction=out.main");
-	private final Pipe<Message<?>> unreliableSendPipe = new Pipe<Message<?>>(
+	private final Pipe<Message> unreliableSendPipe = new Pipe<Message>(
 			"name=SessionObject,hash=" + this.hashCode()
 					+ ",direction=out.unreliable");
-	// private final Pipe<Message<?>> receivePipe = new Pipe<Message<?>>(
-	// "name=SessionObject,hash=" + this.hashCode() + ",direction=in");
+	
 
 	private Object userObject = null;
 
@@ -83,7 +82,7 @@ public final class SessionObject implements Session, NioSession {
 	private ApplicationProtocol applicationProtocol = null;
 	private APState protocolState;
 
-	private Message<?> nextMessage;
+	private Message nextMessage;
 	private int contentLength;
 	private SocketAddress address;
 
@@ -111,9 +110,6 @@ public final class SessionObject implements Session, NioSession {
 		return protocolState;
 	}
 
-	// public APPattern getCurrentPattern() {
-	// return currentPattern;
-	// }
 
 	public void setApplicationProtocolState(APState newState) {
 		if (newState == null) {
@@ -136,35 +132,7 @@ public final class SessionObject implements Session, NioSession {
 				+ sessionkey;
 	}
 
-	// /**
-	// * TODO: cleanup connection?
-	// */
-	// private void doTerminate() {
-	// SessionClosed mClosed = (SessionClosed) Message.requestMessage(
-	// SessionClosed.class, MessageClassification.SESSION.value());
-	// send(mClosed);
-	//
-	// sessionState = SessionState.TERMINATED;
-	// mainProvider.terminate(this);
-	// if (unreliableProvider != null) {
-	// unreliableProvider.terminate(this);
-	// }
-	// }
 
-	// private static final Pool<SessionObject> freePool = new
-	// Pool<SessionObject>()
-	// {
-	// protected SessionObject newInstance() {
-	// SessionObject mc = new SessionObject();
-	// JLOG.log(Level.WARNING, "************ New SessionObject from Pool! " +
-	// mc);
-	// return mc;
-	// }
-	// };
-	//
-	// public static Pool<SessionObject> freePool() {
-	// return freePool;
-	// }
 
 	/**
 	 * internal initialization.
@@ -207,35 +175,18 @@ public final class SessionObject implements Session, NioSession {
 		this.unreliableProvider = unreliable;
 	}
 
-	// public void close() {
-	// try {
-	// unreliableProvider.stop();
-	// mainProvider.stop();
-	// } catch (IOException e) {
-	// JLOG.log(Level.WARNING, "Stopping providers failed", e);
-	// }
-	// this.applicationProtocol = null;
-	// this.sessionkey = 0;
-	// this.address = null;
-	// this.broker = null;
-	// this.communication = null;
-	// this.contentLength = 0;
-	// this.mainProvider = null;
-	// this.unrel
-	// freePool.releaseElementToPool(this);
-	// }
 
 	/**
 	 * used by TCP
 	 */
-	public Message<?> getNextMessage() {
+	public Message getNextMessage() {
 		return nextMessage;
 	}
 
 	/**
 	 * used by TCP
 	 */
-	public void setNextMessage(Message<?> nextMessage) {
+	public void setNextMessage(Message nextMessage) {
 		this.nextMessage = nextMessage;
 	}
 
@@ -268,25 +219,25 @@ public final class SessionObject implements Session, NioSession {
 		return readBuffer;
 	}
 
-	public Pipe<Message<?>> getOutgoingMessages(NIOTransportProvider provider) {
+	public Pipe<Message> getOutgoingMessages(NIOTransportProvider provider) {
 		if (provider == mainProvider || unreliableProvider == null)
 			return mainSendPipe;
 		else
 			return unreliableSendPipe;
 	}
 
-	// private Pipe<Message<?>> getReceivedMessages() {
+	// private Pipe<Message> getReceivedMessages() {
 	// return receivePipe;
 	// }
 
-	public void receive(Message<?> m) {
+	public void receive(Message m) {
 		// if (JLOG.isLoggable(Level.INFO)) {
 		// JLOG.info("received on " + this + " " + m.getCommand() + ": " + m);
 		// }
 		// getReceivedMessages().add(m);
 	}
 
-	private void addMessageToSendPipe(Message<?> m) {
+	private void addMessageToSendPipe(Message m) {
 		if (m.getMessageDefinition().isReliable() || unreliableProvider == null)
 			mainSendPipe.add(m);
 		else
@@ -298,159 +249,25 @@ public final class SessionObject implements Session, NioSession {
 	 * @param m
 	 *            Message
 	 */
-	public final void internMessageReceived(Message<?> m,
+	public final void internMessageReceived(Message m,
 			NIOTransportProvider provider) {
 		broker.broke(m, provider);
 	}
 
-	// /**
-	// *
-	// * @param m
-	// * Message
-	// */
-	// public final void oldInternMessageReceived(Message<?> m) {
-	// if (JLOG.isLoggable(Level.FINE)) {
-	// JLOG.fine("internMessageReceived(): <- read " + m);
-	// }
-	// if (m instanceof ChangeState) {
-	// sessionState = SessionState.SYNC;
-	// // implicit state change - handle event below.
-	// }
-	//
-	// if (sessionState == SessionState.ACTIVE) {
-	// if (communication != null) {
-	// if (m.getClassificationValue() == MessageClassification.SESSION
-	// .value()) {
-	// if (m instanceof SessionClosed) {
-	// JLOG.info("SessionObject closed by partner.");
-	// sessionState = SessionState.TERMINATED;
-	// mainProvider.terminate(this);
-	// if (unreliableProvider != null) {
-	// unreliableProvider.terminate(this);
-	// }
-	// return;
-	// } else {
-	// JLOG.warning("internMessageReceived(): Unhandled: " + m
-	// + " for " + this);
-	// }
-	// } else {
-	// communication.getProtocolListenerHelper().messageReceived(
-	// this, m);
-	// }
-	// } else {
-	// JLOG.warning("internMessageReceived(): No communication associated!");
-	// }
-	// } else if (sessionState == SessionState.CREATED) {
-	// if (m instanceof ClientAuthentication) {
-	// Authentication a = ServerCommunication.getServerCommunication()
-	// .getAuthentication();
-	// ClientAuthentication ca = (ClientAuthentication) m;
-	// if (a != null) {
-	// user = a.authenticate(ca.credentials.getBytes());
-	// if (user == null) {
-	// JLOG.info("Authentication denied access.");
-	// doTerminate();
-	// return;
-	// }
-	// } else {
-	// user = null; // anonymous
-	// }
-	// if (ca.sessionkey == 0) {
-	//
-	// if (ca.dualChannel) {
-	// unreliableProvider = mainProvider.join(this);
-	// }
-	//
-	// sessionkey = UUID.randomUUID().getMostSignificantBits();
-	//
-	// SessionAccepted mAccepted = (SessionAccepted) Message
-	// .requestMessage(SessionAccepted.class,
-	// MessageClassification.SESSION.value());
-	// mAccepted.sessionkey = sessionkey;
-	// send(mAccepted);
-	//
-	// if (!ca.dualChannel) {
-	// sessionState = SessionState.ACTIVE;
-	// communication.getProtocolListenerHelper()
-	// .sessionCreated(getProvider(true), this);
-	// }
-	// } else {
-	// sessionState = SessionState.ACTIVE;
-	// communication.getProtocolListenerHelper().sessionCreated(
-	// getProvider(true), this);
-	// }
-	// } else if (m instanceof SessionAccepted) {
-	// sessionState = SessionState.ACTIVE;
-	// sessionkey = ((SessionAccepted) m).sessionkey;
-	// if (unreliableProvider != null) {
-	// ((NampTCPClient) mainProvider).sessionAccepted(this);
-	// } else {
-	// communication.getProtocolListenerHelper().sessionCreated(
-	// getProvider(true), this);
-	// }
-	// } else if (m instanceof SessionClosed) {
-	// doTerminate();
-	// communication.getProtocolListenerHelper().sessionFailedToOpen(
-	// getProvider(true),
-	// new AuthenticationException("Access denied."));
-	// } else {
-	// JLOG.warning("protocol error. received in CREATED: "
-	// + m.getClass());
-	// doTerminate();
-	// communication.getProtocolListenerHelper().sessionTerminated(
-	// getProvider(true), this);
-	// }
-	// } else if (sessionState == SessionState.SYNC) {
-	// if (m instanceof ChangeState) {
-	// protocolState = APState.get(((ChangeState) m).stateValue);
-	// if (protocolState == null) {
-	// JLOG.warning("protocol error. Illegal ChangeState: "
-	// + ((ChangeState) m).stateValue);
-	// doTerminate();
-	// communication.getProtocolListenerHelper()
-	// .sessionTerminated(getProvider(true), this);
-	// } else {
-	// StateChangeAcknowledged mAckn = (StateChangeAcknowledged) Message
-	// .requestMessage(StateChangeAcknowledged.class,
-	// MessageClassification.SESSION.value());
-	// mAckn.stateValue = ((ChangeState) m).stateValue;
-	// send(mAckn);
-	// sessionState = SessionState.ACTIVE;
-	// communication.getProtocolListenerHelper()
-	// .stateChangeComplete(getProvider(true), this);
-	// }
-	// } else if (m instanceof StateChangeAcknowledged) {
-	// if (protocolState.value() != ((StateChangeAcknowledged) m).stateValue) {
-	// JLOG.warning("protocol error. Wrong State Acknowledged: "
-	// + ((StateChangeAcknowledged) m).stateValue);
-	// doTerminate();
-	// communication.getProtocolListenerHelper()
-	// .sessionTerminated(getProvider(true), this);
-	// } else {
-	// sessionState = SessionState.ACTIVE;
-	// communication.getProtocolListenerHelper()
-	// .stateChangeComplete(getProvider(true), this);
-	// }
-	// }
-	// // ignore other messages
-	// } else {
-	// JLOG.warning("protocol error. received in " + sessionState.name()
-	// + ": " + m.getClass());
-	// }
-	// }
-
-	public void send(Message<?> m) {
+	public void send(Message m) {
 		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			JLOG.log(SessionObject.MSG_TRACE_LEVEL,
-					"send on " + this + " " + m.getCommand() + ": " + m);
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "send on " + this + ": "
+					+ m);
 		}
-		if (m.getClassificationValue() < 0)
-			throw new Error("send on " + this + " " + m.getCommand() + ": " + m);
+		if (m.getProtocolId() < 0)
+			throw new Error("getProtocolId negative: send on " + this + ": " + m);
+		if (m.getCommandId()<0)
+			throw new Error("getCommandId negative: send on " + this + ": " + m);
 
 		if (sessionState == SessionState.ACTIVE) {
 			addMessageToSendPipe(m);
 		} else if (sessionState == SessionState.CREATED) {
-			if (m.getClassificationValue() == MessageClassification.SESSION
+			if (m.getProtocolId() == MessageClassification.SESSION
 					.value()) {
 				if (m instanceof ClientAuthentication) {
 					ClientAuthentication a = ((ClientAuthentication) m);
@@ -471,7 +288,7 @@ public final class SessionObject implements Session, NioSession {
 						"SessionObject is not active yet. Unexpected: " + m);
 			}
 		} else if (sessionState == SessionState.SYNC) {
-			if (m.getClassificationValue() == MessageClassification.SESSION
+			if (m.getProtocolId() == MessageClassification.SESSION
 					.value()) {
 				addMessageToSendPipe(m);
 			} else {
@@ -483,8 +300,7 @@ public final class SessionObject implements Session, NioSession {
 					"SessionObject terminated! Unexpected: " + m);
 		} else {
 			throw new IllegalStateException("Message rejected in sessionState "
-					+ sessionState + " send on " + this + " " + m.getCommand()
-					+ "/" + m.getClassificationValue() + ": " + m);
+					+ sessionState + " send on " + this + ": " + m);
 		}
 	}
 

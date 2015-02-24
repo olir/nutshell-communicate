@@ -27,7 +27,6 @@ import de.serviceflow.nutshell.cl.intern.session.ClientAuthentication;
 import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
 import de.serviceflow.nutshell.cl.intern.session.SessionAccepted;
 import de.serviceflow.nutshell.cl.intern.session.SessionClosed;
-import de.serviceflow.nutshell.cl.intern.session.SessionMessage;
 
 public class ServerMessageBroker implements MessageBroker {
 	private static final Logger JLOG = Logger
@@ -35,9 +34,8 @@ public class ServerMessageBroker implements MessageBroker {
 
 	private final SessionObject session;
 
-	private boolean created(Message<?> m) {
-		switch ((SessionMessage) m.getCommand()) {
-		case CLIENT_AUTHENTICATION: {
+	private boolean created(Message m) {
+		if (m instanceof ClientAuthentication) {
 			ClientAuthentication ca = (ClientAuthentication) m;
 			if (!checkAuthentication(ca)) {
 				session.terminate();
@@ -60,8 +58,7 @@ public class ServerMessageBroker implements MessageBroker {
 
 				}
 			} else {
-				String protocol = acceptAuthentication(
-						session.getSessionkey(),
+				String protocol = acceptAuthentication(session.getSessionkey(),
 						ca.requestedProtocol.toString()); // UDP
 
 				if (!session.activate(protocol)) {
@@ -72,32 +69,22 @@ public class ServerMessageBroker implements MessageBroker {
 			}
 
 			return true;
+		} else {
+			return false;
 		}
-
-		case PROXY_AUTHENTICATION:
-			break;
-		case SESSION_ACCEPTED:
-			break;
-		case CHANGE_STATE:
-			break;
-		case SESSION_CLOSED:
-			break;
-		case STATE_CHANGE_ACKNOWLEDGED:
-			break;
-		default:
-			break;
-		}
-		return false;
 	}
 
 	private String acceptAuthentication(long sessionkey,
 			String requestedProtocol) {
-		
+
 		ApplicationProtocol p = ApplicationProtocol
 				.getByName(requestedProtocol);
 		if (p == null)
-			throw new Error("Unupported protocol '"+requestedProtocol+"'"); // TODO improve this in
-		
+			throw new Error("Unupported protocol '" + requestedProtocol + "'"); // TODO
+																				// improve
+																				// this
+																				// in
+
 		if (sessionkey == 0L) {
 			sessionkey = UUID.randomUUID().getMostSignificantBits();
 			session.setSessionkey(sessionkey);
@@ -108,7 +95,7 @@ public class ServerMessageBroker implements MessageBroker {
 		mAccepted.nampVersion = 1;
 		mAccepted.protocol.setString(p.getName());
 		session.send(mAccepted);
-												
+
 		return p.getName();
 	}
 
@@ -129,16 +116,16 @@ public class ServerMessageBroker implements MessageBroker {
 		return true;
 	}
 
-	private boolean sync(Message<?> m) {
+	private boolean sync(Message m) {
 		return false;
 	}
 
-	private boolean stall(Message<?> m) {
+	private boolean stall(Message m) {
 		return false;
 	}
 
-	private boolean active(Message<?> m) {
-		if (m.getClassificationValue() == MessageClassification.SESSION.value()) {
+	private boolean active(Message m) {
+		if (m.getProtocolId() == MessageClassification.SESSION.value()) {
 			if (m instanceof SessionClosed) {
 				JLOG.info("SessionObject closed by partner.");
 				session.terminate();
@@ -166,12 +153,12 @@ public class ServerMessageBroker implements MessageBroker {
 	 *            Message
 	 */
 	@Override
-	public final void broke(Message<?> m, NIOTransportProvider provider) {
+	public final void broke(Message m, NIOTransportProvider provider) {
 		boolean noError = true;
 
 		switch (session.getSessionState()) {
 		case CREATED:
-			if (m.getClassificationValue() == MessageClassification.SESSION
+			if (m.getProtocolId() == MessageClassification.SESSION
 					.value()) {
 				noError = created(m);
 			}
@@ -183,7 +170,7 @@ public class ServerMessageBroker implements MessageBroker {
 			noError = stall(m);
 			break;
 		case SYNC:
-			if (m.getClassificationValue() == MessageClassification.SESSION
+			if (m.getProtocolId() == MessageClassification.SESSION
 					.value()) {
 				noError = sync(m);
 			}

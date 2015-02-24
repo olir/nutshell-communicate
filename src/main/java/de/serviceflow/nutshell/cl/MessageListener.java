@@ -37,5 +37,5 @@ public interface MessageListener {
 	 * @param m
 	 *            the APPLICATION
 	 */
-	void messageReceived(Session s, Message<?> m);
+	void messageReceived(Session s, Message m);
 }

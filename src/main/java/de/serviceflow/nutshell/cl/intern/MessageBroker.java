@@ -18,5 +18,5 @@ package de.serviceflow.nutshell.cl.intern;
 import de.serviceflow.nutshell.cl.Message;
 
 public interface MessageBroker {
-	void broke(Message<?> m, NIOTransportProvider provider);
+	void broke(Message m, NIOTransportProvider provider);
 }

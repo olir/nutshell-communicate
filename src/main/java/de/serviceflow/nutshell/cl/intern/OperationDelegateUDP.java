@@ -82,7 +82,7 @@ public class OperationDelegateUDP {
 //		JLOG.warning("<<<<< controlType="+controlType);
 
 		int commandId = buffer.get();
-		Message<?> nextMessage = Message.requestMessage(commandId, controlType);
+		Message nextMessage = Message.requestMessage(commandId, controlType);
 		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
 			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "UDP.opRead: " + nextMessage
 					+ " for " + session + " @" + sa);
@@ -129,12 +129,12 @@ public class OperationDelegateUDP {
 
 			// JLOG.info("opWrite ..."+session);
 
-			Pipe<Message<?>> mcSendPipe = session.getOutgoingMessages(ts);
+			Pipe<Message> mcSendPipe = session.getOutgoingMessages(ts);
 			if (mcSendPipe.isClean()) {
 				continue; // no message
 			}
 
-			Message<?> m = mcSendPipe.next();
+			Message m = mcSendPipe.next();
 			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
 				JLOG.log(SessionObject.MSG_TRACE_LEVEL, "UDP.opWrite: " + m
 						+ " for " + session + " @"
@@ -142,7 +142,7 @@ public class OperationDelegateUDP {
 			}
 			buffer.clear();
 			buffer.putLong(session.getSessionkey());
-			int controlType = m.getClassificationValue();
+			int controlType = m.getProtocolId();
 			// currently only 1 protocol supported per session
 			// client and server id do not match - map it
 			if (controlType>1)

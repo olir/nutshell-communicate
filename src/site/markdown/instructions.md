@@ -8,7 +8,7 @@ To create the server daemon, the easiest way is to
  
 * create a class that extends SimpleServerDaemon,
 * read the application protocol by a method createProtocolReader() 
-  (see [Application Protocol](#application-protocol),
+  (see [Application Protocol](#Application_Protocol),
 * create a MessageListener. We add a subclass MyCom that implements it.
 * add a bind() method where we add the application protocol and then
 call the bind method from the superclass to bind the server daemon 
@@ -25,7 +25,7 @@ public class TestServer3 extends SimpleServerDaemon {
 
 	class MyCom implements MessageListener {
 		@Override
-		public void messageReceived(Session s, Message<?> m) {
+		public void messageReceived(Session s, Message m) {
 		}
 	}
 
@@ -46,7 +46,7 @@ connect method is required.
 * We connect with TCP so we use port 10001.
 * "InetAddress.getLocalHost()" is just for test and should be replaced by the remote host later.
 * We also need to select an application protocol by providing it's name ("test3/v1").
-(see [Application Protocol](#application-protocol)
+(see [Application Protocol](#Application_Protocol)
 
 ``` java
 public class TestClient3 extends SimpleClient{
@@ -59,7 +59,7 @@ public class TestClient3 extends SimpleClient{
 	
 	class MyCom implements MessageListener {
 		@Override
-		public void messageReceived(Session s, Message<?> m) {
+		public void messageReceived(Session s, Message m) {
 		}
 	}
 
@@ -94,7 +94,8 @@ and message classes.
 ``` xml
 <?xml version="1.0" encoding="UTF-8"?>
 <tns:Protocol xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xmlns:tns="http://www.screenflow.de/nutshell/2015/protocol.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+	xmlns:tns="http://www.screenflow.de/nutshell/2015/protocol.xsd"
 	messagepackage="de.serviceflow.nutshell.cl.test2" name="test3/v1">
 	<State name="ReadyForTest" isInitial="true">
 			<Message classname="TestRoundStarting" client="true"  reliable="true"/>
@@ -109,43 +110,23 @@ and message classes.
 
 ### Messages
 
-The message classes declared in the protocol must the superclass Message. The constructor must be initialized by a unique enum constant.
-
-So first we create a enum containing constants for all the messages defined in the XML.
-
-TODO: i will try to eliminate this step in the future.
+The message classes declared in the protocol must extends the superclass Message.
 
 ``` java
-public enum TestMessage2 {
-	TEST_PING, TEST_ROUND_COMPLETED, TEST_ACKNOWLEDGE, TEST_ROUND_STARTING
-}
-```
-
-Then create a Message:
-
-``` java
-public class TestRequest extends Message<TestMessage1> {
-	public TestRequest() {
-		super(TestMessage1.TEST_REQUEST);
-	}
-
-	@Transfer
+public class TestRequest extends Message {
 	public int factor1;
-	@Transfer
 	public int factor2;
-
-	@Transfer
 	public final NioObjectContainer expected = new NioObjectContainer();
 }
 ```
 
-Serialization:
+___Serialization:___
 
-* Message extends NioStruct, a class which expects that each field we want to transfer is explicitly marked with the annotation @Transfer. These field types can be primitives or the corresponding classes or any class that
+* Message extends NioStruct, a class which expects that each field we do not want to transfer is explicitly marked with the annotation @NoTransfer. 
+* These field types can be primitives or the corresponding classes or any class that
 implements Transferable. 
 * NioStruct is a Transferable, so you can create substructures.
 * The class NioObjectContainer is a Transferable that can be used to transfer any objects using Kryo.
 * NVarchar is a String replacement based on ByteBuffer.
 
-TODO: i will try to replace @Transfer and inverse the behaviour similar to @Transient.
 

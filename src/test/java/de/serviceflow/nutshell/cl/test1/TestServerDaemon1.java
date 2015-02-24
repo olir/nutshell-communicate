@@ -65,11 +65,11 @@ public class TestServerDaemon1 extends SimpleServerDaemon implements
 
 	}
 
-	public final void messageHasBeenSent(Session s, Message<?> m) {
+	public final void messageHasBeenSent(Session s, Message m) {
 		JLOG.fine("TestServerDaemon2 detects messageSend " + m);
 	}
 
-	public final void messageReceived(Session s, Message<?> nextMessage) {
+	public final void messageReceived(Session s, Message nextMessage) {
 		JLOG.fine("TestServerDaemon2 detects messageReceived " + nextMessage);
 		try {
 			/*
@@ -84,7 +84,7 @@ public class TestServerDaemon1 extends SimpleServerDaemon implements
 			/*
 			 * Get TEST_PING and send TEST_ACKNOWLEDGE.
 			 */
-			if (nextMessage.getCommand() == TestMessage1.TEST_REQUEST) {
+			if (nextMessage instanceof TestRequest) {
 				TestRequest request = (TestRequest) nextMessage;
 				TestResponse response = (TestResponse) Message.requestMessage(
 						TestResponse.class, s);
@@ -110,7 +110,7 @@ public class TestServerDaemon1 extends SimpleServerDaemon implements
 				// .getState("Terminated"));
 			} else {
 				fail("APPLICATION type unexpected: "
-						+ nextMessage.getClassificationValue() + "/"
+						+ nextMessage.getProtocolId() + "/"
 						+ nextMessage.getCommandId());
 			}
 		} finally {

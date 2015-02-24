@@ -25,9 +25,9 @@ import de.serviceflow.nutshell.cl.Message;
  * 
  * 
  */
-public class SessionClosed extends Message<SessionMessage> {
+public class SessionClosed extends Message {
 	public SessionClosed() {
-		super(SessionMessage.SESSION_CLOSED,
+		super(
 				MessageClassification.SESSION.value());
 	}
 

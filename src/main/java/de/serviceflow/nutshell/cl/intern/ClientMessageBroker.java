@@ -25,7 +25,6 @@ import de.serviceflow.nutshell.cl.intern.session.ChangeState;
 import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
 import de.serviceflow.nutshell.cl.intern.session.SessionAccepted;
 import de.serviceflow.nutshell.cl.intern.session.SessionClosed;
-import de.serviceflow.nutshell.cl.intern.session.SessionMessage;
 
 public class ClientMessageBroker implements MessageBroker {
 	private static final Logger JLOG = Logger
@@ -33,9 +32,8 @@ public class ClientMessageBroker implements MessageBroker {
 
 	private final SessionObject session;
 
-	private boolean created(Message<?> m, NIOTransportProvider provider) {
-		switch ((SessionMessage) m.getCommand()) {
-		case SESSION_ACCEPTED: {
+	private boolean created(Message m, NIOTransportProvider provider) {
+		if (m instanceof SessionAccepted) {
 			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
 				JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 						"key = " + session.getSessionkey());
@@ -48,42 +46,32 @@ public class ClientMessageBroker implements MessageBroker {
 			((AbtractTransportClient) provider).sessionAccepted(session);
 
 			if (isUDP || !session.isDualChannel()) {
-				if (!session.activate(((SessionAccepted) m).protocol.toString())) {
+				if (!session
+						.activate(((SessionAccepted) m).protocol.toString())) {
 					return false;
 				}
-				session.getCommunication().getProtocolListenerHelper()
-						.sessionCreated(session.getProvider(!session.isDualChannel()), session);
+				session.getCommunication()
+						.getProtocolListenerHelper()
+						.sessionCreated(
+								session.getProvider(!session.isDualChannel()),
+								session);
 			}
-		}
 			return true;
-
-		case CHANGE_STATE:
-			break;
-		case CLIENT_AUTHENTICATION:
-			break;
-		case PROXY_AUTHENTICATION:
-			break;
-		case SESSION_CLOSED:
-			break;
-		case STATE_CHANGE_ACKNOWLEDGED:
-			break;
-		default:
-			break;
-
+		} else {
+			return false;
 		}
+	}
+
+	private boolean sync(Message m) {
 		return false;
 	}
 
-	private boolean sync(Message<?> m) {
+	private boolean stall(Message m) {
 		return false;
 	}
 
-	private boolean stall(Message<?> m) {
-		return false;
-	}
-
-	private boolean active(Message<?> m) {
-		if (m.getClassificationValue() == MessageClassification.SESSION.value()) {
+	private boolean active(Message m) {
+		if (m.getProtocolId() == MessageClassification.SESSION.value()) {
 			if (m instanceof SessionClosed) {
 				if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
 					JLOG.log(SessionObject.MSG_TRACE_LEVEL,
@@ -91,21 +79,19 @@ public class ClientMessageBroker implements MessageBroker {
 				}
 				session.terminate();
 				return true;
-			}
-			else
-			if (m instanceof ChangeState) {
+			} else if (m instanceof ChangeState) {
 				if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
 					JLOG.log(SessionObject.MSG_TRACE_LEVEL,
 							"SessionObject state change starting.");
 				}
 				session.setSessionState(SessionState.SYNC);
-				session.setApplicationProtocolState(APState.get(((ChangeState)m).stateValue));
+				session.setApplicationProtocolState(APState
+						.get(((ChangeState) m).stateValue));
 				return true;
 			}
 		} else {
 			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				JLOG.log(SessionObject.MSG_TRACE_LEVEL,
-						"forwarding "+m);
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL, "forwarding " + m);
 			}
 			session.getCommunication().getProtocolListenerHelper()
 					.messageReceived(session, m);
@@ -128,14 +114,14 @@ public class ClientMessageBroker implements MessageBroker {
 	 *            Message
 	 */
 	@Override
-	public final void broke(Message<?> m, NIOTransportProvider provider) {
+	public final void broke(Message m, NIOTransportProvider provider) {
 		boolean noError = true;
 		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
 			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "broking " + m);
 		}
 		switch (session.getSessionState()) {
 		case CREATED:
-			if (m.getClassificationValue() == MessageClassification.SESSION
+			if (m.getProtocolId() == MessageClassification.SESSION
 					.value()) {
 				noError = created(m, provider);
 			}
@@ -147,7 +133,7 @@ public class ClientMessageBroker implements MessageBroker {
 			noError = stall(m);
 			break;
 		case SYNC:
-			if (m.getClassificationValue() == MessageClassification.SESSION
+			if (m.getProtocolId() == MessageClassification.SESSION
 					.value()) {
 				noError = sync(m);
 			}

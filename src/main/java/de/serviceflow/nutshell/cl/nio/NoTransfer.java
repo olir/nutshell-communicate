@@ -13,18 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.serviceflow.nutshell.cl.test2;
+package de.serviceflow.nutshell.cl.nio;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * Example for an enumeration of message identifiers for all APPLICATION Messages be exchanged
- * by client and server.
+ * Annotation used to tag fields to exclude from transfer over network.
  * 
- * @author Rodeo <a href="https://java.net/people/1022463-Rodeo">@
- *         java.net</a>
- * @version $Id:  $
+ * @author <a href="http://www.serviceflow.de/nutshell">Oliver Rode</a>
+ * @version $Id: fbcfd2e7a099d4417e57756090446d0f9f3e5ef0 $
  * 
  * 
  */
-public enum TestMessage2 {
-	TEST_PING, TEST_ROUND_COMPLETED, TEST_ACKNOWLEDGE, TEST_ROUND_STARTING
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD) //can use in method only.
+public @interface NoTransfer {
+
 }

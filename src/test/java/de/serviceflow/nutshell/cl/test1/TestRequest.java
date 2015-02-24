@@ -17,28 +17,20 @@ package de.serviceflow.nutshell.cl.test1;
 
 import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.nio.NioObjectContainer;
-import de.serviceflow.nutshell.cl.nio.Transfer;
 
 /**
- * Example for a message be send from client to server. The class should be configured in
- * the XML protocol file, in this example <a href="testprotocol.xml"
- * target="_blank">testprotocol.xml</a>.
+ * Example for a message be send from client to server. The class should be
+ * configured in the XML protocol file, in this example <a
+ * href="testprotocol.xml" target="_blank">testprotocol.xml</a>.
  * 
  * @author <a href="http://www.serviceflow.de/nutshell">Oliver Rode</a>
  * @version $Id: $
  * 
  * 
  */
-public class TestRequest extends Message<TestMessage1> {
-	public TestRequest() {
-		super(TestMessage1.TEST_REQUEST);
-	}
+public class TestRequest extends Message {
 
-	@Transfer
 	public int factor1;
-	@Transfer
 	public int factor2;
-
-	@Transfer
 	public final NioObjectContainer expected = new NioObjectContainer();
 }

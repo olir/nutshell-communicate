@@ -18,7 +18,6 @@ package de.serviceflow.nutshell.cl.intern.session;
 import de.serviceflow.nutshell.cl.Authentication;
 import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.nio.NVarchar;
-import de.serviceflow.nutshell.cl.nio.Transfer;
 
 /**
  * The client send this message to authenticate to a server or proxy.
@@ -28,35 +27,29 @@ import de.serviceflow.nutshell.cl.nio.Transfer;
  * 
  * 
  */
-public class ClientAuthentication extends Message<SessionMessage> {
+public class ClientAuthentication extends Message {
 	public ClientAuthentication() {
-		super(SessionMessage.CLIENT_AUTHENTICATION,
-				MessageClassification.SESSION.value());
+		super(MessageClassification.SESSION.value());
 	}
-
-	@Transfer
+	
 	public int requestedNampVersion;
 
-	@Transfer
 	public final NVarchar requestedProtocol = new NVarchar();
-	
+
 	/**
 	 * if 2nd channel the key of the accepted session. 0 otherwise.
 	 */
-	@Transfer
-	public long sessionkey; 
-	
+	public long sessionkey;
+
 	/**
 	 * true: create dual-channel session
 	 */
-	@Transfer
-	public boolean dualChannel; 
+	public boolean dualChannel;
 
 	/**
 	 * Some data that meaning to an Authentication.
 	 * 
 	 * @see Authentication
 	 */
-	@Transfer
 	public final NVarchar credentials = new NVarchar();
 }

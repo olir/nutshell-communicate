@@ -37,7 +37,7 @@ public interface Session {
 	 * @param m
 	 *            a Message
 	 */
-	void send(Message<?> m);
+	void send(Message m);
 
 	/**
 	 * The session may attach an object to a session, to make it easier to find

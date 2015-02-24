@@ -95,11 +95,11 @@ public class TestClient1 extends SimpleClient implements MessageListener {
 		this.testData = testData;
 	}
 
-	public final void messageHasBeenSent(Session s, Message<?> m) {
+	public final void messageHasBeenSent(Session s, Message m) {
 		JLOG.fine("TestClient2 detects messageSend " + m);
 	}
 
-	public final void messageReceived(Session s, Message<?> nextMessage) {
+	public final void messageReceived(Session s, Message nextMessage) {
 		JLOG.info("*** TestClient2 detects messageReceived " + nextMessage);
 		try {
 			/*
@@ -114,7 +114,7 @@ public class TestClient1 extends SimpleClient implements MessageListener {
 			/*
 			 * Get TEST_PING and send TEST_ACKNOWLEDGE.
 			 */
-			if (nextMessage.getCommand() == TestMessage1.TEST_REPONSE) {
+			if (nextMessage instanceof TestResponse) {
 				TestResponse response = (TestResponse) nextMessage;
 				((MuliplicationTest) s.getUserObject())
 						.setServerCalculatedProduct(response.result);
@@ -123,7 +123,7 @@ public class TestClient1 extends SimpleClient implements MessageListener {
 				// s.setApplicationProtocolState(getApplicationProtocol().getState(
 				// "Terminated"));
 			} else {
-				fail("APPLICATION type unexpected: " + nextMessage.getCommand());
+				fail("APPLICATION type unexpected: " + nextMessage);
 			}
 		} finally {
 			nextMessage.releaseMessage();

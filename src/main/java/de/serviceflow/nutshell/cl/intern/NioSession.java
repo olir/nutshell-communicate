@@ -45,11 +45,11 @@ public interface NioSession extends Session {
 
 	void setCommunication(Communication communication);
 
-	Pipe<Message<?>> getOutgoingMessages(NIOTransportProvider provider);
+	Pipe<Message> getOutgoingMessages(NIOTransportProvider provider);
 
 	Object getAddress();
 
-	void internMessageReceived(Message<?> nextMessage, NIOTransportProvider ts);
+	void internMessageReceived(Message nextMessage, NIOTransportProvider ts);
 
 	void join(NIOTransportProvider udp);
 

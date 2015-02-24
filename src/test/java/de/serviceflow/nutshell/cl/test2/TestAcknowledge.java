@@ -16,7 +16,6 @@
 package de.serviceflow.nutshell.cl.test2;
 
 import de.serviceflow.nutshell.cl.Message;
-import de.serviceflow.nutshell.cl.nio.Transfer;
 
 /**
  * Example for a message be send from server to client. The class should be
@@ -28,16 +27,9 @@ import de.serviceflow.nutshell.cl.nio.Transfer;
  * 
  * 
  */
-public class TestAcknowledge extends Message<TestMessage2> {
-	public TestAcknowledge() {
-		super(TestMessage2.TEST_ACKNOWLEDGE);
-	}
-	@Transfer
+public class TestAcknowledge extends Message {
 	public int count;
-	@Transfer
 	public int old;
-	@Transfer
 	public long oldwait;
-	@Transfer
 	public int copies;
 }

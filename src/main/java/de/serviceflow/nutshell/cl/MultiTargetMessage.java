@@ -37,21 +37,21 @@ import de.serviceflow.nutshell.cl.intern.util.Bucket;
  * 
  * 
  */
-public class MultiTargetMessage<EnumClass> extends Message<EnumClass> {
+public class MultiTargetMessage extends Message {
 	private static final int BUFFER_SIZE = 1024;
 
 	private ByteBuffer reusedWriteBuffer = ByteBuffer
 			.allocateDirect(BUFFER_SIZE);
 
-	private static final Bucket<MultiTargetMessage<?>> MMPOOL = new Bucket<MultiTargetMessage<?>>(
+	private static final Bucket<MultiTargetMessage> MMPOOL = new Bucket<MultiTargetMessage>(
 			100) {
 		@SuppressWarnings("rawtypes")
-		protected MultiTargetMessage<?> newInstance() {
+		protected MultiTargetMessage newInstance() {
 			return new MultiTargetMessage();
 		}
 
 		@Override
-		protected void toss(MultiTargetMessage<?> e) {
+		protected void toss(MultiTargetMessage e) {
 			// TODO Auto-generated method stub
 
 		}
@@ -60,14 +60,14 @@ public class MultiTargetMessage<EnumClass> extends Message<EnumClass> {
 
 	private final Set<SessionObject> targets = new HashSet<SessionObject>();
 
-	private Message<?> real;
+	private Message real;
 	private int targetCount = 0;
 	@SuppressWarnings("unused")
 	private boolean reusedWriteBufferInitialized;
 
-	public static MultiTargetMessage<?> requestMultiTargetMessage(
-			Message<?> real) {
-		MultiTargetMessage<?> mtm = MMPOOL.requestElementFromPool();
+	public static MultiTargetMessage requestMultiTargetMessage(
+			Message real) {
+		MultiTargetMessage mtm = MMPOOL.requestElementFromPool();
 		mtm.assignMessage(real);
 		return mtm;
 	}
@@ -78,12 +78,12 @@ public class MultiTargetMessage<EnumClass> extends Message<EnumClass> {
 	}
 
 	private MultiTargetMessage() {
-		super(null, -1);
+		super(-1);
 	}
 
-	private void assignMessage(Message<?> real) {
+	private void assignMessage(Message real) {
 		this.real = real;
-		updateCommand(real.getCommand(), real.getClassificationValue());
+		updateCommand(real, real.getProtocolId());
 		super.bufferGetMode = true;
 		// super.broadcastMode = true;
 		if (real.bufferGetMode != true) {

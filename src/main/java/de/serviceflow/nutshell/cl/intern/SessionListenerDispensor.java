@@ -153,7 +153,7 @@ public class SessionListenerDispensor implements MessageListener,
 
 	}
 
-	public final void messageReceived(Session s, Message<?> nextMessage) {
+	public final void messageReceived(Session s, Message nextMessage) {
 		if (JLOG.isLoggable(Level.FINE)) {
 			JLOG.fine("messageReceived " + nextMessage);
 		}

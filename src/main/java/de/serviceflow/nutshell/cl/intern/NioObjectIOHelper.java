@@ -29,7 +29,7 @@ import javax.persistence.Id;
 import de.serviceflow.nutshell.cl.Lookup;
 import de.serviceflow.nutshell.cl.LookupRegistry;
 import de.serviceflow.nutshell.cl.nio.NioStruct;
-import de.serviceflow.nutshell.cl.nio.Transfer;
+import de.serviceflow.nutshell.cl.nio.NoTransfer;
 import de.serviceflow.nutshell.cl.nio.TransferJPAReference;
 import de.serviceflow.nutshell.cl.nio.Transferable;
 
@@ -80,91 +80,79 @@ public class NioObjectIOHelper {
 
 		Field fields[] = messageClass.getFields();
 		for (Field field : fields) {
-			if (field.isAnnotationPresent(Transfer.class)) {
-				if (JLOG.isLoggable(Level.FINER)) {
-					JLOG.finer("." + field.getName() + " found annotation on "
-							+ messageClass);
-				}
-
-				Class<?> type = field.getType();
-				if (type.isArray()) {
-					throw new Error("classic arrays not supported. class="
-							+ messageClass.getClass().getName() + " field="
-							+ field.getName());
-					// type = type.getComponentType();
-					// if (type.isArray()) {
-					// throw new Error(
-					// "Multi-demensional arrays not supported. class="
-					// + messageClass.getClass().getName()
-					// + " field=" + field.getName());
-					// }
-				}
-				if (type == Boolean.class || type == Boolean.TYPE) {
-					fieldHelperList.add(new BooleanIOHelper(field));
-				} else if (type == Byte.class || type == Byte.TYPE) {
-					fieldHelperList.add(new OctetIOHelper(field));
-				} else if (type == Short.class || type == Short.TYPE) {
-					fieldHelperList.add(new ShortIOHelper(field));
-				} else if (type == Integer.class || type == Integer.TYPE) {
-					fieldHelperList.add(new IntIOHelper(field));
-				} else if (type == Long.class || type == Long.TYPE) {
-					fieldHelperList.add(new LongIOHelper(field));
-				} else if (type == Float.class || type == Float.TYPE) {
-					fieldHelperList.add(new FloatIOHelper(field));
-				} else if (type == Double.class || type == Double.TYPE) {
-					fieldHelperList.add(new DoubleIOHelper(field));
-				} else if (Transferable.class.isAssignableFrom(type)) {
-					fieldHelperList.add(new TransferableIOHelper(field));
-				} else {
-					throw new Error("Field type '" + type.getName()
-							+ "' not supported. class="
-							+ messageClass.getClass().getName() + " field="
-							+ field.getName());
-				}
-			} else if (field.isAnnotationPresent(TransferJPAReference.class)) {
-				Class<?> type = field.getType();
-				Field tfields[] = type.getFields();
-				Field idfield = null;
-				for (Field tfield : tfields) {
-					if (tfield.isAnnotationPresent(Id.class)) {
-						idfield = tfield;
-						break;
+			if (!field.isAnnotationPresent(NoTransfer.class)) {
+				if (field.isAnnotationPresent(TransferJPAReference.class)) {
+					Class<?> type = field.getType();
+					Field tfields[] = type.getFields();
+					Field idfield = null;
+					for (Field tfield : tfields) {
+						if (tfield.isAnnotationPresent(Id.class)) {
+							idfield = tfield;
+							break;
+						}
 					}
-				}
-				if (idfield != null) {
-					Class<?> idtype = idfield.getType();
-					if (idtype == Integer.class || idtype == Integer.TYPE) {
-						fieldHelperList.add(new JPAReferenceIOHelper(field,
-								idfield));
+					if (idfield != null) {
+						Class<?> idtype = idfield.getType();
+						if (idtype == Integer.class || idtype == Integer.TYPE) {
+							fieldHelperList.add(new JPAReferenceIOHelper(field,
+									idfield));
+						} else {
+							throw new Error(
+									"TransferJPAReference failed for class "
+											+ messageClass.getName()
+											+ " on field "
+											+ field.getName()
+											+ ": Refer to "
+											+ type.getName()
+											+ " invalid because Id annotated field "
+											+ idfield.getName()
+											+ " is not of type int. Unsupported type: "
+											+ idtype.getName());
+						}
+					}
+				} else {
+					if (JLOG.isLoggable(Level.FINER)) {
+						JLOG.finer("." + field.getName()
+								+ " found annotation on " + messageClass);
+					}
+
+					Class<?> type = field.getType();
+					if (type.isArray()) {
+						throw new Error("classic arrays not supported. class="
+								+ messageClass.getClass().getName() + " field="
+								+ field.getName());
+						// type = type.getComponentType();
+						// if (type.isArray()) {
+						// throw new Error(
+						// "Multi-demensional arrays not supported. class="
+						// + messageClass.getClass().getName()
+						// + " field=" + field.getName());
+						// }
+					}
+					if (type == Boolean.class || type == Boolean.TYPE) {
+						fieldHelperList.add(new BooleanIOHelper(field));
+					} else if (type == Byte.class || type == Byte.TYPE) {
+						fieldHelperList.add(new OctetIOHelper(field));
+					} else if (type == Short.class || type == Short.TYPE) {
+						fieldHelperList.add(new ShortIOHelper(field));
+					} else if (type == Integer.class || type == Integer.TYPE) {
+						fieldHelperList.add(new IntIOHelper(field));
+					} else if (type == Long.class || type == Long.TYPE) {
+						fieldHelperList.add(new LongIOHelper(field));
+					} else if (type == Float.class || type == Float.TYPE) {
+						fieldHelperList.add(new FloatIOHelper(field));
+					} else if (type == Double.class || type == Double.TYPE) {
+						fieldHelperList.add(new DoubleIOHelper(field));
+					} else if (Transferable.class.isAssignableFrom(type)) {
+						fieldHelperList.add(new TransferableIOHelper(field));
 					} else {
-						throw new Error(
-								"TransferJPAReference failed for class "
-										+ messageClass.getName()
-										+ " on field "
-										+ field.getName()
-										+ ": Refer to "
-										+ type.getName()
-										+ " invalid because Id annotated field "
-										+ idfield.getName()
-										+ " is not of type int. Unsupported type: "
-										+ idtype.getName());
+						throw new Error("Field type '" + type.getName()
+								+ "' not supported. class="
+								+ messageClass.getClass().getName() + " field="
+								+ field.getName());
 					}
-				} else {
-					throw new Error(
-							"TransferJPAReference failed for class "
-									+ messageClass.getName()
-									+ " on field "
-									+ field.getName()
-									+ ": Refer to "
-									+ type.getName()
-									+ " invalid because Id annotation is not present in this class.");
 				}
-			} else {
-				JLOG.finer("." + field.getName()
-						+ ": ignored - no useful annotation on "
-						+ messageClass.getName());
 			}
-
 		}
 	}
 

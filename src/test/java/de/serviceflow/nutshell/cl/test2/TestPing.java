@@ -16,25 +16,18 @@
 package de.serviceflow.nutshell.cl.test2;
 
 import de.serviceflow.nutshell.cl.Message;
-import de.serviceflow.nutshell.cl.nio.Transfer;
 
 /**
- * Example for a message be send from client to server. The class should be configured in
- * the XML protocol file, in this example <a href="testprotocol.xml"
- * target="_blank">testprotocol.xml</a>.
+ * Example for a message be send from client to server. The class should be
+ * configured in the XML protocol file, in this example <a
+ * href="testprotocol.xml" target="_blank">testprotocol.xml</a>.
  * 
  * @author <a href="http://www.serviceflow.de/nutshell">Oliver Rode</a>
  * @version $Id: $
  * 
  * 
  */
-public class TestPing extends Message<TestMessage2> {
-	public TestPing() {
-		super(TestMessage2.TEST_PING);
-	}
-	
-	@Transfer
+public class TestPing extends Message {
 	public long muuid;
-	@Transfer
 	public int id;
 }
