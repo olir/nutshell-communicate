@@ -45,7 +45,6 @@ public class MultiTargetMessage extends Message {
 
 	private static final Bucket<MultiTargetMessage> MMPOOL = new Bucket<MultiTargetMessage>(
 			100) {
-		@SuppressWarnings("rawtypes")
 		protected MultiTargetMessage newInstance() {
 			return new MultiTargetMessage();
 		}

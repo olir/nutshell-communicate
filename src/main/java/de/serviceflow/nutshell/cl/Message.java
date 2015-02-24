@@ -43,6 +43,7 @@ public abstract class Message extends NioStruct {
 
 	protected boolean bufferGetMode;
 
+	@SuppressWarnings("unused")
 	private Message subject;
 	private int commandId;
 	private int protocolId;

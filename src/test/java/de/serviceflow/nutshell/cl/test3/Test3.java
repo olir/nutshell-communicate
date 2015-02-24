@@ -22,8 +22,6 @@ import static org.junit.Assert.fail;
 
 import java.util.logging.Logger;
 
-import org.junit.Test;
-
 /**
  * Another Test to check if client-server communication is working.
  * 
