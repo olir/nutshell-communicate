@@ -16,6 +16,7 @@
 package de.serviceflow.nutshell.cl.intern;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,6 +81,9 @@ public class NioObjectIOHelper {
 
 		Field fields[] = messageClass.getFields();
 		for (Field field : fields) {
+			if (Modifier.isStatic(field.getModifiers())) {
+				continue;
+			}
 			if (!field.isAnnotationPresent(NoTransfer.class)) {
 				if (field.isAnnotationPresent(TransferJPAReference.class)) {
 					Class<?> type = field.getType();

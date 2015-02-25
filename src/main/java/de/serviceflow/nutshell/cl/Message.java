@@ -87,7 +87,6 @@ public abstract class Message extends NioStruct {
 			throw new Error("APPLICATION class not registered for commandId="
 					+ commandId + "in #" + controlType);
 		}
-		JLOG.info("controlType=" + controlType + " commandId=" + commandId);
 		Class<?> c = poolListArray[controlType].get(commandId);
 		if (c == null) {
 			throw new Error("APPLICATION class not registered for commandId="
