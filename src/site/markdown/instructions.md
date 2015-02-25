@@ -122,11 +122,13 @@ public class TestRequest extends Message {
 
 ___Serialization:___
 
-* Message extends NioStruct, a class which expects that each field we do not want to transfer is explicitly marked with the annotation @NoTransfer. 
+* Message extends EncodedNioStruct, a class which expects that each field we do not want to transfer is explicitly marked with the annotation @NoTransfer. 
 * These field types can be primitives or the corresponding classes or any class that
 implements Transferable. 
-* NioStruct is a Transferable, so you can create substructures.
-* The class NioObjectContainer is a Transferable that can be used to transfer any objects using Kryo.
+* EncodedNioStruct is a Transferable, so you can create substructures. It is based on rge kryo library and uses variable length encoding for integers.
+* The class NioObjectContainer is a Transferable that can be used to transfer Objects using Kryo.
+You can register classes to kryo by calling KryoFactory.register(Class<?> c, int id). 
+Please read Kryo documentation for details.
 * NVarchar is a String replacement based on ByteBuffer.
 
 

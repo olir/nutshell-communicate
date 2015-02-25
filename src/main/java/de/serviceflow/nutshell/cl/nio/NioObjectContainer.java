@@ -17,7 +17,6 @@ package de.serviceflow.nutshell.cl.nio;
 
 import java.nio.ByteBuffer;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.ByteBufferInput;
 import com.esotericsoftware.kryo.io.ByteBufferOutput;
 import com.esotericsoftware.kryo.io.Input;
@@ -32,22 +31,19 @@ import com.esotericsoftware.kryo.io.Output;
  * 
  */
 public class NioObjectContainer implements Transferable {
+	public Object objective;
 
-	private static Kryo kryoInstance = null;
-	
-	private Object objective = null;
-	
 	@Override
 	public void writeObject(ByteBuffer out) {
 		Output output = new ByteBufferOutput(out);
-		getKryo().writeClassAndObject(output, objective);
+		KryoFactory.getKryo().writeClassAndObject(output, objective);
 		output.close();
 	}
 
 	@Override
 	public void readObject(ByteBuffer in) {
 		Input input = new ByteBufferInput(in);
-		objective = getKryo().readClassAndObject(input);
+		objective = KryoFactory.getKryo().readClassAndObject(input);
 		input.close();
 	}
 
@@ -56,25 +52,7 @@ public class NioObjectContainer implements Transferable {
 	}
 
 	public void setObjective(Object objective) {
-			this.objective = objective;
+		this.objective = objective;
 	}
 
-	/**
-	 * This is using the registration method of the kryo library. 
-	 * 
-	 * @param c Class
-	 * @param id unique id for this class
-	 * @see https://github.com/EsotericSoftware/kryo
-	 */
-	public static void register(Class<?> c, int id) {
-		getKryo().register(c, id);
-	}
-
-	static Kryo getKryo() {
-		if (kryoInstance==null) {
-			kryoInstance = new Kryo();
-		}
-		return kryoInstance;
-	}
-	
 }

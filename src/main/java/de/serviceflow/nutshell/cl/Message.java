@@ -27,7 +27,7 @@ import de.serviceflow.nutshell.cl.intern.NioSession;
 import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
 import de.serviceflow.nutshell.cl.intern.util.Bucket;
 import de.serviceflow.nutshell.cl.intern.util.Pool;
-import de.serviceflow.nutshell.cl.nio.NioStruct;
+import de.serviceflow.nutshell.cl.nio.EncodedNioStruct;
 
 /**
  * Base class for application messages.
@@ -37,7 +37,7 @@ import de.serviceflow.nutshell.cl.nio.NioStruct;
  * 
  * 
  */
-public abstract class Message extends NioStruct {
+public abstract class Message extends EncodedNioStruct {
 	private static final Logger JLOG = Logger
 			.getLogger(Message.class.getName());
 
