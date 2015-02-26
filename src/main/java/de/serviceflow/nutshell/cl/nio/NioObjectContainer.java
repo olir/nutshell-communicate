@@ -22,6 +22,8 @@ import com.esotericsoftware.kryo.io.ByteBufferOutput;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 
+import de.serviceflow.nutshell.cl.intern.KryoFactory;
+
 /**
  * Container offering Object offering serialization.
  * 

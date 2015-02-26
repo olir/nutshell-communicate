@@ -1,4 +1,4 @@
-package de.serviceflow.nutshell.cl.nio;
+package de.serviceflow.nutshell.cl.intern;
 
 import com.esotericsoftware.kryo.Kryo;
 
