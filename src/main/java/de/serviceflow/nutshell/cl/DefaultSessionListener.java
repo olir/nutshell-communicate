@@ -52,10 +52,10 @@ public class DefaultSessionListener implements SessionListener {
 		session.setUserObject(userObject);
 	}
 
-	protected final boolean removeCommunicationSession(Session session) {
+	protected final void removeCommunicationSession(Session session) {
 		Object userObject = session.getUserObject();
 		session.setUserObject(null);
-		return sessions.remove(userObject);
+		sessions.remove(userObject);
 	}
 
 	public void sessionCreated(TransportProvider p, Session session) {
