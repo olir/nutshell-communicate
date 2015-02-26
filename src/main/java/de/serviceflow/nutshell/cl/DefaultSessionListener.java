@@ -55,7 +55,7 @@ public class DefaultSessionListener implements SessionListener {
 	protected final boolean removeCommunicationSession(Session session) {
 		Object userObject = session.getUserObject();
 		session.setUserObject(null);
-		return sessions.remove(userObject, session);
+		return sessions.remove(userObject);
 	}
 
 	public void sessionCreated(TransportProvider p, Session session) {
