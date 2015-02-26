@@ -1,3 +1,5 @@
+# Travis settings for
+# https://api.travis-ci.org/olir/nutshell-communicate.svg
 language: java
 notifications:
   email: false
