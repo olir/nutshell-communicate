@@ -1,3 +1,8 @@
+Nutshell Communication Library
+==============================
+
+[![Build Status](https://travis-ci.org/olir/nutshell-communicate.png)](https://travis-ci.org/olir/nutshell-communicate/builds)
+
 # About
 
 Nutshell Communication is a Java library designed for low-latency network communication and using the messaging communication-style, instead of remote procedure calls. It's a higher-level framework, where the application developer defines an application protocol by XML and code the corresponding messages and event handling. The library hides transport details from the developer. The library us using a session layer protocol which covers authentication (client sends binary data your server has to handle), synchronized state-switching and in future it offers session-recovery (session gets "stale" while connection is down). The library offers also a plug-in serialization implemented by using [Kryo](https://github.com/EsotericSoftware/kryo).
