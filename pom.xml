@@ -4,7 +4,7 @@
 	<!-- Maven Coordinates -->
 	<groupId>de.serviceflow</groupId>
 	<artifactId>nutshell-communicate</artifactId>
-	<version>0.6.1</version>
+	<version>0.6.1-STAGING</version>
   	<packaging>pom</packaging>
 
 	<prerequisites>
