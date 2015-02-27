@@ -48,7 +48,7 @@ public class SimpleCommunicationTest {
 	static final Logger JLOG = Logger.getLogger(SimpleCommunicationTest.class
 			.getName());
 
-	private static final long DELAY = 250L;
+	private static final long DELAY = 2500L;
 
 	public final int TESTPORT = 10101;
 	private NetworkProtocolType npt = null;
