@@ -19,6 +19,13 @@
 	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
+	<distributionManagement>
+	  <snapshotRepository>
+	    <id>ossrh</id>
+	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+	  </snapshotRepository>
+	</distributionManagement>
+
 	<!-- More Project Information -->
 	<name>Nutshell Communication Library</name>
 	<description>The Nutshell Communication Library is designed for network communication by using the messaging communication-style. It's a higher-level framework, where the application developer defines an application protocol by XML and code the corresponding messages and event handling. The library hides transport details from the developer.</description>
@@ -225,6 +232,20 @@
                          </execution>
                  </executions>
             </plugin>
+            
+			<!-- release -->
+		    <plugin>
+		      <groupId>org.sonatype.plugins</groupId>
+		      <artifactId>nexus-staging-maven-plugin</artifactId>
+		      <version>1.6.3</version>
+		      <extensions>true</extensions>
+		      <configuration>
+		        <serverId>ossrh</serverId>
+		        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+		        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+		      </configuration>
+		    </plugin>
+            
 			<!-- Reporting: mvn site:run -->
 		    <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
