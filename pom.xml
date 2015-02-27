@@ -4,7 +4,7 @@
 	<!-- Maven Coordinates -->
 	<groupId>de.serviceflow</groupId>
 	<artifactId>nutshell-communicate</artifactId>
-	<version>0.7-SNAPSHOT</version>
+	<version>0.6</version>
   	<packaging>pom</packaging>
 
 	<prerequisites>
@@ -21,7 +21,7 @@
 	  <developerConnection>scm:git:https://github.com/olir/nutshell-communicate.git</developerConnection>
 	  <url>https://github.com/olir/nutshell-communicate.git</url>
 	  <tag>HEAD</tag>
-  </scm>
+	</scm>
 	
 	<distributionManagement>
 	  <snapshotRepository>
