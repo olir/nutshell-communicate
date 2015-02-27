@@ -61,12 +61,12 @@ public class SimpleCommunicationTest {
 	 *
 	 * @see NetworkProtocolType#TCP
 	 */
-//	@Test
+	@Test
 	public final void testTCP() {
 		npt = NetworkProtocolType.TCP;
 		runProtocolTest();
 	}
-//
+
 //	/**
 //	 * <b>Test case</b> for UDP protocol.
 //	 * 
