@@ -8,7 +8,7 @@
 	<groupId>de.serviceflow</groupId>
 	<artifactId>nutshell-communicate</artifactId>
 	<version>0.3</version>
-  	<packaging>jar</packaging>
+  	<packaging>pom</packaging>
 
 	<prerequisites>
 		<maven>3.2.5</maven>
@@ -19,6 +19,12 @@
 	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
+	<scm>
+	  <connection>scm:git:https://github.com/olir/nutshell-communicate.git</connection>
+	  <developerConnection>scm:git:https://github.com/olir/nutshell-communicate.git</developerConnection>
+	  <url>https://github.com/olir/nutshell-communicate.git</url>
+	</scm>
+	
 	<distributionManagement>
 	  <snapshotRepository>
 	    <id>ossrh</id>
@@ -30,10 +36,11 @@
 	  </repository>
 	</distributionManagement>
 
+	
 	<!-- More Project Information -->
 	<name>Nutshell Communication Library</name>
 	<description>The Nutshell Communication Library is designed for network communication by using the messaging communication-style. It's a higher-level framework, where the application developer defines an application protocol by XML and code the corresponding messages and event handling. The library hides transport details from the developer.</description>
-	<url>http://www.serviceflow.de/nutshell</url>
+	<url>https://github.com/olir/nutshell-communicate</url>
 	<inceptionYear>1999-2015</inceptionYear>
 	<organization>
 		<name>Oliver Rode</name>
@@ -80,7 +87,7 @@
 		<developer>
 		  <id>olir</id>
 		  <name>Oliver Rode</name>
-		  <url>http://www.screenflow.de/nutshell</url>
+		  <url>https://github.com/olir</url>
 		  <roles>
 			<role>project administrator</role>
 			<role>architect</role>
