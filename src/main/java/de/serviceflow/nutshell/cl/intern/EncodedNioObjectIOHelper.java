@@ -191,10 +191,10 @@ public class EncodedNioObjectIOHelper {
 	}
 
 	public void writeObject(EncodedNioStruct m, ByteBuffer out) {
-		if (!out.isDirect()) {
-			throw new Error("Non-direct buffer!");
-		}
-		bbo.setBuffer(out, out.capacity());
+//		if (!out.isDirect()) {
+//			throw new Error("Non-direct buffer!");
+//		}
+		bbo.setBuffer(out /* , out.capacity() */);
 
 		for (AbstractFieldIOHelper h : fieldHelperList) {
 			if (h instanceof TransferableIOHelper) {
@@ -219,9 +219,9 @@ public class EncodedNioObjectIOHelper {
 	}
 
 	public void readObject(EncodedNioStruct m, ByteBuffer in) {
-		if (!in.isDirect()) {
-			throw new Error("Non-direct buffer!");
-		}
+//		if (!in.isDirect()) {
+//			throw new Error("Non-direct buffer!");
+//		}
 		bbi.setBuffer(in);
 
 		for (AbstractFieldIOHelper h : fieldHelperList) {
