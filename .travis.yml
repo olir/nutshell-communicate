@@ -3,3 +3,5 @@
 language: java
 notifications:
   email: false
+after_success:
+  - mvn clean test saga:coverage cobertura:cobertura coveralls:report
