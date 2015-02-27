@@ -4,7 +4,7 @@
 	<!-- Maven Coordinates -->
 	<groupId>de.serviceflow</groupId>
 	<artifactId>nutshell-communicate</artifactId>
-	<version>0.6.1-STAGING</version>
+	<version>0.6.2-STAGING</version>
   	<packaging>pom</packaging>
 
 	<prerequisites>
@@ -269,7 +269,7 @@
 			       <executions>
 			        <execution>
 			          <id>sign-artifacts</id>
-			          <phase>verify</phase>
+			          <phase>deploy</phase>
 			          <goals>
 			            <goal>sign</goal>
 			          </goals>
