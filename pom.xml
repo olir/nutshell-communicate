@@ -236,7 +236,48 @@
 					  <version>1.6</version>
 					</dependency>
 				</dependencies>
-			</plugin>			
+			</plugin>
+			
+			<plugin>
+			    <groupId>org.eluder.coveralls</groupId>
+			    <artifactId>coveralls-maven-plugin</artifactId>
+			    <version>3.0.1</version>
+			    <configuration>
+			        <repoToken>yourcoverallsprojectrepositorytoken</repoToken>
+			    </configuration>
+			</plugin>
+			<plugin>
+			    <groupId>org.jacoco</groupId>
+			    <artifactId>jacoco-maven-plugin</artifactId>
+			    <version>0.7.2.201409121644</version>
+			    <executions>
+			        <execution>
+			            <id>prepare-agent</id>
+			            <goals>
+			                <goal>prepare-agent</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			</plugin>
+			<plugin>
+			    <groupId>com.github.timurstrekalov</groupId>
+			    <artifactId>saga-maven-plugin</artifactId>
+			    <version>1.5.2</version>
+			    <executions>
+			        <execution>
+			            <goals>
+			                <goal>coverage</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			    <configuration>
+			        <baseDir>http://localhost:${jasmine.serverPort}</baseDir>
+			        <outputDir>${project.build.directory}/saga-coverage</outputDir>
+			        <noInstrumentPatterns>
+			            <pattern>.*/spec/.*</pattern>
+			        </noInstrumentPatterns>
+			    </configuration>
+			</plugin>
 		</plugins>
     </build>  
     
