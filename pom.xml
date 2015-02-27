@@ -242,15 +242,13 @@
 					</dependency>
 				</dependencies>
 			</plugin>
-			
+			<!-- travis -->
 			<plugin>
 			    <groupId>org.eluder.coveralls</groupId>
 			    <artifactId>coveralls-maven-plugin</artifactId>
 			    <version>3.0.1</version>
-			    <configuration>
-			        <repoToken>yourcoverallsprojectrepositorytoken</repoToken>
-			    </configuration>
 			</plugin>
+			<!-- travis -->
 			<plugin>
 			    <groupId>org.jacoco</groupId>
 			    <artifactId>jacoco-maven-plugin</artifactId>
@@ -264,6 +262,7 @@
 			        </execution>
 			    </executions>
 			</plugin>
+			<!-- travis -->
 			<plugin>
 			    <groupId>com.github.timurstrekalov</groupId>
 			    <artifactId>saga-maven-plugin</artifactId>
