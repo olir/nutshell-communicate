@@ -51,8 +51,8 @@ public final class SessionObject implements Session, NioSession {
 	private static final Logger JLOG = Logger.getLogger(SessionObject.class
 			.getName());
 
-	public static final Level MSG_TRACE_LEVEL = Level.FINE;
-	public static final Level MSG_TRACE_LEVEL2 = Level.FINE;
+	public static Level MSG_TRACE_LEVEL = Level.FINE;
+	public static Level MSG_TRACE_LEVEL2 = Level.FINE;
 
 	private Communication communication = null;
 	private NIOTransportProvider mainProvider = null;

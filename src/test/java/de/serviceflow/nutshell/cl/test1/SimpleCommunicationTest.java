@@ -30,6 +30,7 @@ import org.junit.Test;
 
 import de.serviceflow.nutshell.cl.NetworkProtocolType;
 import de.serviceflow.nutshell.cl.ServerCommunication;
+import de.serviceflow.nutshell.cl.intern.SessionObject;
 import de.serviceflow.nutshell.cl.test2.TestClient2;
 import de.serviceflow.nutshell.cl.test2.TestServerDaemon2;
 
@@ -63,6 +64,8 @@ public class SimpleCommunicationTest {
 	 */
 	@Test
 	public final void testTCP() {
+		SessionObject.MSG_TRACE_LEVEL = Level.INFO;
+		SessionObject.MSG_TRACE_LEVEL2 = Level.INFO;
 		npt = NetworkProtocolType.TCP;
 		runProtocolTest();
 	}
