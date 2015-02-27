@@ -2,6 +2,7 @@ Nutshell Communication Library
 ==============================
 
 [![Build Status](https://travis-ci.org/olir/nutshell-communicate.png)](https://travis-ci.org/olir/nutshell-communicate/builds)
+[![Coverage Status](https://coveralls.io/repos/olir/nutshell-communicate/badge.svg)](https://coveralls.io/r/olir/nutshell-communicate)
 
 # About
 
