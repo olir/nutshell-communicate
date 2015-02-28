@@ -86,6 +86,7 @@ public abstract class AbtractTransportClient extends NIOTransportProvider
 		JLOG.info("changedApplicationProtocolState " + session + " to "
 				+ protocolState.getName());
 		session.setSessionState(SessionState.SYNC);
+		getProtocolListenerHelper().stateChangeComplete(this, session);
 	}
 
 	public String getApplicationProtocolName() {

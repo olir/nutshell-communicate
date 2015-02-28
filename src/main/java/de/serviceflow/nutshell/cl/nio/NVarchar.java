@@ -134,7 +134,8 @@ public final class NVarchar implements Transferable {
 
 	public final void setString(String value) {
 		clear();
-		addString(value, null);
+		if (value!=null)
+			addString(value, null);
 		svalue = null;
 	}
 

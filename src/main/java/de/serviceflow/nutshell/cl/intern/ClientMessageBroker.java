@@ -25,6 +25,7 @@ import de.serviceflow.nutshell.cl.intern.session.ChangeState;
 import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
 import de.serviceflow.nutshell.cl.intern.session.SessionAccepted;
 import de.serviceflow.nutshell.cl.intern.session.SessionClosed;
+import de.serviceflow.nutshell.cl.intern.session.StateChangeAcknowledged;
 
 public class ClientMessageBroker implements MessageBroker {
 	private static final Logger JLOG = Logger
@@ -85,8 +86,16 @@ public class ClientMessageBroker implements MessageBroker {
 							"SessionObject state change starting.");
 				}
 				session.setSessionState(SessionState.SYNC);
+
+				StateChangeAcknowledged mAckn = (StateChangeAcknowledged) Message
+						.requestMessage(StateChangeAcknowledged.class,
+								MessageClassification.SESSION.value());
+				mAckn.stateValue = ((ChangeState) m).stateValue;
+				session.send(mAckn);
+
 				session.setApplicationProtocolState(APState
 						.get(((ChangeState) m).stateValue));
+				session.setSessionState(SessionState.ACTIVE);
 				return true;
 			}
 		} else {
@@ -117,12 +126,12 @@ public class ClientMessageBroker implements MessageBroker {
 	public final void broke(Message m, NIOTransportProvider provider) {
 		boolean noError = true;
 		if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "broking " + m);
+			JLOG.log(SessionObject.MSG_TRACE_LEVEL,
+					"broking in " + session.getSessionState() + ": " + m);
 		}
 		switch (session.getSessionState()) {
 		case CREATED:
-			if (m.getProtocolId() == MessageClassification.SESSION
-					.value()) {
+			if (m.getProtocolId() == MessageClassification.SESSION.value()) {
 				noError = created(m, provider);
 			}
 			break;
@@ -133,8 +142,7 @@ public class ClientMessageBroker implements MessageBroker {
 			noError = stall(m);
 			break;
 		case SYNC:
-			if (m.getProtocolId() == MessageClassification.SESSION
-					.value()) {
+			if (m.getProtocolId() == MessageClassification.SESSION.value()) {
 				noError = sync(m);
 			}
 			break;
@@ -151,6 +159,8 @@ public class ClientMessageBroker implements MessageBroker {
 						+ session.getSessionState());
 			}
 		}
+
+		m.releaseMessage();
 	}
 
 }

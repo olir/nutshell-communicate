@@ -19,14 +19,18 @@ import java.security.Principal;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+import de.serviceflow.nutshell.cl.APState;
 import de.serviceflow.nutshell.cl.ApplicationProtocol;
 import de.serviceflow.nutshell.cl.Authentication;
 import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.ServerCommunication;
+import de.serviceflow.nutshell.cl.SessionState;
+import de.serviceflow.nutshell.cl.intern.session.ChangeState;
 import de.serviceflow.nutshell.cl.intern.session.ClientAuthentication;
 import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
 import de.serviceflow.nutshell.cl.intern.session.SessionAccepted;
 import de.serviceflow.nutshell.cl.intern.session.SessionClosed;
+import de.serviceflow.nutshell.cl.intern.session.StateChangeAcknowledged;
 
 public class ServerMessageBroker implements MessageBroker {
 	private static final Logger JLOG = Logger
@@ -117,6 +121,25 @@ public class ServerMessageBroker implements MessageBroker {
 	}
 
 	private boolean sync(Message m) {
+		if (m instanceof StateChangeAcknowledged) {
+			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL,
+						"SessionObject state change ending.");
+			}
+
+			StateChangeAcknowledged mAckn = (StateChangeAcknowledged)m;
+			if (mAckn.stateValue != session.getApplicationProtocolState().value()) {
+				JLOG.log(SessionObject.MSG_TRACE_LEVEL,
+						"StateChangeAcknowledged ignored. has wrong state: "+mAckn.stateValue+
+						" expected: "+session.getApplicationProtocolState().value());
+				return false;
+			}
+			
+			session.setSessionState(SessionState.ACTIVE);
+			session.getCommunication().getProtocolListenerHelper()
+					.stateChangeComplete(session.getProvider(true), session);
+			return true;
+		}
 		return false;
 	}
 
@@ -194,5 +217,7 @@ public class ServerMessageBroker implements MessageBroker {
 								+ session.getSessionState());
 			}
 		}
+		
+		m.releaseMessage();
 	}
 }

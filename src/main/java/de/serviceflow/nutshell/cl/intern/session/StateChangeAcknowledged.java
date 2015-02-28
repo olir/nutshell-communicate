@@ -18,7 +18,7 @@ package de.serviceflow.nutshell.cl.intern.session;
 import de.serviceflow.nutshell.cl.Message;
 
 /**
- * The server sends this message to initiate a state change.
+ * The client sends this message to acknowledge ChangeState message.
  * 
  * @author <a href="http://www.serviceflow.de/nutshell">Oliver Rode</a>
  * @version $Id: $
