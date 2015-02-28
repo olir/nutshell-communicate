@@ -408,6 +408,9 @@ public final class SessionObject implements Session, NioSession {
 			this.protocolState = applicationProtocol.getInitialState();
 			setSessionState(SessionState.ACTIVE);
 		}
+		else {
+			throw new Error("protocol not found: "+protocol);
+		}
 		return (applicationProtocol != null);
 	}
 

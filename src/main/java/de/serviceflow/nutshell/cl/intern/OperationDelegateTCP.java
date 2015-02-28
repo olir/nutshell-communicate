@@ -23,6 +23,7 @@ import java.nio.channels.SocketChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import de.serviceflow.nutshell.cl.ApplicationProtocol;
 import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.intern.util.Pipe;
 
@@ -73,16 +74,25 @@ public class OperationDelegateTCP {
 				JLOG.fine("opRead: buffer filled (size=" + size + ")");
 			}
 
+			short controlType = buffer.get(2);
+			if (controlType>0) {
+				ApplicationProtocol protocol = session.getApplicationProtocol();
+				if (protocol==null) {
+					if (JLOG.isLoggable(Level.FINE)) {
+						JLOG.fine("waiting for protocol to be set");
+					}
+					return false; // not in right state to deserialize.
+				}
+				// currently only 1 protocol supported per session
+				// client and server id do not match - map it
+				controlType=(short)protocol.getId();
+			}
+			
 			buffer.flip();
-			buffer.position(2); // skip size
+			buffer.position(3); // skip size and control type
 			// no sessionkey required yet.
 			
-			// currently only 1 protocol supported per session
-			// client and server id do not match - map it
-			int controlType = buffer.get();
-			if (controlType>0)
-				controlType=session.getApplicationProtocol().getId();
-//			JLOG.warning("<<<<< controlType="+controlType);
+			//			JLOG.warning("<<<<< controlType="+controlType);
 			int commandId = buffer.get();
 			Message nextMessage = Message.requestMessage(commandId,
 					controlType);
