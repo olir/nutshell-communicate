@@ -46,7 +46,7 @@ import de.serviceflow.nutshell.cl.test2.TestServerDaemon2;
  */
 public class SimpleCommunicationTest {
 	static final Logger JLOG = Logger.getLogger(SimpleCommunicationTest.class
-			.getName());
+			.getName()); 
 
 	private static final long DELAY = 2500L;
 
@@ -63,7 +63,7 @@ public class SimpleCommunicationTest {
 	 * @see NetworkProtocolType#TCP
 	 */
 	@Test
-	public final void testTCP() {
+	public final void testTCP() { 
 		SessionObject.MSG_TRACE_LEVEL = Level.INFO;
 		SessionObject.MSG_TRACE_LEVEL2 = Level.INFO;
 		npt = NetworkProtocolType.TCP;
@@ -124,7 +124,7 @@ public class SimpleCommunicationTest {
 
 	public Reader createProtocolReader() {
 		InputStream is = getClass().getResourceAsStream(
-				"/de/serviceflow/nutshell/cl/test/testprotocol1.xml");
+				"/de/serviceflow/nutshell/cl/test1/testprotocol1.xml");
 		if (is == null) {
 			fail("protocol resource not found");
 		}

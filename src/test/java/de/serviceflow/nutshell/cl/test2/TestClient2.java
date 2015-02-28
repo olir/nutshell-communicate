@@ -127,7 +127,7 @@ public class TestClient2 extends SimpleClient {
 
 	public Reader createProtocolReader() {
 		InputStream is = getClass().getResourceAsStream(
-				"/de/serviceflow/nutshell/cl/test/testprotocol2.xml");
+				"/de/serviceflow/nutshell/cl/test2/testprotocol2.xml");
 		if (is == null) {
 			throw new Error("protocol resource not found");
 		}

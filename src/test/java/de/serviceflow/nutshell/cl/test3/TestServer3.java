@@ -41,6 +41,6 @@ public class TestServer3 extends SimpleServerDaemon {
 
 	private Reader createProtocolReader() {
 		return new InputStreamReader(getClass().getResourceAsStream(
-				"/de/serviceflow/nutshell/cl/test/myprotocol.xml"));
+				"/de/serviceflow/nutshell/cl/test3/myprotocol.xml"));
 	}
 }
