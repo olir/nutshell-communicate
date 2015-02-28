@@ -4,7 +4,7 @@
 	<!-- Maven Coordinates -->
 	<groupId>de.serviceflow</groupId>
 	<artifactId>nutshell-communicate</artifactId>
-	<version>0.6.4</version>
+	<version>0.6.5-SNAPSHOT</version>
   	<packaging>pom</packaging>
 
 	<prerequisites>
@@ -268,7 +268,7 @@
 		    <plugin>
 		      <groupId>org.sonatype.plugins</groupId>
 		      <artifactId>nexus-staging-maven-plugin</artifactId>
-		      <version>1.6.3</version>
+		      <version>1.6.5</version>
 		      <extensions>true</extensions>
 			<executions>
 					<execution>
