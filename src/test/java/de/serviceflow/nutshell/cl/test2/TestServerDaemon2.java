@@ -212,7 +212,7 @@ public class TestServerDaemon2 extends SimpleServerDaemon implements
 	static class SingleClientAuthentication implements Authentication {
 
 		@Override
-		public Principal authenticate(byte[] credentials) {
+		public Principal authenticate(byte[] credentials, Object clientAddressObject) {
 			if (session == null) {
 				return new Principal() {
 

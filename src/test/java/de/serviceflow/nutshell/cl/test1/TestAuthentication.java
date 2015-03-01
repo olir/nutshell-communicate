@@ -22,7 +22,7 @@ import de.serviceflow.nutshell.cl.Authentication;
 public class TestAuthentication implements Authentication {
 
 	@Override
-	public Principal authenticate(byte[] credentials) {
+	public Principal authenticate(byte[] credentials, Object clientAddressObject) {
 		return new Principal() {
 			@Override
 			public String getName() {

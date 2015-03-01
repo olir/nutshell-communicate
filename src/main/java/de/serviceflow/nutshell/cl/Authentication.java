@@ -34,7 +34,8 @@ public interface Authentication {
 	 * 
 	 * @param credentials
 	 *            some data that allows the Authentication to make his decision.
+	 * @param clientAddressObject Information about the underlying connection source.
 	 * @return Principal if authenticated, return null if not.
 	 */
-	Principal authenticate(byte[] credentials);
+	Principal authenticate(byte[] credentials, Object clientAddressObject);
 }

@@ -108,7 +108,7 @@ public class ServerMessageBroker implements MessageBroker {
 				.getAuthentication();
 		Principal user = null;
 		if (a != null) {
-			user = a.authenticate(ca.credentials.getBytes());
+			user = a.authenticate(ca.credentials.getBytes(), ca.getSession().getAddress());
 		}
 		if (user == null) {
 			JLOG.info("Authentication denied.");

@@ -110,7 +110,7 @@ public abstract class SimpleServerDaemon extends DefaultSessionListener {
 	private static class AnonymousAuthentication implements Authentication {
 
 		@Override
-		public Principal authenticate(byte[] credentials) {
+		public Principal authenticate(byte[] credentials, Object clientAddressObject) {
 			return new Principal() {
 
 				@Override
