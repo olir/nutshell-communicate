@@ -150,9 +150,9 @@ public class ClientCommunication extends Communication {
 						newProviderList.clear();
 					}
 				}
-				if (providerList.isEmpty() && communicationWorkers.isEmpty()) {
+//				if (providerList.isEmpty() && communicationWorkers.isEmpty()) {
 					sleep();
-				}
+//				}
 				for (Runnable r : communicationWorkers) {
 					try {
 						r.run();
