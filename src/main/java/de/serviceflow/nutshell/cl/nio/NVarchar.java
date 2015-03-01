@@ -42,9 +42,7 @@ public final class NVarchar implements Transferable, CharSequence {
 	 */
 	public static final int MIN = 128;
 
-	// private byte [] buffer;
 	private ByteBuffer buffer;
-	private int size = 0;
 
 	private String svalue = null;
 
@@ -62,50 +60,48 @@ public final class NVarchar implements Transferable, CharSequence {
 			initialcapacity = 2;
 		}
 		buffer = ByteBuffer.allocateDirect(initialcapacity);
-		// buffer=new byte[initialcapacity];
-	}
-
-	public final int size() {
-		return size;
 	}
 
 	public final byte getByte(int index) {
-		if (index >= size) {
+		if (index >= buffer.position()) {
 			throw new ArrayIndexOutOfBoundsException(index);
 		}
 		return buffer.get(index);
-		// return buffer[index];
 	}
 
 	public final void addByte(byte value) {
-		// int l = buffer.length;
 		int l = buffer.capacity();
-		if (size == l) {
+		if (buffer.position() == l) {
 			increase();
 		}
-		// buffer[size++]=value;
 		buffer.put(value);
 		svalue = null;
 	}
 
-	private final void increase() {
+	private final boolean increase() {
 		if (JLOG.isLoggable(Level.FINER)) {
 			JLOG.finer("increase()");
 		}
-		// int newLength = buffer.length<<1;
+
 		int newLength = MAX;
 		if (newLength > MAX)
 			newLength = MAX;
 
-		// buffer = Arrays.copyOf(buffer, newLength);
+		if (newLength<=buffer.capacity())
+			return false;
+		
 		ByteBuffer newbuffer = ByteBuffer.allocateDirect(newLength);
 		buffer.flip();
 		buffer = newbuffer.put(buffer);
+		return true;
 	}
 
 	public final void addBytes(byte[] values) {
-		// for (int i=0; i<values.length; i++)
-		// addByte(values[i]);
+		while (buffer.position()+values.length > buffer.capacity()) {
+			if (!increase())
+				break; // may cause a BufferOverflow
+		}
+
 		buffer.put(values);
 		svalue = null;
 	}
@@ -123,8 +119,6 @@ public final class NVarchar implements Transferable, CharSequence {
 			charsetName = "UTF-8";
 		try {
 			addBytes(value.getBytes(charsetName));
-			// JLOG.info("addString: value="+value+
-			// " position="+buffer.position());
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(
 					"Unexpected that UTF-8 is not available", e);
@@ -159,8 +153,6 @@ public final class NVarchar implements Transferable, CharSequence {
 		buffer.flip();
 		buffer.get(a);
 		buffer.limit(buffer.capacity());
-		// JLOG.info("getBytes: a.length="+a.length+
-		// " position="+buffer.position()+ " limit="+buffer.limit());
 		return a;
 	}
 
@@ -207,7 +199,6 @@ public final class NVarchar implements Transferable, CharSequence {
 
 	@Override
 	public int length() {
-		// TODO Auto-generated method stub
 		return buffer.position();
 	}
 
