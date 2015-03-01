@@ -28,7 +28,7 @@ import java.util.logging.Logger;
  * 
  * 
  */
-public final class NVarchar implements Transferable {
+public final class NVarchar implements Transferable, CharSequence {
 	private static final Logger JLOG = Logger.getLogger(NVarchar.class
 			.getName());
 
@@ -198,5 +198,24 @@ public final class NVarchar implements Transferable {
 		buffer.put(in);
 		in.limit(limit);
 		svalue = null;
+	}
+
+	@Override
+	public char charAt(int index) {
+		return (char)buffer.get(index);
+	}
+
+	@Override
+	public int length() {
+		// TODO Auto-generated method stub
+		return buffer.position();
+	}
+
+	/**
+	 * This is provided because interface needs it, but not intended to be used.
+	 */
+	@Override
+	public CharSequence subSequence(int start, int end) {
+		return toString().subSequence(start, end);
 	}
 }
