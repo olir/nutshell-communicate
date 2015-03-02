@@ -27,7 +27,6 @@ import javax.management.ObjectName;
 
 import de.serviceflow.nutshell.cl.intern.Communication;
 import de.serviceflow.nutshell.cl.intern.NIOTransportProvider;
-import de.serviceflow.nutshell.cl.intern.SessionObject;
 import de.serviceflow.nutshell.cl.intern.session.NampTCPService;
 
 /**
@@ -44,7 +43,6 @@ public class ServerCommunication extends Communication {
 
 	private static ServerCommunication serverCommunication;
 
-	private boolean running = true;
 	private boolean shutdown = false;
 
 	private Authentication authentication = null;
@@ -74,9 +72,9 @@ public class ServerCommunication extends Communication {
 	}
 
 	private ServerCommunication() {
-		Thread t = new Thread(getThreadGroup(), new CommunicationLoop(),
-				"ServerCommunicationThread");
-		t.start();
+		Thread comThread = new Thread(getThreadGroup(),
+				new CommunicationLoop(), "CommunicationThread");
+		comThread.start();
 	}
 
 	/**
@@ -91,9 +89,7 @@ public class ServerCommunication extends Communication {
 	 * @return TransportService
 	 * @throws IOException
 	 */
-	public NIOTransportProvider bind(InetSocketAddress isa
-	// , ApplicationProtocol appProtocol
-	) throws IOException {
+	public NIOTransportProvider bind(InetSocketAddress isa) throws IOException {
 
 		if (shutdown) {
 			throw new IllegalStateException("Shutdown/Terminated");
@@ -135,6 +131,8 @@ public class ServerCommunication extends Communication {
 		}
 
 		shutdown = true;
+		removeAllListeners();
+		serverCommunication = null;
 	}
 
 	public Authentication getAuthentication() {
@@ -145,66 +143,40 @@ public class ServerCommunication extends Communication {
 		this.authentication = authenticator;
 	}
 
-	private class CommunicationLoop implements Runnable {
-		public void run() {
-			for (; running;) {
-				NIOTransportProvider toBeStopped = null;
-				for (NIOTransportProvider provider : providerList) {
-					try {
-						if (provider.isRunning()) {
-							provider.process();
-						} else {
-							provider.completeStop();
-							toBeStopped = provider;
-							break; // restart loop instead fixing iterator.
-						}
-					} catch (Throwable t) {
-						JLOG.log(Level.SEVERE,
-								"Exception in communication Loop", t);
-					}
-				}
-				if (toBeStopped != null) {
-					providerList.remove(toBeStopped);
-					toBeStopped = null;
-					if (providerList.isEmpty() && shutdown) {
-						running = false; // terminated.
-					}
-				}
-				if (!newProviderList.isEmpty()) {
-					synchronized (newProviderList) {
-						providerList.addAll(newProviderList);
-						newProviderList.clear();
-					}
-				}
-//				if (providerList.isEmpty() && communicationWorkers.isEmpty()) {
-					sleep();
-//				}
-				for (Runnable r : communicationWorkers) {
-					try {
-						r.run();
-					} catch (Throwable t) {
-						JLOG.log(Level.SEVERE,
-								"Exception in communication Loop", t);
-					}
-				}
-			}
-			removeAllListeners();
-			serverCommunication = null;
-			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				JLOG.log(SessionObject.MSG_TRACE_LEVEL,
-						"Finished server communication thread.");
-			}
-		}
-
-		private void sleep() {
+	protected void communicationStep() {
+		setInCommunicationThread(true);
+		NIOTransportProvider toBeStopped = null;
+		for (NIOTransportProvider provider : providerList) {
 			try {
-				Thread.sleep(1L);
-			} catch (InterruptedException e) {
-				running = false;
-				JLOG.log(Level.SEVERE, "Exception in communication Loop", e);
+				if (provider.isRunning()) {
+					provider.process();
+				} else {
+					provider.completeStop();
+					toBeStopped = provider;
+					break; // restart loop instead fixing iterator.
+				}
+			} catch (Throwable t) {
+				JLOG.log(Level.SEVERE, "Exception in communication Loop", t);
 			}
-
 		}
+		if (toBeStopped != null) {
+			providerList.remove(toBeStopped);
+			toBeStopped = null;
+		}
+		if (!newProviderList.isEmpty()) {
+			synchronized (newProviderList) {
+				providerList.addAll(newProviderList);
+				newProviderList.clear();
+			}
+		}
+		for (Runnable r : communicationWorkers) {
+			try {
+				r.run();
+			} catch (Throwable t) {
+				JLOG.log(Level.SEVERE, "Exception in communication Loop", t);
+			}
+		}
+		setInCommunicationThread(false);
 	}
 
 }

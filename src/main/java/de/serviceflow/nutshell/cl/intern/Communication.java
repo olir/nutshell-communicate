@@ -45,8 +45,8 @@ import de.serviceflow.nutshell.cl.intern.session.StateChangeAcknowledged;
  * 
  */
 public abstract class Communication {
-	static private final Logger JLOG = Logger
-			.getLogger(Communication.class.getName());
+	static private final Logger JLOG = Logger.getLogger(Communication.class
+			.getName());
 
 	public static final String MBEAN_PACKAGE = "de.serviceflow.nutshell.cl";
 
@@ -57,14 +57,14 @@ public abstract class Communication {
 	private final List<MessageListener> mlisteners = new ArrayList<MessageListener>();
 	private final List<SessionListener> slisteners = new ArrayList<SessionListener>();
 
-	private final ThreadGroup group;
+	private ThreadGroup group = new ThreadGroup("Nutshell Communication Library");
+
+	
 
 	protected final List<Runnable> communicationWorkers = Collections
 			.synchronizedList(new ArrayList<Runnable>());
 
 	protected Communication() {
-		group = new ThreadGroup("Nutshell Communication Library");
-
 		try {
 			Message.register(ClientAuthentication.class,
 					MessageClassification.SESSION.value());
@@ -79,7 +79,7 @@ public abstract class Communication {
 		} catch (IllegalAccessException e) {
 			throw new Error(
 					"Unrecoverable internal missconfiguration. Bugfix required.");
-		}
+		}		
 	}
 
 	public final void addApplicationProtocol(Reader r) {
@@ -90,7 +90,7 @@ public abstract class Communication {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public final void addSessionListener(SessionListener l) {
 		slisteners.add(l);
 		if (JLOG.isLoggable(Level.FINEST)) {
@@ -148,7 +148,7 @@ public abstract class Communication {
 	 * 
 	 * @param r
 	 *            the Runnable
-	 * @return true 
+	 * @return true
 	 */
 	public final boolean addCommunicationWorker(Runnable r) {
 		return communicationWorkers.add(r);
@@ -156,6 +156,48 @@ public abstract class Communication {
 
 	public final boolean removeCommunicationWorker(Runnable r) {
 		return communicationWorkers.remove(r);
+	}
+
+	protected boolean inCommunicationThread = false;
+
+	public boolean isInCommunicationThread() {
+		return inCommunicationThread;
+	}
+
+	protected void setInCommunicationThread(boolean inCommunicationThread) {
+		this.inCommunicationThread = inCommunicationThread;
+	}
+
+	protected abstract void communicationStep();
+
+	protected class CommunicationLoop implements Runnable {
+
+		public CommunicationLoop() {
+		}
+
+		boolean running = true;
+
+		public void run() {
+			for (; running;) {
+				try {
+					Communication.this.communicationStep();
+				} catch (Throwable t) {
+					JLOG.log(Level.SEVERE, "Exception in communication Loop", t);
+				}
+				sleep();
+			}
+			JLOG.log(Level.INFO, "*** Finished communication thread.");
+		}
+
+		private void sleep() {
+			try {
+				Thread.sleep(1L);
+			} catch (InterruptedException e) {
+				running = false;
+				JLOG.log(Level.SEVERE, "Exception in communication Loop", e);
+			}
+		}
+
 	}
 
 }

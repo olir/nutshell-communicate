@@ -34,6 +34,7 @@ import com.esotericsoftware.kryo.io.KryoDataOutput;
 
 import de.serviceflow.nutshell.cl.Lookup;
 import de.serviceflow.nutshell.cl.LookupRegistry;
+import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.nio.EncodedNioStruct;
 import de.serviceflow.nutshell.cl.nio.NoTransfer;
 import de.serviceflow.nutshell.cl.nio.TransferJPAReference;
@@ -108,13 +109,18 @@ public class EncodedNioObjectIOHelper {
 	 */
 	private EncodedNioObjectIOHelper(EncodedNioStruct c) {
 		Class<?> messageClass = c.getClass();
-
-		Field fields[] = messageClass.getFields();
-		for (Field field : fields) {
+		Class<?> exclusiveParent = messageClass;
+		while (exclusiveParent.getSuperclass()!= Message.class) { 
+			exclusiveParent = exclusiveParent.getSuperclass();
+		}
+		Iterable<Field> fieldsIterator = getFieldsUpTo(messageClass,
+				exclusiveParent);
+		for (Field field : fieldsIterator) {
 			if (Modifier.isStatic(field.getModifiers())) {
 				continue;
 			}
 			if (!field.isAnnotationPresent(NoTransfer.class)) {
+				field.setAccessible(true);
 				if (field.isAnnotationPresent(TransferJPAReference.class)) {
 					Class<?> type = field.getType();
 					Field tfields[] = type.getFields();
@@ -145,10 +151,10 @@ public class EncodedNioObjectIOHelper {
 						}
 					}
 				} else {
-					if (JLOG.isLoggable(Level.FINER)) {
-						JLOG.finer("." + field.getName()
-								+ " found annotation on " + messageClass);
-					}
+					// if (JLOG.isLoggable(Level.FINER)) {
+					// JLOG.finer("." + field.getName()
+					// + " found no annotation on " + messageClass);
+					// }
 
 					Class<?> type = field.getType();
 					if (type.isArray()) {
@@ -191,9 +197,9 @@ public class EncodedNioObjectIOHelper {
 	}
 
 	public void writeObject(EncodedNioStruct m, ByteBuffer out) {
-//		if (!out.isDirect()) {
-//			throw new Error("Non-direct buffer!");
-//		}
+		// if (!out.isDirect()) {
+		// throw new Error("Non-direct buffer!");
+		// }
 		bbo.setBuffer(out /* , out.capacity() */);
 
 		for (AbstractFieldIOHelper h : fieldHelperList) {
@@ -219,9 +225,9 @@ public class EncodedNioObjectIOHelper {
 	}
 
 	public void readObject(EncodedNioStruct m, ByteBuffer in) {
-//		if (!in.isDirect()) {
-//			throw new Error("Non-direct buffer!");
-//		}
+		// if (!in.isDirect()) {
+		// throw new Error("Non-direct buffer!");
+		// }
 		bbi.setBuffer(in);
 
 		for (AbstractFieldIOHelper h : fieldHelperList) {
@@ -241,6 +247,30 @@ public class EncodedNioObjectIOHelper {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @see http
+	 *      ://stackoverflow.com/questions/16966629/what-is-the-difference-between
+	 *      -getfields-getdeclaredfields-in-java-reflection
+	 */
+	private static Iterable<Field> getFieldsUpTo(Class<?> startClass,
+			Class<?> exclusiveParent) {
+		List<Field> currentClassFields = new ArrayList<Field>();
+		Field[] df = startClass.getDeclaredFields();
+		for (Field f : df)
+			currentClassFields.add(f);
+		Class<?> parentClass = startClass.getSuperclass();
+
+		if (parentClass != null
+				&& exclusiveParent != null && !startClass
+						.equals(exclusiveParent)) {
+			List<Field> parentClassFields = (List<Field>) getFieldsUpTo(
+					parentClass, exclusiveParent);
+			currentClassFields.addAll(parentClassFields);
+		}
+
+		return currentClassFields;
 	}
 
 	private static abstract class AbstractFieldIOHelper {
@@ -444,7 +474,12 @@ public class EncodedNioObjectIOHelper {
 
 		void readField(Transferable t, ByteBuffer in) {
 			try {
-				((Transferable) field.get(t)).readObject(in);
+				Transferable tt = ((Transferable) field.get(t));
+				if (tt == null) {
+					tt = (Transferable) field.getType().newInstance();
+					field.set(t, tt);
+				}
+				tt.readObject(in);
 			} catch (Exception e) {
 				throw new Error("read error on " + t + " at " + field, e);
 			}
@@ -452,7 +487,8 @@ public class EncodedNioObjectIOHelper {
 
 		void writeField(Transferable t, ByteBuffer out) {
 			try {
-				((Transferable) field.get(t)).writeObject(out);
+				Transferable tt = ((Transferable) field.get(t));
+				tt.writeObject(out);
 			} catch (Exception e) {
 				throw new Error("write error on " + t + " at " + field, e);
 			}

@@ -25,7 +25,6 @@ import java.util.logging.Logger;
 
 import de.serviceflow.nutshell.cl.intern.Communication;
 import de.serviceflow.nutshell.cl.intern.NIOTransportProvider;
-import de.serviceflow.nutshell.cl.intern.SessionObject;
 import de.serviceflow.nutshell.cl.intern.cpi.AbtractTransportClient;
 import de.serviceflow.nutshell.cl.intern.cpi.TCPClient;
 import de.serviceflow.nutshell.cl.intern.cpi.UDPClient;
@@ -52,7 +51,6 @@ public class ClientCommunication extends Communication {
 	private List<NIOTransportProvider> newProviderList = Collections
 			.synchronizedList(new ArrayList<NIOTransportProvider>());
 
-	private boolean running = true;
 	private boolean shutdown = false;
 
 	/**
@@ -68,9 +66,9 @@ public class ClientCommunication extends Communication {
 	}
 
 	private ClientCommunication() {
-		Thread t = new Thread(getThreadGroup(), new CommunicationLoop(),
-				"ClientCommunicationThread");
-		t.start();
+		Thread comThread = new Thread(getThreadGroup(),
+				new CommunicationLoop(), "CommunicationThread");
+		comThread.start();
 	}
 
 	public NIOTransportProvider connect(NetworkProtocolType npt,
@@ -117,68 +115,44 @@ public class ClientCommunication extends Communication {
 		}
 
 		shutdown = true;
+		removeAllListeners();
+		clientCommunication = null;
 	}
 
-	private class CommunicationLoop implements Runnable {
-		public void run() {
-			NIOTransportProvider toBeStopped = null;
-			for (; running;) {
-				for (NIOTransportProvider provider : providerList) {
-					try {
-						if (provider.isRunning()) {
-							provider.process();
-						} else {
-							provider.completeStop();
-							toBeStopped = provider;
-							break; // restart loop instead fixing iterator.
-						}
-					} catch (Throwable t) {
-						JLOG.log(Level.SEVERE,
-								"Exception in communication Loop", t);
-					}
-				}
-				if (toBeStopped != null) {
-					providerList.remove(toBeStopped);
-					toBeStopped = null;
-					if (providerList.isEmpty() && shutdown) {
-						running = false; // terminated.
-					}
-				}
-				if (!newProviderList.isEmpty()) {
-					synchronized (newProviderList) {
-						providerList.addAll(newProviderList);
-						newProviderList.clear();
-					}
-				}
-//				if (providerList.isEmpty() && communicationWorkers.isEmpty()) {
-					sleep();
-//				}
-				for (Runnable r : communicationWorkers) {
-					try {
-						r.run();
-					} catch (Throwable t) {
-						JLOG.log(Level.SEVERE,
-								"Exception in communication Loop", t);
-					}
-				}
-			}
-			removeAllListeners();
-			clientCommunication = null;
-			if (JLOG.isLoggable(SessionObject.MSG_TRACE_LEVEL)) {
-				JLOG.log(SessionObject.MSG_TRACE_LEVEL,
-						"Finished client communication thread.");
-			}
-		}
-
-		private void sleep() {
+	protected void communicationStep() {
+		setInCommunicationThread(true);
+		NIOTransportProvider toBeStopped = null;
+		for (NIOTransportProvider provider : providerList) {
 			try {
-				Thread.sleep(1L);
-			} catch (InterruptedException e) {
-				running = false;
-				JLOG.log(Level.SEVERE, "Exception in communication Loop", e);
+				if (provider.isRunning()) {
+					provider.process();
+				} else {
+					provider.completeStop();
+					toBeStopped = provider;
+					break; // restart loop instead fixing iterator.
+				}
+			} catch (Throwable t) {
+				JLOG.log(Level.SEVERE, "Exception in communication Loop", t);
 			}
-
 		}
+		if (toBeStopped != null) {
+			providerList.remove(toBeStopped);
+			toBeStopped = null;
+		}
+		if (!newProviderList.isEmpty()) {
+			synchronized (newProviderList) {
+				providerList.addAll(newProviderList);
+				newProviderList.clear();
+			}
+		}
+		for (Runnable r : communicationWorkers) {
+			try {
+				r.run();
+			} catch (Throwable t) {
+				JLOG.log(Level.SEVERE, "Exception in communication Loop", t);
+			}
+		}
+		setInCommunicationThread(false);
 	}
 
 }

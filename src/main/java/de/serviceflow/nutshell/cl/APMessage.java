@@ -15,6 +15,8 @@
  */
 package de.serviceflow.nutshell.cl;
 
+import java.util.logging.Logger;
+
 import de.serviceflow.nutshell.cl.intern.MessageRegistryHelper;
 
 /**
@@ -26,6 +28,9 @@ import de.serviceflow.nutshell.cl.intern.MessageRegistryHelper;
  * 
  */
 public final class APMessage {
+	private static final Logger JLOG = Logger.getLogger(APMessage.class
+			.getName());
+
 	private Class<?> messageClass;
 	private boolean reliable = true;
 
@@ -40,7 +45,7 @@ public final class APMessage {
 		if (!de.serviceflow.nutshell.cl.Message.class
 				.isAssignableFrom(messageClass)) {
 			throw new Error("APPLICATION class " + className
-					+ " is not derived from AbstractMessage.");
+					+ " is not subclass of Message.");
 		}
 
 		reliable = xMessage.isReliable();

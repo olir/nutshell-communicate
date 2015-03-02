@@ -184,6 +184,12 @@ public final class NVarchar implements Transferable, CharSequence {
 	public void readObject(ByteBuffer in) {
 		buffer.clear();
 		int size = in.getShort();
+		
+		while (size > buffer.capacity()) {
+			if (!increase())
+				break; // may cause a BufferOverflow
+		}
+		
 		int pos = in.position();
 		int limit = in.limit();
 		in.limit(pos + size);

@@ -114,24 +114,25 @@ public abstract class Message extends EncodedNioStruct {
 	}
 
 	public String toString() {
-		return getClass().getSimpleName() + "(" + protocolId + ")]";
+		return getClass().getSimpleName() + "(" + protocolId + ")] #"+hashCode();
 	}
 
 	/**
 	 * clean up and put message into pool.
 	 */
 	public void releaseMessage() {
-		if (getProtocolId() == -1)
-			return; // ignore prototypes
-
-		// pool it
-		Map<Class<?>, MPool<Message>> map = poolMapArray[getProtocolId()];
-		if (map != null) {
-			Pool<Message> pool = map.get(getClass());
-			if (pool != null) {
-				pool.releaseElementToPool((Message) this);
-			}
-		}
+		return;
+//		if (getProtocolId() == -1)
+//			return; // ignore prototypes
+//
+//		// pool it
+//		Map<Class<?>, MPool<Message>> map = poolMapArray[getProtocolId()];
+//		if (map != null) {
+//			Pool<Message> pool = map.get(getClass());
+//			if (pool != null) {
+//				pool.releaseElementToPool((Message) this);
+//			}
+//		}
 	}
 
 	private MessageRegistryHelper messageDefinition = MessageRegistryHelper.DEFAULT;

@@ -47,7 +47,6 @@ public abstract class NIOTransportProvider implements TransportProvider {
 
 	protected Communication communication;
 	protected InetSocketAddress isa;
-	// private ApplicationProtocol app;
 
 	private ConnectionApprover ca = new DefaultConnectionApprover();
 
@@ -109,8 +108,7 @@ public abstract class NIOTransportProvider implements TransportProvider {
 			return true;
 		}
 
-		// if (newOperations != null)
-		// operations.addAll(newOperations);
+//		synchronized (NIOTransportProvider.class) {
 
 		Set<SelectionKey> selectedKeys = selector.selectedKeys();
 		Iterator<SelectionKey> it = selectedKeys.iterator();
@@ -118,7 +116,7 @@ public abstract class NIOTransportProvider implements TransportProvider {
 		while (it.hasNext()) {
 			SelectionKey key = (SelectionKey) it.next();
 			try {
-				doOperation(key);
+					doOperation(key);
 			} catch (IOException e) {
 				NioSession session = (NioSession) key.attachment();
 				key.cancel();
@@ -128,6 +126,9 @@ public abstract class NIOTransportProvider implements TransportProvider {
 				it.remove();
 			}
 		}
+		
+//		} // synchronized
+		
 		return false;
 	}
 

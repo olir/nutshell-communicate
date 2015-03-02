@@ -73,7 +73,6 @@ public final class SessionObject implements Session, NioSession {
 	private final Pipe<Message> unreliableSendPipe = new Pipe<Message>(
 			"name=SessionObject,hash=" + this.hashCode()
 					+ ",direction=out.unreliable");
-	
 
 	private Object userObject = null;
 
@@ -110,7 +109,6 @@ public final class SessionObject implements Session, NioSession {
 		return protocolState;
 	}
 
-
 	public void setApplicationProtocolState(APState newState) {
 		if (newState == null) {
 			throw new IllegalStateException(
@@ -131,8 +129,6 @@ public final class SessionObject implements Session, NioSession {
 				+ getProvider(false) + ") #" + this.hashCode() + " key="
 				+ sessionkey;
 	}
-
-
 
 	/**
 	 * internal initialization.
@@ -174,7 +170,6 @@ public final class SessionObject implements Session, NioSession {
 	public void join(NIOTransportProvider unreliable) {
 		this.unreliableProvider = unreliable;
 	}
-
 
 	/**
 	 * used by TCP
@@ -259,16 +254,20 @@ public final class SessionObject implements Session, NioSession {
 			JLOG.log(SessionObject.MSG_TRACE_LEVEL, "send on " + this + ": "
 					+ m);
 		}
+
+		if (!communication.isInCommunicationThread()) {
+			throw new Error("called outside from communication thread.");
+		}
 		if (m.getProtocolId() < 0)
-			throw new Error("getProtocolId negative: send on " + this + ": " + m);
-		if (m.getCommandId()<0)
+			throw new Error("getProtocolId negative: send on " + this + ": "
+					+ m);
+		if (m.getCommandId() < 0)
 			throw new Error("getCommandId negative: send on " + this + ": " + m);
 
 		if (sessionState == SessionState.ACTIVE) {
 			addMessageToSendPipe(m);
 		} else if (sessionState == SessionState.CREATED) {
-			if (m.getProtocolId() == MessageClassification.SESSION
-					.value()) {
+			if (m.getProtocolId() == MessageClassification.SESSION.value()) {
 				if (m instanceof ClientAuthentication) {
 					ClientAuthentication a = ((ClientAuthentication) m);
 					if (a.dualChannel && sessionkey != 0)
@@ -288,8 +287,7 @@ public final class SessionObject implements Session, NioSession {
 						"SessionObject is not active yet. Unexpected: " + m);
 			}
 		} else if (sessionState == SessionState.SYNC) {
-			if (m.getProtocolId() == MessageClassification.SESSION
-					.value()) {
+			if (m.getProtocolId() == MessageClassification.SESSION.value()) {
 				addMessageToSendPipe(m);
 			} else {
 				throw new IllegalStateException(
@@ -407,9 +405,8 @@ public final class SessionObject implements Session, NioSession {
 		if (applicationProtocol != null) {
 			this.protocolState = applicationProtocol.getInitialState();
 			setSessionState(SessionState.ACTIVE);
-		}
-		else {
-			throw new Error("protocol not found: "+protocol);
+		} else {
+			throw new Error("protocol not found: " + protocol);
 		}
 		return (applicationProtocol != null);
 	}
