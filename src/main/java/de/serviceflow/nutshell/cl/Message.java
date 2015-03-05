@@ -114,7 +114,8 @@ public abstract class Message extends EncodedNioStruct {
 	}
 
 	public String toString() {
-		return getClass().getSimpleName() + "(" + protocolId + ")] #"+hashCode();
+		return getClass().getSimpleName() + "(" + protocolId + ")] #"
+				+ hashCode();
 	}
 
 	/**
@@ -122,17 +123,17 @@ public abstract class Message extends EncodedNioStruct {
 	 */
 	public void releaseMessage() {
 		return;
-//		if (getProtocolId() == -1)
-//			return; // ignore prototypes
-//
-//		// pool it
-//		Map<Class<?>, MPool<Message>> map = poolMapArray[getProtocolId()];
-//		if (map != null) {
-//			Pool<Message> pool = map.get(getClass());
-//			if (pool != null) {
-//				pool.releaseElementToPool((Message) this);
-//			}
-//		}
+		// if (getProtocolId() == -1)
+		// return; // ignore prototypes
+		//
+		// // pool it
+		// Map<Class<?>, MPool<Message>> map = poolMapArray[getProtocolId()];
+		// if (map != null) {
+		// Pool<Message> pool = map.get(getClass());
+		// if (pool != null) {
+		// pool.releaseElementToPool((Message) this);
+		// }
+		// }
 	}
 
 	private MessageRegistryHelper messageDefinition = MessageRegistryHelper.DEFAULT;
@@ -242,7 +243,7 @@ public abstract class Message extends EncodedNioStruct {
 	}
 
 	public static int findCommandId(Class<?> messageClass, int controlType) {
-		for (int i = 0; i < poolListArray[controlType].size(); i++) {
+		for (int i = 0, n = poolListArray[controlType].size(); i < n; i++) {
 			Class<?> m = poolListArray[controlType].get(i);
 			if (m.equals(messageClass))
 				return i;
