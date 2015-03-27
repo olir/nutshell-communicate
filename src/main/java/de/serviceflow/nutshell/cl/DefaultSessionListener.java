@@ -47,7 +47,7 @@ public class DefaultSessionListener implements SessionListener {
 		return sessions.get(userObject);
 	}
 
-	protected final void addCommunicationSession(Session session, Object userObject) {
+	public final void addCommunicationSession(Session session, Object userObject) {
 		sessions.put(userObject, session);
 		session.setUserObject(userObject);
 	}

@@ -28,6 +28,7 @@ import de.serviceflow.nutshell.cl.intern.MessageRegistryHelper;
  * 
  */
 public final class APMessage {
+	@SuppressWarnings("unused")
 	private static final Logger JLOG = Logger.getLogger(APMessage.class
 			.getName());
 

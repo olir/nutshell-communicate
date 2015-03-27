@@ -19,13 +19,11 @@ import java.security.Principal;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import de.serviceflow.nutshell.cl.APState;
 import de.serviceflow.nutshell.cl.ApplicationProtocol;
 import de.serviceflow.nutshell.cl.Authentication;
 import de.serviceflow.nutshell.cl.Message;
 import de.serviceflow.nutshell.cl.ServerCommunication;
 import de.serviceflow.nutshell.cl.SessionState;
-import de.serviceflow.nutshell.cl.intern.session.ChangeState;
 import de.serviceflow.nutshell.cl.intern.session.ClientAuthentication;
 import de.serviceflow.nutshell.cl.intern.session.MessageClassification;
 import de.serviceflow.nutshell.cl.intern.session.SessionAccepted;
@@ -108,7 +106,8 @@ public class ServerMessageBroker implements MessageBroker {
 				.getAuthentication();
 		Principal user = null;
 		if (a != null) {
-			user = a.authenticate(ca.credentials.getBytes(), ca.getSession().getAddress());
+			user = a.authenticate(ca.credentials.getBytes(), ca.getSession()
+					.getAddress());
 		}
 		if (user == null) {
 			JLOG.info("Authentication denied.");
@@ -127,14 +126,16 @@ public class ServerMessageBroker implements MessageBroker {
 						"SessionObject state change ending.");
 			}
 
-			StateChangeAcknowledged mAckn = (StateChangeAcknowledged)m;
-			if (mAckn.stateValue != session.getApplicationProtocolState().value()) {
+			StateChangeAcknowledged mAckn = (StateChangeAcknowledged) m;
+			if (mAckn.stateValue != session.getApplicationProtocolState()
+					.value()) {
 				JLOG.log(SessionObject.MSG_TRACE_LEVEL,
-						"StateChangeAcknowledged ignored. has wrong state: "+mAckn.stateValue+
-						" expected: "+session.getApplicationProtocolState().value());
+						"StateChangeAcknowledged ignored. has wrong state: "
+								+ mAckn.stateValue + " expected: "
+								+ session.getApplicationProtocolState().value());
 				return false;
 			}
-			
+
 			session.setSessionState(SessionState.ACTIVE);
 			session.getCommunication().getProtocolListenerHelper()
 					.stateChangeComplete(session.getProvider(true), session);
@@ -181,8 +182,7 @@ public class ServerMessageBroker implements MessageBroker {
 
 		switch (session.getSessionState()) {
 		case CREATED:
-			if (m.getProtocolId() == MessageClassification.SESSION
-					.value()) {
+			if (m.getProtocolId() == MessageClassification.SESSION.value()) {
 				noError = created(m);
 			}
 			break;
@@ -193,8 +193,7 @@ public class ServerMessageBroker implements MessageBroker {
 			noError = stall(m);
 			break;
 		case SYNC:
-			if (m.getProtocolId() == MessageClassification.SESSION
-					.value()) {
+			if (m.getProtocolId() == MessageClassification.SESSION.value()) {
 				noError = sync(m);
 			}
 			break;
@@ -217,7 +216,7 @@ public class ServerMessageBroker implements MessageBroker {
 								+ session.getSessionState());
 			}
 		}
-		
+
 		m.releaseMessage();
 	}
 }

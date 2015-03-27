@@ -109,9 +109,14 @@ public class ClientCommunication extends Communication {
 		client.stop();
 	}
 
-	public void stopAllClients() throws IOException {
+	public void stopAllClients()  {
 		for (NIOTransportProvider client : providerList) {
+                    try {
 			client.stop();
+                    }
+                    catch (IOException e) {
+                        e.printStackTrace();
+                    }
 		}
 
 		shutdown = true;

@@ -15,6 +15,9 @@
  */
 package de.serviceflow.nutshell.cl.intern;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import de.serviceflow.nutshell.cl.APMessage;
 import de.serviceflow.nutshell.cl.APState;
 
@@ -23,13 +26,9 @@ import de.serviceflow.nutshell.cl.APState;
  * Helps with message registration,  protocol execution and validation. 
  */
 public class MessageRegistryHelper {
-	// private static final Logger JLOG =
-	// Logger.getLogger(MessageRegistryHelper.class
-	// .getName());
-
 	public static final MessageRegistryHelper DEFAULT = new MessageRegistryHelper();
 
-	private APState state = null;
+	private Set<APState> states = new HashSet<APState>();
 	private APMessage apMessage = null;
 
 	/**
@@ -42,24 +41,21 @@ public class MessageRegistryHelper {
 	 *            definition of the message
 	 */
 	public final void add(APState state, APMessage apMessage) {
-		if (this.state != null) {
-			throw new Error(
-					"Message reuse in multipe states is not supported. Define different messages classes. apMessage:"
-							+ apMessage
-							+ ". state 1: "
-							+ this.state
-							+ ". state 2: " + state);
+		this.states.add(state);
+		if (this.apMessage==null) {
+			this.apMessage = apMessage;
 		}
-		this.state = state;
-		this.apMessage = apMessage;
+		else {
+			if (this.apMessage.isReliable()!=apMessage.isReliable())
+				throw new Error("configurations of multi-state message different: reliable");
+		}
 	}
 
 	public final boolean belongsTo(APState a) {
-		return state == null || a == state;
+		return states.contains(a);
 	}
 
 	public final boolean isReliable() {
 		return apMessage == null || apMessage.isReliable();
 	}
-
 }

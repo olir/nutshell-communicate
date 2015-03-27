@@ -1,40 +1,41 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- Maven Coordinates -->
 	<groupId>de.serviceflow</groupId>
 	<artifactId>nutshell-communicate</artifactId>
 	<version>0.6.5-SNAPSHOT</version>
-  	<packaging>pom</packaging>
+	<packaging>pom</packaging>
 
 	<prerequisites>
 		<maven>3.2.5</maven>
 	</prerequisites>
-  
+
 	<properties>
-	    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<scm>
-	  <connection>scm:git:https://github.com/olir/nutshell-communicate.git</connection>
-	  <developerConnection>scm:git:https://github.com/olir/nutshell-communicate.git</developerConnection>
-	  <url>https://github.com/olir/nutshell-communicate.git</url>
-	  <tag>HEAD</tag>
+		<connection>scm:git:https://github.com/olir/nutshell-communicate.git</connection>
+		<developerConnection>scm:git:https://github.com/olir/nutshell-communicate.git</developerConnection>
+		<url>https://github.com/olir/nutshell-communicate.git</url>
+		<tag>HEAD</tag>
 	</scm>
-	
+
 	<distributionManagement>
-	  <snapshotRepository>
-	    <id>ossrh</id>
-	    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-	  </snapshotRepository>
-	  <repository>
-	    <id>ossrh</id>
-	    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-	  </repository>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+		</repository>
 	</distributionManagement>
 
-	
+
 	<!-- More Project Information -->
 	<name>Nutshell Communication Library</name>
 	<description>The Nutshell Communication Library is designed for network communication by using the messaging communication-style. It's a higher-level framework, where the application developer defines an application protocol by XML and code the corresponding messages and event handling. The library hides transport details from the developer.</description>
@@ -45,11 +46,11 @@
 		<url>http://www.serviceflow.de/nutshell</url>
 	</organization>
 	<licenses>
-	  <license>
-		<name>Apache License, Version 2.0</name>
-		<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		<distribution>repo</distribution>
-		<comments>For sources and binaries: 
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+			<comments>For sources and binaries: 
 				Copyright 1999-2015 Oliver Rode http://www.serviceflow.de/nutshell , 
 				Licensed under the Apache License, Version 2.0 (the "License");
 				you may not use sources and binary files except in compliance with the License.
@@ -61,12 +62,12 @@
 				See the License for the specific language governing permissions and
 				limitations under the License.
 		</comments>
-	  </license>
-	  <license>
-		<name>GNU Free Documentation License</name>
-		<url>http://www.gnu.org/licenses/fdl-1.3.txt</url>
-		<distribution>repo</distribution>
-		<comments>For the project documentation: 
+		</license>
+		<license>
+			<name>GNU Free Documentation License</name>
+			<url>http://www.gnu.org/licenses/fdl-1.3.txt</url>
+			<distribution>repo</distribution>
+			<comments>For the project documentation: 
 				Copyright (c)  1999-2015  Oliver Rode   http://www.serviceflow.de , 
 				Permission is granted to copy, distribute and/or modify the project documents
 				under the terms of the GNU Free Documentation License, Version 1.3
@@ -75,29 +76,29 @@
 				A copy of the license is included in the section entitled "GNU
 				Free Documentation License".		
 		</comments>
-	  </license>
-	</licenses>	
+		</license>
+	</licenses>
 	<issueManagement>
 		<url>https://github.com/olir/nutshell-communicate/issues</url>
 		<system>github</system>
 	</issueManagement>
 	<developers>
 		<developer>
-		  <id>olir</id>
-		  <name>Oliver Rode</name>
-		  <url>https://github.com/olir</url>
-		  <roles>
-			<role>project administrator</role>
-			<role>architect</role>
-			<role>developer</role>
-		  </roles>
-		  <timezone>Europe/Berlin</timezone>
+			<id>olir</id>
+			<name>Oliver Rode</name>
+			<url>https://github.com/olir</url>
+			<roles>
+				<role>project administrator</role>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+			<timezone>Europe/Berlin</timezone>
 		</developer>
-	  </developers>
-	  <contributors>
+	</developers>
+	<contributors>
 		<!-- No credits so far. -->
-	  </contributors>
-	  
+	</contributors>
+
 	<!-- POM Relationships -->
 	<dependencies>
 		<dependency>
@@ -111,10 +112,10 @@
 			<version>2.2.5</version>
 		</dependency>
 		<dependency>
-		   <groupId>junit</groupId>
-		   <artifactId>junit</artifactId>
-		   <version>4.11</version>
-		   <scope>test</scope>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>
@@ -123,59 +124,59 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
-	       <groupId>com.esotericsoftware</groupId>
-	       <artifactId>kryo</artifactId>
-		   <version>3.0.0</version>
-    	</dependency>		
+			<groupId>com.esotericsoftware</groupId>
+			<artifactId>kryo</artifactId>
+			<version>3.0.0</version>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
 			<artifactId>maven-plugin-api</artifactId>
 			<version>2.2.1</version>
 		</dependency>
 	</dependencies>
-  
+
 	<!-- Build Settings -->
 	<build>
-        <plugins>
+		<plugins>
 			<!-- generate-sources -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>jaxb2-maven-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>1.6</version>
+				<executions>
+					<execution>
 						<phase>generate-sources</phase>
-                        <id>xjc</id>
-                        <goals>
-                            <goal>xjc</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-		            <locales>en</locales><!-- does not work - plugin does not support locales. -->
-        			<!-- The schema directory or xsd files. -->
+						<id>xjc</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<locales>en</locales><!-- does not work - plugin does not support locales. -->
+					<!-- The schema directory or xsd files. -->
 					<schemaDirectory>${basedir}/src/main/resources/schema</schemaDirectory>
 					<!-- The package in which the source files will be generated. -->
 					<packageName>de.serviceflow.nutshell.cl.xml</packageName>
 					<!-- The working directory to create the generated java source files. -->
 					<outputDirectory>${basedir}/src/main/xjc</outputDirectory>
-                </configuration>
-            </plugin>
+				</configuration>
+			</plugin>
 			<!-- compile -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
+				<version>3.2</version>
 				<configuration>
-				  <source>1.7</source>
-				  <target>1.7</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>
 			<!-- test -->
 			<plugin>
-	            <groupId>org.apache.maven.plugins</groupId>
-	            <artifactId>maven-surefire-plugin</artifactId>
-	            <version>2.9</version>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.9</version>
 				<configuration>
 					<!-- Sets the VM argument line used when unit tests are run. -->
 					<argLine>${surefireArgLine}</argLine>
@@ -185,172 +186,172 @@
 					<excludes>
 					</excludes>
 				</configuration>
-	            <executions>
-	                <execution>
-	                    <phase>test</phase>
-	                    <goals>
-	                        <goal>test</goal>
-	                    </goals>
-	                </execution>
-	            </executions>
-	        </plugin>			
+				<executions>
+					<execution>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- assembly:single: create executeable jar with dependecies -->
-		    <plugin>
-		      <artifactId>maven-assembly-plugin</artifactId>
-		      <configuration>
-		        <archive>
-		          <manifest>
-		            <addClasspath>true</addClasspath>
-		            <mainClass>fully.qualified.MainClass</mainClass>
-		          </manifest>
-		        </archive>
-		        <descriptorRefs>
-		          <descriptorRef>jar-with-dependencies</descriptorRef>
-		        </descriptorRefs>
-		      </configuration>
-			  <executions>
-			    <execution>
-			      <id>make-my-jar-with-dependencies</id> <!-- this is used for inheritance merges -->
-			      <phase>package</phase> <!-- bind to the packaging phase -->
-			      <goals>
-			        <goal>single</goal>
-			      </goals>
-			    </execution>
-			  </executions>
-	  	    </plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<addClasspath>true</addClasspath>
+							<mainClass>fully.qualified.MainClass</mainClass>
+						</manifest>
+					</archive>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-my-jar-with-dependencies</id> <!-- this is used for inheritance merges -->
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- pre-site: copy additional javadoc resources -->
-            <plugin>
-                 <artifactId>maven-resources-plugin</artifactId>
-                 <version>2.7</version>
-                 <executions>
-                         <execution>
-                                 <id>copy-main-resources</id>
-                                 <phase>pre-site</phase>
-                                 <goals>
-                                         <goal>copy-resources</goal>
-                                 </goals>
-                                 <configuration>
-                                         <outputDirectory>${project.build.directory}/site/apidocs/</outputDirectory>
-                                         <resources>
-                                                 <resource>
-                                                         <directory>${basedir}/src/main/resources/</directory>
-                                                 </resource>
-                                         </resources>
-                                 </configuration>
-                         </execution>
-                         <execution>
-                                 <id>copy-test-resources</id>
-                                 <phase>pre-site</phase>
-                                 <goals>
-                                         <goal>copy-resources</goal>
-                                 </goals>
-                                 <configuration>
-                                         <outputDirectory>${project.build.directory}/site/testapidocs/</outputDirectory>
-                                         <resources>
-                                                 <resource>
-                                                         <directory>${basedir}/src/test/resources/</directory>
-                                                 </resource>
-                                         </resources>
-                                 </configuration>
-                         </execution>
-                 </executions>
-            </plugin>
-            
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.7</version>
+				<executions>
+					<execution>
+						<id>copy-main-resources</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/site/apidocs/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/main/resources/</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-test-resources</id>
+						<phase>pre-site</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/site/testapidocs/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${basedir}/src/test/resources/</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 			<!-- release -->
-	                <plugin>
-			      <groupId>org.apache.maven.plugins</groupId>
-			      <artifactId>maven-gpg-plugin</artifactId>
-			      <version>1.5</version>
-				 <configuration>
-				        <skip>false</skip>
-				 </configuration>
-			       <executions>
-			        <execution>
-			          <id>sign-artifacts</id>
-			          <phase>deploy</phase>
-			          <goals>
-			            <goal>sign</goal>
-			          </goals>
-			        </execution>
-			      </executions>
-			    </plugin>
-		    <plugin>
-		      <groupId>org.sonatype.plugins</groupId>
-		      <artifactId>nexus-staging-maven-plugin</artifactId>
-		      <version>1.6.5</version>
-		      <extensions>true</extensions>
-			<executions>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+				<executions>
 					<execution>
-					  <id>default-deploy</id>
-					  <phase>deploy</phase>
-					  <goals>
-						<goal>deploy</goal>
-					  </goals>
+						<id>sign-artifacts</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
 					</execution>
-				  </executions>			  
-		      <configuration>
-		        <serverId>ossrh</serverId>
-		        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-		        <autoReleaseAfterClose>true</autoReleaseAfterClose>
-		      </configuration>
-		    </plugin>
-				<plugin>
-				  <groupId>org.apache.maven.plugins</groupId>
-				  <artifactId>maven-source-plugin</artifactId>
-				  <version>2.2.1</version>
-				  <executions>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.5</version>
+				<extensions>true</extensions>
+				<executions>
 					<execution>
-					  <id>attach-sources</id>
-					  <goals>
-						<goal>jar-no-fork</goal>
-					  </goals>
+						<id>default-deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
 					</execution>
-				  </executions>
-				</plugin>
-				<plugin>
-				  <groupId>org.apache.maven.plugins</groupId>
-				  <artifactId>maven-javadoc-plugin</artifactId>
-				  <version>2.10.1</version>
-				  <executions>
+				</executions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
 					<execution>
-					  <id>attach-javadocs</id>
-					  <goals>
-						<goal>jar</goal>
-					  </goals>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
 					</execution>
-				  </executions>
-				</plugin>
-				
-				
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+
 			<!-- Reporting: mvn site:run -->
-		    <plugin>
+			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
 				<version>3.4</version>
 				<configuration>
-				  <port>9000</port>
-				  <tempWebappDirectory>${basedir}/target/site/tempdir</tempWebappDirectory>
+					<port>9000</port>
+					<tempWebappDirectory>${basedir}/target/site/tempdir</tempWebappDirectory>
 				</configuration>
 				<dependencies>
 					<dependency>
-					  <groupId>org.apache.maven.doxia</groupId>
-					  <artifactId>doxia-module-markdown</artifactId>
-					  <version>1.6</version>
+						<groupId>org.apache.maven.doxia</groupId>
+						<artifactId>doxia-module-markdown</artifactId>
+						<version>1.6</version>
 					</dependency>
 				</dependencies>
 			</plugin>
 			<!-- travis -->
 			<plugin>
-			    <groupId>org.eluder.coveralls</groupId>
-			    <artifactId>coveralls-maven-plugin</artifactId>
-			    <version>3.0.1</version>
+				<groupId>org.eluder.coveralls</groupId>
+				<artifactId>coveralls-maven-plugin</artifactId>
+				<version>3.0.1</version>
 			</plugin>
 			<!-- travis -->
 			<plugin>
-			    <groupId>org.jacoco</groupId>
-			    <artifactId>jacoco-maven-plugin</artifactId>
-			    <version>0.7.2.201409121644</version>
-			    <executions>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.2.201409121644</version>
+				<executions>
 					<execution>
 						<id>pre-unit-test</id>
 						<goals>
@@ -359,17 +360,13 @@
 						<configuration>
 							<!-- Sets the path to the file which contains the execution data. -->
 							<destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
-							<!--
-								Sets the name of the property containing the settings
-								for JaCoCo runtime agent.
-							-->
+							<!-- Sets the name of the property containing the settings for JaCoCo 
+								runtime agent. -->
 							<propertyName>surefireArgLine</propertyName>
 						</configuration>
 					</execution>
-					<!--
-						Ensures that the code coverage report for unit tests is created after
-						unit tests have been run.
-					-->
+					<!-- Ensures that the code coverage report for unit tests is created 
+						after unit tests have been run. -->
 					<execution>
 						<id>post-unit-test</id>
 						<phase>test</phase>
@@ -383,113 +380,103 @@
 							<outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
 						</configuration>
 					</execution>
-		</executions>
+				</executions>
 			</plugin>
 			<!-- travis -->
-<!-- NOT STABLE
+			<!-- NOT STABLE <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> 
+				<version>2.7</version> <configuration> <formats> <format>html</format> <format>xml</format> 
+				</formats> <maxmem>256m</maxmem> </configuration> </plugin> -->
+			<!-- travis -->
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.7</version>
+				<groupId>com.github.timurstrekalov</groupId>
+				<artifactId>saga-maven-plugin</artifactId>
+				<version>1.5.2</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>coverage</goal>
+						</goals>
+					</execution>
+				</executions>
 				<configuration>
-					<formats>
-						<format>html</format>
-						<format>xml</format>
-					</formats>
-					<maxmem>256m</maxmem>
+					<baseDir>http://localhost:8234</baseDir>
+					<outputDir>${project.build.directory}/saga-coverage</outputDir>
+					<noInstrumentPatterns>
+						<pattern>.*/spec/.*</pattern>
+					</noInstrumentPatterns>
 				</configuration>
 			</plugin>
--->			
-			<!-- travis -->
-			<plugin>
-			    <groupId>com.github.timurstrekalov</groupId>
-			    <artifactId>saga-maven-plugin</artifactId>
-			    <version>1.5.2</version>
-			    <executions>
-			        <execution>
-			            <goals>
-			                <goal>coverage</goal>
-			            </goals>
-			        </execution>
-			    </executions>
-			    <configuration>
-			        <baseDir>http://localhost:8234</baseDir>
-			        <outputDir>${project.build.directory}/saga-coverage</outputDir>
-			        <noInstrumentPatterns>
-			            <pattern>.*/spec/.*</pattern>
-			        </noInstrumentPatterns>
-			    </configuration>
-			</plugin>
 		</plugins>
-        <pluginManagement>
-        	<plugins>
-        		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        		<plugin>
-        			<groupId>org.eclipse.m2e</groupId>
-        			<artifactId>lifecycle-mapping</artifactId>
-        			<version>1.0.0</version>
-        			<configuration>
-        				<lifecycleMappingMetadata>
-        					<pluginExecutions>
-        						<pluginExecution>
-        							<pluginExecutionFilter>
-        								<groupId>org.jacoco</groupId>
-        								<artifactId>
-        									jacoco-maven-plugin
-        								</artifactId>
-        								<versionRange>
-        									[0.7.2.201409121644,)
-        								</versionRange>
-        								<goals>
-        									<goal>prepare-agent</goal>
-        								</goals>
-        							</pluginExecutionFilter>
-        							<action>
-        								<ignore />
-        							</action>
-        						</pluginExecution>
-        					</pluginExecutions>
-        				</lifecycleMappingMetadata>
-        			</configuration>
-        		</plugin>
-        	</plugins>
-        </pluginManagement>
-	</build>  
-    
+		<pluginManagement>
+			<plugins>
+				<!--This plugin's configuration is used to store Eclipse m2e settings 
+					only. It has no influence on the Maven build itself. -->
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.jacoco</groupId>
+										<artifactId>
+											jacoco-maven-plugin
+										</artifactId>
+										<versionRange>
+											[0.7.2.201409121644,)
+										</versionRange>
+										<goals>
+											<goal>prepare-agent</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
 	<!-- Reporting: mvn site -->
-    <reporting>
+	<reporting>
 		<plugins>
-            <!-- Default Site Pages -->
+			<!-- Default Site Pages -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<version>2.8</version>
 				<reportSets>
-				  <reportSet>
-					<reports>
-					  <report>index</report>
-					  <report>summary</report>
-					  <report>license</report>
-  					  <report>dependencies</report>
-					  <report>project-team</report>
+					<reportSet>
+						<reports>
+							<report>index</report>
+							<report>summary</report>
+							<report>license</report>
+							<report>dependencies</report>
+							<report>project-team</report>
 
-					  <report>cim</report>
-					  <report>dependency-convergence</report>
-					  <report>dependency-info</report>
-					  <report>dependency-management</report>
-					  <report>distribution-management</report>
-					  <report>help</report>
-					  <report>issue-tracking</report>
-					  <report>mailing-list</report>
-					  <report>modules</report>
-					  <report>scm</report>
-					  <report>plugin-management</report>
-					  <report>plugins</report>
-					</reports>
-				  </reportSet>
+							<report>cim</report>
+							<report>dependency-convergence</report>
+							<report>dependency-info</report>
+							<report>dependency-management</report>
+							<report>distribution-management</report>
+							<report>help</report>
+							<report>issue-tracking</report>
+							<report>mailing-list</report>
+							<report>modules</report>
+							<report>scm</report>
+							<report>plugin-management</report>
+							<report>plugins</report>
+						</reports>
+					</reportSet>
 				</reportSets>
 			</plugin>
-				
+
 			<!-- Java Documentation -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -498,52 +485,41 @@
 				<configuration>
 					<doctitle>My API for ${project.name} ${project.version}</doctitle>
 					<windowtitle>My API for ${project.name} ${project.version}</windowtitle>
-					
+
 					<testDoctitle>My Test API for ${project.name} ${project.version}</testDoctitle>
 					<testWindowtitle>My Test API for ${project.name} ${project.version}</testWindowtitle>
 					<show>private</show>
 					<failOnError>false</failOnError>
 				</configuration>
 				<reportSets>
-				  <reportSet>
-					<reports>
-					  <report>javadoc-no-fork</report>
-					  <report>test-javadoc-no-fork</report>
-					</reports>
-				  </reportSet>
+					<reportSet>
+						<reports>
+							<report>javadoc-no-fork</report>
+							<report>test-javadoc-no-fork</report>
+						</reports>
+					</reportSet>
 				</reportSets>
 			</plugin>
-		
-		   <!-- Source Code Cross-Reference -->
+
+			<!-- Source Code Cross-Reference -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jxr-plugin</artifactId>
 				<version>2.5</version>
 				<configuration>
-				  <linkJavadoc>true</linkJavadoc>
-				  <javadocDir>${basedir}/target/site/apidocs/</javadocDir>
-				</configuration>				
-			</plugin>
-		
-			<plugin>
-			    <groupId>org.jacoco</groupId>
-			    <artifactId>jacoco-maven-plugin</artifactId>
-			    <version>0.7.2.201409121644</version>
-			</plugin>
-<!-- NOT STABLE
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<formats>
-						<format>html</format>
-						<format>xml</format>
-					</formats>
+					<linkJavadoc>true</linkJavadoc>
+					<javadocDir>${basedir}/target/site/apidocs/</javadocDir>
 				</configuration>
 			</plugin>
--->
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.2.201409121644</version>
+			</plugin>
+			<!-- NOT STABLE <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>cobertura-maven-plugin</artifactId> 
+				<version>2.7</version> <configuration> <formats> <format>html</format> <format>xml</format> 
+				</formats> </configuration> </plugin> -->
 		</plugins>
-    </reporting>
+	</reporting>
 </project>
