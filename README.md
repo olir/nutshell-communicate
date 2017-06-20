@@ -1,6 +1,9 @@
 Nutshell Communication Library
 ==============================
 
+This project is outdated through cloud infrastructure. If you like to play around with java nio and UDP go ahead.
+
+
 [![Build Status](https://travis-ci.org/olir/nutshell-communicate.png)](https://travis-ci.org/olir/nutshell-communicate/builds)
 [![Coverage Status](https://coveralls.io/repos/olir/nutshell-communicate/badge.svg)](https://coveralls.io/r/olir/nutshell-communicate)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.serviceflow/nutshell-communicate/badge.png)](https://maven-badges.herokuapp.com/maven-central/de.serviceflow/nutshell-communicate)
